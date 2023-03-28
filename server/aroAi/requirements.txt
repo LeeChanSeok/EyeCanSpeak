@@ -4,7 +4,7 @@
 # Base ------------------------------------------------------------------------
 gitpython>=3.1.30
 matplotlib>=3.2.2
-numpy>=1.18.5
+numpy
 opencv-python>=4.1.1
 Pillow>=7.1.2
 psutil  # system resources
@@ -48,3 +48,6 @@ setuptools>=65.5.1 # Snyk vulnerability fix
 # pycocotools>=2.0.6  # COCO mAP
 # roboflow
 # ultralytics  # HUB https://hub.ultralytics.com
+
+Flask==2.2.3
+Flask-Cors==3.0.10

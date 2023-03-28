@@ -82,7 +82,6 @@ def getImage():
     if not file:
         abort(400, 'No file uploaded')
 
-    ## todo 인공지능
     result = certifyAurora(file)
 
     return '{"result": {0} }'.format(result)
@@ -147,9 +146,14 @@ def certifyAurora(file):
         with dt[2]:
             pred = non_max_suppression(pred, conf_thres, iou_thres, classes, agnostic_nms, max_det=max_det)
 
-    print(pred)
-
-    return
+    result = False
+    for tensor in pred:
+        for detection in tensor:
+            if detection[4] > 0.4:
+                result = True
+                print(result)
+                return result
+    return result
 
 
 if __name__ == "__main__":
