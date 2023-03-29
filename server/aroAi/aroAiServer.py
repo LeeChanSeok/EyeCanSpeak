@@ -157,5 +157,5 @@ def certifyAurora(file):
 
 
 if __name__ == "__main__":
-    certifyAurora('')
-    # app.run(debug=True, host='0.0.0.0', port=8080)
+    # certifyAurora('')
+    app.run(debug=True, host='0.0.0.0', port=8080)

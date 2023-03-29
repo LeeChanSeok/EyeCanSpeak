@@ -1,7 +1,13 @@
 FROM python:3.8
 
-COPY ./requirements.txt ./
+WORKDIR /usr/src
 
-RUN python -m pip install --upgrade pip
+COPY . .
 
-RUN pip install -r ./requirements.txt
+RUN apt-get update && apt-get install -y libgl1-mesa-glx
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install -r requirements.txt
+	
+CMD ["aroAiServer.py"]
+
+ENTRYPOINT ["python3"]
