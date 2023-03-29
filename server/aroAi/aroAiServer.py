@@ -75,8 +75,7 @@ cors = CORS(app, resources={
 
 @app.route('/certify', methods=['POST'])
 def getImage():
-    # request.files 에서 파일 가져오기
-    file = request.files['file']
+    # request.files 에서 파일 가져오기    file = request.files['image'].read()
 
     # 파일 없을 겨우
     if not file:
@@ -85,10 +84,9 @@ def getImage():
     result = certifyAurora(file)
 
     return '{"result": {0} }'.format(result)
-
+    
 @smart_inference_mode()
-def certifyAurora(file):
-    source = str('./to_detect/aurora.jpg')
+def certifyAurora(image_data):
     weights='./weights/aurora.pt'
     data = './aurora.yaml'
     imgsz = (640, 640)
@@ -123,12 +121,13 @@ def certifyAurora(file):
     imgsz = check_img_size(imgsz, s=stride)  # check image size
 
     bs = 1  # batch_size
-    dataset = LoadImages(source, img_size=imgsz, stride=stride, auto=pt, vid_stride=vid_stride)
+    dataset = LoadImages(image_data, img_size=imgsz, stride=stride, auto=pt, vid_stride=vid_stride)
 
     vid_path, vid_writer = [None] * bs, [None] * bs
 
     model.warmup(imgsz=(1 if pt or model.triton else bs, 3, *imgsz))  # warmup
     seen, windows, dt = 0, [], (Profile(), Profile(), Profile())
+    
     for path, im, im0s, vid_cap, s in dataset:
         with dt[0]:
             im = torch.from_numpy(im).to(model.device)
