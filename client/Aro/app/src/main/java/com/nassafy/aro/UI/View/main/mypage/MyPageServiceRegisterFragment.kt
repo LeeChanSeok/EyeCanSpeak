@@ -73,11 +73,6 @@ class MyPageServiceRegisterFragment :
         binding.auroraServiceCardview.setIsSelected(myPageServiceRegisterFragementViewModel.auroraService)
         binding.meteorServiceCardview.setIsSelected(myPageServiceRegisterFragementViewModel.meteorService)
 
-        //커스텀 뷰는 setOnClickListener가 안먹힘;;; //TODO 나아아중에 개선
-//        binding.auroraServiceCardview.setOnClickListener {
-//            Log.d("ssafy1", "why didn't be clicked?")
-//        }
-
         binding.cancelButton.setOnClickListener {
             findNavController().popBackStack()
         }

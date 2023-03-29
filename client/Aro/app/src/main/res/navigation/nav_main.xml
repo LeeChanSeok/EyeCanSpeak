@@ -1,96 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/nav_main"
-        app:startDestination="@id/mainFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_main"
+    app:startDestination="@id/mainFragment">
 
     <fragment
-            android:id="@+id/mainFragment"
-            android:name="com.nassafy.aro.ui.view.main.MainFragment"
-            android:label="MainFragmentDirection">
+        android:id="@+id/mainFragment"
+        android:name="com.nassafy.aro.ui.view.main.MainFragment"
+        android:label="MainFragmentDirection">
         <action
-                android:id="@+id/action_mainFragment_to_stampHomeFragment"
-                app:destination="@id/nav_stamp_diary"
-                app:enterAnim="@anim/enter_right_anim"
-                app:exitAnim="@anim/exit_left_anim"
-                app:popEnterAnim="@anim/enter_left_anim"
-                app:popExitAnim="@anim/exit_right_anim" />
+            android:id="@+id/action_mainFragment_to_stampHomeFragment"
+            app:destination="@id/nav_stamp_diary"
+            app:enterAnim="@anim/enter_right_anim"
+            app:exitAnim="@anim/exit_left_anim"
+            app:popEnterAnim="@anim/enter_left_anim"
+            app:popExitAnim="@anim/exit_right_anim" />
         <action
-                android:id="@+id/action_mainFragment_to_myPageFragment"
-                app:destination="@id/myPageFragment"
-                app:enterAnim="@anim/enter_right_anim"
-                app:exitAnim="@anim/exit_left_anim"
-                app:popEnterAnim="@anim/enter_left_anim"
-                app:popExitAnim="@anim/exit_right_anim" />
+            android:id="@+id/action_mainFragment_to_myPageFragment"
+            app:destination="@id/myPageFragment"
+            app:enterAnim="@anim/enter_right_anim"
+            app:exitAnim="@anim/exit_left_anim"
+            app:popEnterAnim="@anim/enter_left_anim"
+            app:popExitAnim="@anim/exit_right_anim" />
 
     </fragment>
 
     <!-- ======================================= STAMP ======================================= -->
 
     <navigation
-            android:id="@+id/nav_stamp_diary"
-            app:startDestination="@id/stampHomeFragment">
+        android:id="@+id/nav_stamp_diary"
+        app:startDestination="@id/stampHomeFragment">
         <fragment
-                android:id="@+id/stampDiaryFragment"
-                android:name="com.nassafy.aro.ui.view.main.stamp.StampDiaryFragment"
-                android:label="stampDiaryFragmentDirection">
+            android:id="@+id/stampDiaryFragment"
+            android:name="com.nassafy.aro.ui.view.main.stamp.StampDiaryFragment"
+            android:label="stampDiaryFragmentDirection">
 
             <action
-                    android:id="@+id/action_stampDiaryFragment_to_stampHomeFragment"
-                    app:destination="@id/stampHomeFragment"
-                    app:enterAnim="@anim/enter_right_anim"
-                    app:exitAnim="@anim/exit_left_anim"
-                    app:popEnterAnim="@anim/enter_left_anim"
-                    app:popExitAnim="@anim/exit_right_anim" />
+                android:id="@+id/action_stampDiaryFragment_to_stampHomeFragment"
+                app:destination="@id/stampHomeFragment"
+                app:enterAnim="@anim/enter_right_anim"
+                app:exitAnim="@anim/exit_left_anim"
+                app:popEnterAnim="@anim/enter_left_anim"
+                app:popExitAnim="@anim/exit_right_anim" />
         </fragment>
         <fragment
-                android:id="@+id/stampHomeFragment"
-                android:name="com.nassafy.aro.ui.view.main.stamp.StampHomeFragment"
-                android:label="fragment_stamp_home">
+            android:id="@+id/stampHomeFragment"
+            android:name="com.nassafy.aro.ui.view.main.stamp.StampHomeFragment"
+            android:label="fragment_stamp_home">
             <action
-                    android:id="@+id/action_stampHomeFragment_to_stampCountryPlacesFragment"
-                    app:destination="@id/stampCountryPlacesFragment"
-                    app:enterAnim="@anim/enter_right_anim"
-                    app:exitAnim="@anim/exit_left_anim"
-                    app:popEnterAnim="@anim/enter_left_anim"
-                    app:popExitAnim="@anim/exit_right_anim" />
+                android:id="@+id/action_stampHomeFragment_to_stampCountryPlacesFragment"
+                app:destination="@id/stampCountryPlacesFragment"
+                app:enterAnim="@anim/enter_right_anim"
+                app:exitAnim="@anim/exit_left_anim"
+                app:popEnterAnim="@anim/enter_left_anim"
+                app:popExitAnim="@anim/exit_right_anim" />
         </fragment>
         <fragment
-                android:id="@+id/stampCountryPlacesFragment"
-                android:name="com.nassafy.aro.ui.view.main.stamp.StampCountryPlacesFragment"
-                android:label="stampCountryPlacesFragmentDirection">
+            android:id="@+id/stampCountryPlacesFragment"
+            android:name="com.nassafy.aro.ui.view.main.stamp.StampCountryPlacesFragment"
+            android:label="stampCountryPlacesFragmentDirection">
 
             <action
-                    android:id="@+id/action_stampCountryPlacesFragment_to_stampDiaryFragment"
-                    app:destination="@id/stampDiaryFragment"
-                    app:enterAnim="@anim/enter_right_anim"
-                    app:exitAnim="@anim/exit_left_anim"
-                    app:popEnterAnim="@anim/enter_left_anim"
-                    app:popExitAnim="@anim/exit_right_anim" />
+                android:id="@+id/action_stampCountryPlacesFragment_to_stampDiaryFragment"
+                app:destination="@id/stampDiaryFragment"
+                app:enterAnim="@anim/enter_right_anim"
+                app:exitAnim="@anim/exit_left_anim"
+                app:popEnterAnim="@anim/enter_left_anim"
+                app:popExitAnim="@anim/exit_right_anim" />
 
 
             <action
-                    android:id="@+id/action_stampCountryPlacesFragment_to_stampValidateFragment"
-                    app:destination="@id/stampValidateFragment"
-                    app:enterAnim="@anim/enter_right_anim"
-                    app:exitAnim="@anim/exit_left_anim"
-                    app:popEnterAnim="@anim/enter_left_anim"
-                    app:popExitAnim="@anim/exit_right_anim" />
+                android:id="@+id/action_stampCountryPlacesFragment_to_stampValidateFragment"
+                app:destination="@id/stampValidateFragment"
+                app:enterAnim="@anim/enter_right_anim"
+                app:exitAnim="@anim/exit_left_anim"
+                app:popEnterAnim="@anim/enter_left_anim"
+                app:popExitAnim="@anim/exit_right_anim" />
 
         </fragment>
 
         <fragment
-                android:id="@+id/stampValidateFragment"
-                android:name="com.nassafy.aro.ui.view.main.stamp.StampValidateFragment"
-                android:label="stampValidateFragmentDirection">
+            android:id="@+id/stampValidateFragment"
+            android:name="com.nassafy.aro.ui.view.main.stamp.StampValidateFragment"
+            android:label="stampValidateFragmentDirection">
 
             <action
-                    android:id="@+id/action_stampValidateFragment_to_stampCountryPlacesFragment"
-                    app:destination="@id/stampCountryPlacesFragment"
-                    app:enterAnim="@anim/enter_right_anim"
-                    app:exitAnim="@anim/exit_left_anim"
-                    app:popEnterAnim="@anim/enter_left_anim"
-                    app:popExitAnim="@anim/exit_right_anim" />
+                android:id="@+id/action_stampValidateFragment_to_stampCountryPlacesFragment"
+                app:destination="@id/stampCountryPlacesFragment"
+                app:enterAnim="@anim/enter_right_anim"
+                app:exitAnim="@anim/exit_left_anim"
+                app:popEnterAnim="@anim/enter_left_anim"
+                app:popExitAnim="@anim/exit_right_anim" />
 
         </fragment>
     </navigation>
@@ -98,62 +98,70 @@
     <!-- ======================================= MyPage ======================================= -->
 
     <fragment
-            android:id="@+id/myPageFragment"
-            android:name="com.nassafy.aro.ui.view.main.mypage.MyPageFragment"
-            android:label="MyPageFragment">
+        android:id="@+id/myPageFragment"
+        android:name="com.nassafy.aro.ui.view.main.mypage.MyPageFragment"
+        android:label="MyPageFragment">
         <action
-                android:id="@+id/action_myPageFragment_to_myPageServiceRegisterFragment"
-                app:destination="@id/myPageServiceRegisterFragment" />
+            android:id="@+id/action_myPageFragment_to_myPageServiceRegisterFragment"
+            app:destination="@id/myPageServiceRegisterFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
         <action
-                android:id="@+id/action_myPageFragment_to_myPageFavoriteRegisterFragment"
-                app:destination="@id/myPageFavoriteRegisterFragment" />
+            android:id="@+id/action_myPageFragment_to_myPageFavoriteRegisterFragment"
+            app:destination="@id/myPageFavoriteRegisterFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
-            android:id="@+id/myPageFavoriteRegisterFragment"
-            android:name="com.nassafy.aro.ui.view.main.mypage.MyPageFavoriteRegisterFragment"
-            android:label="MyPageFavoriteRegisterFragment">
+        android:id="@+id/myPageFavoriteRegisterFragment"
+        android:name="com.nassafy.aro.ui.view.main.mypage.MyPageFavoriteRegisterFragment"
+        android:label="MyPageFavoriteRegisterFragment">
         <action
             android:id="@+id/action_myPageFavoriteRegisterFragment_to_myPageFragment"
             app:destination="@id/myPageFragment"
-            app:enterAnim="@anim/enter_right_anim"
-            app:exitAnim="@anim/exit_left_anim"
-            app:popEnterAnim="@anim/enter_left_anim"
-            app:popExitAnim="@anim/exit_right_anim"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right"
             app:popUpTo="@id/myPageFragment"
             app:popUpToInclusive="true" />
         <argument
-                android:name="auroraService"
-                app:argType="boolean"
-                android:defaultValue="false" />
+            android:name="auroraService"
+            android:defaultValue="false"
+            app:argType="boolean" />
         <argument
-                android:name="meteorService"
-                app:argType="boolean"
-                android:defaultValue="false" />
+            android:name="meteorService"
+            android:defaultValue="false"
+            app:argType="boolean" />
     </fragment>
     <fragment
-            android:id="@+id/myPageServiceRegisterFragment"
-            android:name="com.nassafy.aro.ui.view.main.mypage.MyPageServiceRegisterFragment"
-            android:label="MyPageServiceRegisterFragment">
+        android:id="@+id/myPageServiceRegisterFragment"
+        android:name="com.nassafy.aro.ui.view.main.mypage.MyPageServiceRegisterFragment"
+        android:label="MyPageServiceRegisterFragment">
         <action
-                android:id="@+id/action_myPageServiceRegisterFragment_to_myPageFavoriteRegisterFragment"
-                app:destination="@id/myPageFavoriteRegisterFragment"
-                app:enterAnim="@anim/enter_right_anim"
-                app:exitAnim="@anim/exit_left_anim"
-                app:popEnterAnim="@anim/enter_left_anim"
-                app:popExitAnim="@anim/exit_right_anim" />
+            android:id="@+id/action_myPageServiceRegisterFragment_to_myPageFavoriteRegisterFragment"
+            app:destination="@id/myPageFavoriteRegisterFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
         <action
-                android:id="@+id/action_myPageServiceRegisterFragment_to_myPageFragment"
-                app:destination="@id/myPageFragment"
-                app:popUpTo="@id/myPageFragment"
-                app:popUpToInclusive="false" />
+            android:id="@+id/action_myPageServiceRegisterFragment_to_myPageFragment"
+            app:destination="@id/myPageFragment"
+            app:popUpTo="@id/myPageFragment"
+            app:popUpToInclusive="false" />
         <argument
-                android:name="aurora_service"
-                app:argType="boolean"
-                android:defaultValue="false" />
+            android:name="aurora_service"
+            android:defaultValue="false"
+            app:argType="boolean" />
         <argument
-                android:name="meteor_service"
-                app:argType="boolean"
-                android:defaultValue="false" />
+            android:name="meteor_service"
+            android:defaultValue="false"
+            app:argType="boolean" />
     </fragment>
 
 </navigation>

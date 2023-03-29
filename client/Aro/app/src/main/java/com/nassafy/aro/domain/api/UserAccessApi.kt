@@ -37,4 +37,9 @@ interface UserAccessApi {
         @Body user: UserTest
     ): Response<Unit>
 
+    @POST("api/members/snslogin")
+    suspend fun snsLogin(
+        @Body reuqestBody: JsonObject
+    ): Response<JsonObject>
+
 } // End of UserAccessApi
