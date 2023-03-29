@@ -1,6 +1,7 @@
 package com.nassafy.aro.ui.view.dialog
 
 import android.graphics.Color
+import android.graphics.Paint
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -31,6 +32,7 @@ class OkDialog(private val title: String, private val content: String, private v
         binding.dialogContentTextview.text = content
         binding.dialogOkTextview.apply {
             text = okButtonContent
+            paintFlags = Paint.UNDERLINE_TEXT_FLAG
             setOnClickListener {
                 dismiss()
             }

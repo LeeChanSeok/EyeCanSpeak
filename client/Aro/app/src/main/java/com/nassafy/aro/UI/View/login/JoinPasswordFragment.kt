@@ -57,9 +57,7 @@ class JoinPasswordFragment :
                 override fun onTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {
                     job?.cancel()
                     job = CoroutineScope(Dispatchers.Main).launch {
-                        Log.d("ssafy/c_t", "1")
                         delay(300)
-                        Log.d("ssafy/c_t", "2")
                         validateCheck()
                     }
                 }

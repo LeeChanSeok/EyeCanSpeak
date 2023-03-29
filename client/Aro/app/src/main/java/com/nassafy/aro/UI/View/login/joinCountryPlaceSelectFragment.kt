@@ -131,9 +131,6 @@ class JoinCountryPlaceSelectFragment : BaseFragment<FragmentAroCountryPlaceSelec
                         delay(800)
                         binding.loadingLayout.isGone = true
                     }
-                    Log.d(
-                        "ssafy_pcs", "getCountryTestResponseLiveData: ${it.data}"
-                    )
                     spinnerList.clear()
                     spinnerList.addAll(it.data!!)
                     adapter.notifyDataSetChanged()
@@ -156,8 +153,6 @@ class JoinCountryPlaceSelectFragment : BaseFragment<FragmentAroCountryPlaceSelec
         loginActivityViewModel.placeListLiveData.observe(this.viewLifecycleOwner) {
             when (it) {
                 is NetworkResult.Success -> {
-                    Log.d("ssafy/p1", it.data.toString())
-                    Log.d("ssafy/p2", loginActivityViewModel.selectedAuroraPlaces.value.toString())
                     loginActivityViewModel.placeListData.clear()
                     loginActivityViewModel.placeListData.addAll(it.data!!)
                 }
@@ -174,10 +169,8 @@ class JoinCountryPlaceSelectFragment : BaseFragment<FragmentAroCountryPlaceSelec
         } // End of .placeListLiveData.observe(this.viewLifecycleOwner)
 
         loginActivityViewModel.selectedAuroraPlaces.observe(this.viewLifecycleOwner) { selectedAuroraPlaces ->
-//            Log.d("ssafy_selected_prev", loginActivityViewModel.selectedAuroraPlaceList.toString())
             loginActivityViewModel.selectedAuroraPlaceList.clear()
             loginActivityViewModel.selectedAuroraPlaceList.addAll(selectedAuroraPlaces)
-//            Log.d("ssafy_selected_after", loginActivityViewModel.selectedAuroraPlaceList.toString())
         }
 
         joinCountryPlaceServiceSelectFragmentViewModel.userJoinNetworkResultLiveData.observe(this.viewLifecycleOwner) {

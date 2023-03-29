@@ -38,20 +38,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
     private val loginFragmentViewModel: LoginFragmentViewModel by viewModels()
     private var isTriedLoginState = false
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Application.sharedPreferencesUtil.apply {
-            when (getUserAccessToken()) {
-                "" -> {}
-                else -> { //토큰이 있으면
-                    // TODO 자동로그인
-                    Log.d("싸피", getUserAccessToken())
-                    startMainActivity()
-                } // End of else
-            } // End of when
-        } // End of apply
-    } // End of onCreate
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -126,6 +112,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
             when (it) {
                 is NetworkResult.Success -> {
                     val data = it.data
+                    Log.d("ssafy/login", it.data.toString())
                     Application.sharedPreferencesUtil.addUserAccessToken(data?.accessToken ?: "")
                     Application.sharedPreferencesUtil.addUserRefreshToken(data?.refreshToken ?: "")
                     startMainActivity()

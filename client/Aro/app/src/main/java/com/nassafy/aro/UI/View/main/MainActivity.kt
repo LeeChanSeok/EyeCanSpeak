@@ -210,6 +210,11 @@ class MainActivity : AppCompatActivity() {
                 is NetworkResult.Success -> {
                     mainActivityViewModel.email = it.data!!.email
                     mainActivityViewModel.nickname = it.data!!.nickname
+
+                    binding.mainNavigation.getHeaderView(0).apply {
+                        findViewById<TextView>(R.id.nickname_textview).text = mainActivityViewModel.nickname
+                        findViewById<TextView>(R.id.email_textview).text = mainActivityViewModel.email
+                    }
                 }
                 is NetworkResult.Error -> {
                     binding.root.showSnackBarMessage("유저 정보를 불러오는데 실패했습니다.")
@@ -221,6 +226,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initDrawer() {
+
         val toggle: ActionBarDrawerToggle = object : ActionBarDrawerToggle(
             this,
             binding.mainDrawerlayout,

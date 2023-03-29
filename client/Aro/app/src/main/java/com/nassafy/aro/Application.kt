@@ -9,7 +9,6 @@ import retrofit2.Retrofit
 class Application : Application() {
     override fun onCreate() {
         super.onCreate()
-
         sharedPreferencesUtil = SharedPreferencesUtil(applicationContext)
     } // End of onCreate
 

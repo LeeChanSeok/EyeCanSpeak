@@ -19,8 +19,6 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         AroFCM().getFirebaseToken()
-
-
     }
 
     override fun onNewIntent(intent: Intent?) {

@@ -1,6 +1,7 @@
 package com.nassafy.aro.domain.api
 
 import retrofit2.Response
+import retrofit2.http.GET
 import retrofit2.http.POST
 
 interface SplashApi {
@@ -13,6 +14,6 @@ interface SplashApi {
     200  OK
     400  Bad Request
      */
-    @POST("api/members/autologin")
+    @GET("api/members/autologin")
     suspend fun postAccessTokenGetUserData(): Response<Void>
 } // End of SplashApi
