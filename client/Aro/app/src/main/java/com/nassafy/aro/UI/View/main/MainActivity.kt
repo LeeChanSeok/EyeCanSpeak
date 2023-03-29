@@ -10,11 +10,11 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.nassafy.aro.R
 import com.nassafy.aro.databinding.ActivityMainBinding
+import com.nassafy.aro.service.AroFCM
 import com.nassafy.aro.util.NetworkResult
 import com.nassafy.aro.util.showSnackBarMessage
 import dagger.hilt.android.AndroidEntryPoint
@@ -46,7 +46,19 @@ class MainActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             mainActivityViewModel.getUserInfo()
         }
+
+
+        /*
+            JWT토큰을 보내서 회원정보를 가져오는데,Body에 FCM토큰을 담아서 요청을 보냄
+         */
+        callFcmToken()
+
+
     } // End of onCreate
+
+    private fun callFcmToken(): String {
+        return AroFCM().getFirebaseToken()
+    } // End of callFcmToken
 
     private fun initObserver() {
         mainActivityViewModel.userInfo.observe(this) {

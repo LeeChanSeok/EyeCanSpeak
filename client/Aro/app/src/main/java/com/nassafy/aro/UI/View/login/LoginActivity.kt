@@ -1,10 +1,11 @@
 package com.nassafy.aro.ui.view.login
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import com.nassafy.aro.databinding.ActivityLoginBinding
+import com.nassafy.aro.service.AroFCM
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -17,6 +18,9 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        AroFCM().getFirebaseToken()
+
+
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -26,7 +30,7 @@ class LoginActivity : AppCompatActivity() {
         Log.d("ssafy/sign_in/scheme", "${uri?.scheme}")
 
         // Oauth 로그인 인지 아닌지 확인
-        when(uri?.scheme.toString()) {
+        when (uri?.scheme.toString()) {
             "aro-github" -> { // 깃허브
                 val code = uri?.getQueryParameter("code")
                 // TODO Delete Log

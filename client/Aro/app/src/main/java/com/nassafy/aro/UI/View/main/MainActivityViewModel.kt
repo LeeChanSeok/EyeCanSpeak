@@ -11,7 +11,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainActivityViewModel @Inject constructor(private val mainRepository: MainRepository) : ViewModel() {
+class MainActivityViewModel @Inject constructor(private val mainRepository: MainRepository) :
+    ViewModel() {
     var nickname: String = ""
     var email: String = ""
     val userInfo: LiveData<NetworkResult<UserTest>> get() = mainRepository.userInfo

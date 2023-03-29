@@ -46,7 +46,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                 else -> { //토큰이 있으면
                     // TODO 자동로그인
                     Log.d("싸피", getUserAccessToken())
-//                    startMainActivity()
+                    startMainActivity()
                 } // End of else
             } // End of when
         } // End of apply

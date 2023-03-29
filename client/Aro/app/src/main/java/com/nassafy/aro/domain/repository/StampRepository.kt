@@ -2,7 +2,6 @@ package com.nassafy.aro.domain.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.nassafy.aro.data.dto.MapStampItem
 import com.nassafy.aro.data.dto.StampHomeItem
 import com.nassafy.aro.data.dto.UserStampPlace
 import com.nassafy.aro.domain.api.StampApi
@@ -44,7 +43,6 @@ class StampRepository @Inject constructor(
     } // End of getAllNationList
 
     // ================================= 유저별 국가 스탬프 데이터 가져오기 =================================
-
     private val _getUserStampDataGroupByCountryResponseLiveData =
         MutableLiveData<NetworkResult<StampHomeItem>>()
     val getUserStampDataGroupByCountryResponseLiveData: LiveData<NetworkResult<StampHomeItem>>
@@ -71,7 +69,6 @@ class StampRepository @Inject constructor(
                 )
             }
         }
-
     }  // End of getUserStampDataGroupByCountry
 
     // ========================================== 국가별 명소 & 유저 데이터 가져오기 ==========================================

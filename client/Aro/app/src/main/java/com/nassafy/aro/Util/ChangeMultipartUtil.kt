@@ -15,4 +15,5 @@ class ChangeMultipartUtil {
         val result = c?.getString(index!!)
         return result!!
     } // End of changeAbsoluteyPath
+
 } // End of ChangeMultipartUtil class

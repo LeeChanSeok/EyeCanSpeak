@@ -46,7 +46,6 @@ fun Polyline.addInfoWindow(map: GoogleMap, location: LatLng, title: String, mess
             .icon(invisibleMarker)
             .anchor(0f, 0f)
     )
-    Log.d("Extension", "addInfoWindow: $location")
     marker?.showInfoWindow()
 } // End of addInfoWindow
 

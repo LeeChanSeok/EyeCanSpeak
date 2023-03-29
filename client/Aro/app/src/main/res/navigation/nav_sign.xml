@@ -1,90 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_sign"
-    app:startDestination="@id/loginFragment">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/nav_sign"
+        app:startDestination="@id/splashFragment">
 
     <fragment
-        android:id="@+id/loginFragment"
-        android:name="com.nassafy.aro.ui.view.login.LoginFragment"
-        android:label="fragment_sign_in"
-        tools:layout="@layout/fragment_login" >
+            android:id="@+id/loginFragment"
+            android:name="com.nassafy.aro.ui.view.login.LoginFragment"
+            android:label="fragment_sign_in"
+            tools:layout="@layout/fragment_login">
         <action
-            android:id="@+id/action_loginFragment_to_joinEmailFragment"
-            app:destination="@id/joinEmailFragment"
-            app:enterAnim="@anim/aro_enter_anim"
-            app:exitAnim="@anim/aro_exit_anim"
-            app:popEnterAnim="@anim/aro_pop_enter_anim"
-            app:popExitAnim="@anim/aro_pop_exit_anim" />
+                android:id="@+id/action_loginFragment_to_joinEmailFragment"
+                app:destination="@id/joinEmailFragment"
+                app:enterAnim="@anim/aro_enter_anim"
+                app:exitAnim="@anim/aro_exit_anim"
+                app:popEnterAnim="@anim/aro_pop_enter_anim"
+                app:popExitAnim="@anim/aro_pop_exit_anim" />
         <action
-            android:id="@+id/action_loginFragment_to_joinNicknameFragment"
-            app:destination="@id/joinNicknameFragment" />
+                android:id="@+id/action_loginFragment_to_joinNicknameFragment"
+                app:destination="@id/joinNicknameFragment" />
     </fragment>
     <fragment
-        android:id="@+id/joinEmailFragment"
-        android:name="com.nassafy.aro.ui.view.login.JoinEmailFragment"
-        android:label="fragment_sign_up_email"
-        tools:layout="@layout/fragment_join_email" >
+            android:id="@+id/joinEmailFragment"
+            android:name="com.nassafy.aro.ui.view.login.JoinEmailFragment"
+            android:label="fragment_sign_up_email"
+            tools:layout="@layout/fragment_join_email">
         <action
-            android:id="@+id/action_joinEmailFragment_to_joinPasswordFragment"
-            app:destination="@id/joinPasswordFragment"
-            app:enterAnim="@anim/from_right"
-            app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right" />
+                android:id="@+id/action_joinEmailFragment_to_joinPasswordFragment"
+                app:destination="@id/joinPasswordFragment"
+                app:enterAnim="@anim/from_right"
+                app:exitAnim="@anim/to_left"
+                app:popEnterAnim="@anim/from_left"
+                app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
-        android:id="@+id/joinPasswordFragment"
-        android:name="com.nassafy.aro.ui.view.login.JoinPasswordFragment"
-        android:label="fragment_sign_up_password"
-        tools:layout="@layout/fragment_join_password" >
+            android:id="@+id/joinPasswordFragment"
+            android:name="com.nassafy.aro.ui.view.login.JoinPasswordFragment"
+            android:label="fragment_sign_up_password"
+            tools:layout="@layout/fragment_join_password">
         <action
-            android:id="@+id/action_joinPasswordFragment_to_joinNicknameFragment"
-            app:destination="@id/joinNicknameFragment"
-            app:enterAnim="@anim/from_right"
-            app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right" />
+                android:id="@+id/action_joinPasswordFragment_to_joinNicknameFragment"
+                app:destination="@id/joinNicknameFragment"
+                app:enterAnim="@anim/from_right"
+                app:exitAnim="@anim/to_left"
+                app:popEnterAnim="@anim/from_left"
+                app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
-        android:id="@+id/joinNicknameFragment"
-        android:name="com.nassafy.aro.ui.view.login.JoinNicknameFragment"
-        android:label="SignUpNicknameFragment" >
+            android:id="@+id/joinNicknameFragment"
+            android:name="com.nassafy.aro.ui.view.login.JoinNicknameFragment"
+            android:label="SignUpNicknameFragment">
         <action
-            android:id="@+id/action_joinNicknameFragment_to_joinServiceFragment"
-            app:destination="@id/joinServiceFragment"
-            app:enterAnim="@anim/from_right"
-            app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right" />
+                android:id="@+id/action_joinNicknameFragment_to_joinServiceFragment"
+                app:destination="@id/joinServiceFragment"
+                app:enterAnim="@anim/from_right"
+                app:exitAnim="@anim/to_left"
+                app:popEnterAnim="@anim/from_left"
+                app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
-        android:id="@+id/joinCountryPlaceSelectFragment"
-        android:name="com.nassafy.aro.ui.view.login.JoinCountryPlaceSelectFragment"
-        android:label="SignUpFavoriteFragment" >
+            android:id="@+id/joinCountryPlaceSelectFragment"
+            android:name="com.nassafy.aro.ui.view.login.JoinCountryPlaceSelectFragment"
+            android:label="SignUpFavoriteFragment">
         <action
-            android:id="@+id/action_joinCountryPlaceSelectFragment_to_loginFragment"
-            app:destination="@id/loginFragment"
-            app:popUpTo="@id/loginFragment"
-            app:popUpToInclusive="true" />
+                android:id="@+id/action_joinCountryPlaceSelectFragment_to_loginFragment"
+                app:destination="@id/loginFragment"
+                app:popUpTo="@id/loginFragment"
+                app:popUpToInclusive="true" />
     </fragment>
     <fragment
-        android:id="@+id/joinServiceFragment"
-        android:name="com.nassafy.aro.ui.view.login.JoinServiceFragment"
-        android:label="SignUpServiceFragment" >
+            android:id="@+id/joinServiceFragment"
+            android:name="com.nassafy.aro.ui.view.login.JoinServiceFragment"
+            android:label="SignUpServiceFragment">
         <action
-            android:id="@+id/action_joinServiceFragment_to_joinCountryPlaceSelectFragment"
-            app:destination="@id/joinCountryPlaceSelectFragment"
-            app:enterAnim="@anim/from_right"
-            app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right" />
+                android:id="@+id/action_joinServiceFragment_to_joinCountryPlaceSelectFragment"
+                app:destination="@id/joinCountryPlaceSelectFragment"
+                app:enterAnim="@anim/from_right"
+                app:exitAnim="@anim/to_left"
+                app:popEnterAnim="@anim/from_left"
+                app:popExitAnim="@anim/to_right" />
         <action
-            android:id="@+id/action_joinServiceFragment_to_loginFragment"
-            app:destination="@id/loginFragment"
-            app:popUpTo="@id/loginFragment"
-            app:popUpToInclusive="true" />
+                android:id="@+id/action_joinServiceFragment_to_loginFragment"
+                app:destination="@id/loginFragment"
+                app:popUpTo="@id/loginFragment"
+                app:popUpToInclusive="true" />
     </fragment>
 
+    <fragment
+            android:id="@+id/splashFragment"
+            android:name="com.nassafy.aro.ui.view.login.splash.SplashFragment"
+            android:label="SplashFragment">
+
+        <action
+                android:id="@+id/action_splashFragment_to_LoginFragment"
+                app:destination="@id/loginFragment"
+                app:enterAnim="@anim/from_right"
+                app:exitAnim="@anim/to_left"
+                app:popEnterAnim="@anim/from_left"
+                app:popExitAnim="@anim/to_right" />
+    </fragment>
 </navigation>

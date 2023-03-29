@@ -81,7 +81,6 @@ class StampHomeFragment :
 
             true
         }
-
     } // End of onViewCreated
 
     private fun initEventListeners() {

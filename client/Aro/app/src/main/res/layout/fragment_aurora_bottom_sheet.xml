@@ -55,7 +55,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/kp_index_textview_text"
                     android:textColor="@color/white"
-                    android:textSize="20sp"
+                    android:textSize="16sp"
                     android:fontFamily="@font/nanum_square_b" />
             </LinearLayout>
 
@@ -85,7 +85,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/my_favorite_textview_text"
                     android:textColor="@color/white"
-                    android:textSize="20sp"
+                    android:textSize="16sp"
                     android:fontFamily="@font/nanum_square_b" />
 
             </LinearLayout>

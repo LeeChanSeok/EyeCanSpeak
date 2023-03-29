@@ -1,6 +1,6 @@
 package com.nassafy.aro.ui.view.main.stamp
 
-import android.app.Activity.RESULT_OK
+import android.app.Activity.*
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -210,13 +210,15 @@ class StampDiaryFragment() :
             diaryViewModel.viewPagerImageListSizePlus()
 
             val file = File(
-                ChangeMultipartUtil().changeAbsoluteyPath(imageUri, mContext)
+                ChangeMultipartUtil().changeAbsoluteyPath(imageUri, requireActivity())
             )
+
             val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
             val body = MultipartBody.Part.createFormData("newImageList", file.name, requestFile)
             newImageList.add(body)
         }
     } // End of registerForActivityResult
+
 
     private fun getPlaceDiaryUserDataResponseLiveDataObserve() {
         diaryViewModel.getPlaceDiaryUserDataResponseLiveData.observe(this.viewLifecycleOwner) {

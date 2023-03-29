@@ -29,12 +29,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:tabIconTint="@drawable/tab_selected"
-        app:tabTextColor="@drawable/tab_selected"
         app:tabIndicator="@drawable/tab_indicator"
         app:tabIndicatorColor="@color/main_app_color"
         app:tabIndicatorHeight="4dp"
-        app:tabTextAppearance="@style/TabTextStyle"
         app:tabBackground="@color/view_pager_background_color" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

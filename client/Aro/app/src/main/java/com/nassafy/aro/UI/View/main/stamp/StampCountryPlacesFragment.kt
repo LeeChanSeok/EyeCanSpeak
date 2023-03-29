@@ -2,6 +2,7 @@ package com.nassafy.aro.ui.view.main.stamp
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
@@ -105,6 +106,8 @@ class StampCountryPlacesFragment :
             when (it) {
                 is NetworkResult.Success -> {
                     stampHomeNavViewModel.setUserCountryPlaceDataList(it.data!!)
+                    Log.d(TAG, "getUserPlaceDataGroupByCountryResponseLiveDataObserve: ${it.data}")
+                    Log.d(TAG, "getUserPlaceDataGroupByCountryResponseLiveDataObserve: ${it.data}")
 
                     //setUserCountryPlaceDataList
                     initViewPagerAdapter()
@@ -120,5 +123,4 @@ class StampCountryPlacesFragment :
             }
         }
     } // End of getUserPlaceDataGroupByCountryResponseLiveDataObserve
-
 } // End of StampHomeFragment class

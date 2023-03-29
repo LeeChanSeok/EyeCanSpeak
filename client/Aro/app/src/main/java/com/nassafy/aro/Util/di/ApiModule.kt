@@ -125,7 +125,7 @@ object ApiModule {
             .create(TestApi::class.java)
     }
 
-  @HeaderInterceptorApi
+    @HeaderInterceptorApi
     @Provides
     fun provideHeaderTestApi(@HeaderInterceptorOkHttpClient okHeaderOkHttpClient: OkHttpClient): TestApi {
         return Retrofit.Builder()
@@ -263,4 +263,27 @@ object ApiModule {
             .create(WeatherApi::class.java)
     } // End of provideWithoutHeaderWeatherApi
 
+    // ============================================= Splash =============================================
+    @Provides
+    @WithoutHeaderInterceptorApi
+    fun provideWithoutHeaderSplashApi(@WithoutHeaderInterceptorOkHttpClient okHttpClient: OkHttpClient): SplashApi {
+        return Retrofit.Builder()
+            .client(okHttpClient)
+            .baseUrl(WEATHER_URL)
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .build()
+            .create(SplashApi::class.java)
+    } // End of provideWithoutHeaderSplashApi
+
+
+    @Provides
+    @HeaderInterceptorApi
+    fun provideHeaderSplashApi(@HeaderInterceptorOkHttpClient okHttpClient: OkHttpClient): SplashApi {
+        return Retrofit.Builder()
+            .client(okHttpClient)
+            .baseUrl(provideBaseUrl())
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .build()
+            .create(SplashApi::class.java)
+    } // End of provideHeaderSplashApi
 } // End of ApiModule
