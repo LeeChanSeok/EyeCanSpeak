@@ -1,6 +1,5 @@
 package com.nassafy.aro.domain.repository
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.nassafy.aro.data.dto.Diary
@@ -19,7 +18,6 @@ class DiaryRepository @Inject constructor(
     @WithoutHeaderInterceptorApi private val diaryApi: DiaryApi,
     @HeaderInterceptorApi private val headerDiaryApi: DiaryApi
 ) {
-
 
     // ===================================== 명소별 유저 diary 데이터 가져오기 =====================================
     private val _getPlaceDiaryUserDataResponseLiveData = MutableLiveData<NetworkResult<Diary>>()
@@ -57,15 +55,11 @@ class DiaryRepository @Inject constructor(
         newImageList: List<MultipartBody.Part?>?,
         requestHashMap: HashMap<String, RequestBody>,
     ) {
-        Log.d(TAG, "createPlaceDiary: $placeId , $newImageList , $requestHashMap")
         val response = headerDiaryApi.createStampDiary(
             placeId,
             newImageList,
             requestHashMap
         )
-
-        Log.d(TAG, "createPlaceDiary: $response")
-        Log.d(TAG, "createPlaceDiary: ${response.body()}")
 
         _createPlaceDiaryResponseLiveData.postValue(NetworkResult.Loading())
 

@@ -88,7 +88,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:text="내가 모은 스탬프 3 / 8"
             android:textColor="#D5D5D5"
             android:textSize="10sp"
             app:layout_constraintBottom_toBottomOf="parent"

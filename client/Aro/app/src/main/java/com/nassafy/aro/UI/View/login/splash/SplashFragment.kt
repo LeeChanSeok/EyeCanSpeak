@@ -67,8 +67,7 @@ class SplashFragment : BaseFragment<FragmentSplashBinding>(FragmentSplashBinding
             // postAccessTokenGetUserDataResponseLiveData
             when (it) {
                 is NetworkResult.Success -> {
-                    if (it.data != null) {
-
+                    if (it.data == 200) {
                         val intent = Intent(requireContext(), MainActivity::class.java)
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

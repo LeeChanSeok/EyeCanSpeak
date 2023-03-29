@@ -1,12 +1,18 @@
 package com.nassafy.aro.domain.api
 
-import com.nassafy.aro.data.dto.UserTest
 import retrofit2.Response
 import retrofit2.http.POST
 
 interface SplashApi {
     // AccessToken을 토큰을 보내서 회원정보를 반환 받음
-    @POST("api/members/memberInfo")
-    suspend fun postAccessTokenGetUserData(): Response<UserTest>
+    // API 19
 
+    /*
+    [Response]
+    Http status
+    200  OK
+    400  Bad Request
+     */
+    @POST("api/members/autologin")
+    suspend fun postAccessTokenGetUserData(): Response<Void>
 } // End of SplashApi

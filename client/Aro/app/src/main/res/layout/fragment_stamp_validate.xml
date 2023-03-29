@@ -18,17 +18,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-            android:id="@+id/image_metadata_textview"
-            android:layout_marginTop="20dp"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
 
     <ImageView
             android:id="@+id/stamp_validate_imageview"
@@ -48,7 +37,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@id/stamp_validate_gallery_button"
-            android:layout_marginBottom="40dp" />
+            android:layout_marginBottom="80dp" />
+
+    <TextView
+            android:id="@+id/image_location_inform_textview"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintTop_toBottomOf="@id/stamp_diary_deco_framelayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
     <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/stamp_validate_gallery_button"
@@ -58,7 +58,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/stamp_validate_camera_button"
-            android:layout_marginBottom="60dp" />
+            android:layout_marginBottom="30dp" />
 
     <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/stamp_validate_camera_button"

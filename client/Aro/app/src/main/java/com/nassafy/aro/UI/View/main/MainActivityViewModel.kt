@@ -17,10 +17,9 @@ class MainActivityViewModel @Inject constructor(private val mainRepository: Main
     var email: String = ""
     val userInfo: LiveData<NetworkResult<UserTest>> get() = mainRepository.userInfo
 
-    fun getUserInfo() {
+    fun getUserInfo(fcmToken: String) {
         viewModelScope.launch {
-            mainRepository.getUserInfo()
+            mainRepository.getUserInfo(fcmToken)
         }
     }
-
-}
+} // End of MainActivityViewModel class

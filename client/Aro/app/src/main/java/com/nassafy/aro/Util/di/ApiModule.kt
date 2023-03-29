@@ -64,7 +64,6 @@ class HeaderInterceptor @Inject constructor() : Interceptor {
 @Module
 @InstallIn(SingletonComponent::class)
 object ApiModule {
-
     private val gson: Gson = GsonBuilder() //날짜 데이터 포맷
         .setDateFormat("yyyy-MM-dd HH:mm:ss")
         .create()

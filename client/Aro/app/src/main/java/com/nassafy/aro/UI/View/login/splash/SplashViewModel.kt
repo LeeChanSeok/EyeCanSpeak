@@ -15,7 +15,7 @@ class SplashViewModel @Inject constructor(private val splashRepository: SplashRe
     ViewModel() {
 
     // ====================================  Header에 AccessToken을 토큰만 담아서 유저 정보를 가져온다. ====================================
-    val postAccessTokenGetUserDataResponseLiveData: LiveData<NetworkResult<UserTest>>
+    val postAccessTokenGetUserDataResponseLiveData: LiveData<NetworkResult<Int>>
         get() = splashRepository.postAccessTokenGetUserDataResponseLiveData
 
     suspend fun postAccessTokenGetUserData() {
