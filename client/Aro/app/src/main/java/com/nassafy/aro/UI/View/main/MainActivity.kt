@@ -71,6 +71,7 @@ class MainActivity : AppCompatActivity() {
 
         initObserver()
         initDrawer()
+        initOption()
 
         CoroutineScope(Dispatchers.IO).launch {
             mainActivityViewModel.getUserInfo(callFcmToken())
@@ -221,8 +222,35 @@ class MainActivity : AppCompatActivity() {
                 }
                 is NetworkResult.Loading -> {
                 }
-            }
-        }
+            } // End of when
+        } // End of userInfo.observe
+
+        mainActivityViewModel.getAlarmOptionNetworkResultLiveData.observe(this) {
+            when (it) {
+                is NetworkResult.Success -> {
+                    mainActivityViewModel.alarmOption = it.data!!
+                }
+                is NetworkResult.Error -> {
+                    binding.root.showSnackBarMessage("유저 정보를 불러오는데 실패했습니다.")
+                }
+                is NetworkResult.Loading -> {
+                }
+            } // End of when
+        } // End of getAlarmOptionNetworkResultLiveData.observe
+
+        mainActivityViewModel.getAuroraOptionNetworkResultLiveData.observe(this) {
+            when (it) {
+                is NetworkResult.Success -> {
+                    mainActivityViewModel.auroraDisplayOption = it.data!!
+                }
+                is NetworkResult.Error -> {
+                    binding.root.showSnackBarMessage("유저 정보를 불러오는데 실패했습니다.")
+                }
+                is NetworkResult.Loading -> {
+                }
+            } // End of when
+        } // End of getAuroraOptionNetworkResultLiveData.observe
+
     }
 
     private fun initDrawer() {
@@ -275,4 +303,12 @@ class MainActivity : AppCompatActivity() {
             LocationManager.NETWORK_PROVIDER
         ))
     } // End of isLocationServicesAvailable
+
+    private fun initOption() {
+        CoroutineScope(Dispatchers.IO).launch {
+            mainActivityViewModel.getAlarmOption()
+            mainActivityViewModel.getAuroraDisplayOption()
+        }
+    } // End of initOption
+
 } // End of MainActivity class
