@@ -426,7 +426,7 @@ class AuroraFragment : BaseFragment<FragmentAuroraBinding>(FragmentAuroraBinding
     override fun onDestroyView() {
         super.onDestroyView()
         mClusterManager.clearItems()
-        mClusterManager.markerCollection.clear()
+        mClusterManager.cluster()
         Log.d(TAG, "onDestroyView: gone")
     }
 }

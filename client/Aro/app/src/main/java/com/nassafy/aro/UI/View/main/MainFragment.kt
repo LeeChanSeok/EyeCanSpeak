@@ -23,7 +23,6 @@ private const val TAG = "MainFragment_싸피"
 
 class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::inflate) {
     private lateinit var mContext: Context
-    private var tabTitle: ArrayList<String> = arrayListOf()
     private var tabIcons: ArrayList<View> = arrayListOf()
 
     override fun onAttach(context: Context) {
@@ -63,12 +62,6 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
     } // End of onViewCreated
 
     private fun initTabLayout() {
-        // add tablayout title
-        tabTitle = arrayListOf(
-            getString(R.string.service_aurora),
-            getString(R.string.service_meteor_shower)
-        )
-
         // add tablayout Icon with using custom view
         val tabIcon1 = layoutInflater.inflate(R.layout.tab_icon_custom_view, null)
         tabIcon1.findViewById<ImageView>(R.id.tabicon_imageview)
@@ -91,7 +84,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
     inner class ViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
         FragmentStateAdapter(fragmentManager, lifecycle) {
         override fun getItemCount(): Int {
-            return tabTitle.size
+            return tabIcons.size
         }
 
         override fun createFragment(position: Int): Fragment {
