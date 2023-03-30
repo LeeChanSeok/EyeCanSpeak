@@ -23,6 +23,7 @@
         android:layout_height="wrap_content"
         android:text="@string/location_select_title_textview_text"
         android:textColor="@color/main_app_color"
+        android:fontFamily="@font/nanum_square_b"
         android:textSize="16sp"
         app:layout_constraintTop_toTopOf="@id/cancel_button"
         app:layout_constraintEnd_toEndOf="parent"

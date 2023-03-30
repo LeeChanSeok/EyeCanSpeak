@@ -67,9 +67,6 @@ class MyPageFavoriteRegisterFragment :
                         delay(800)
                         binding.loadingLayout.isGone = true
                     }
-                    Log.d(
-                        "ssafy_pcs", "getCountryTestResponseLiveData: ${it.data}"
-                    )
                     spinnerList.clear()
                     spinnerList.addAll(it.data!!)
                     adapter.notifyDataSetChanged()
@@ -79,7 +76,6 @@ class MyPageFavoriteRegisterFragment :
                     requireView().showSnackBarMessage("서버 통신 에러 발생")
                 }
                 is NetworkResult.Loading -> {
-                    //TODO Loading
                     binding.loadingLayout.isVisible = true
                     Log.d(
                         "ssafy_pcs", "로딩 중.."
@@ -135,7 +131,6 @@ class MyPageFavoriteRegisterFragment :
                                 gson.toJsonTree(favoriteAuroraPlaceList.map { it.placeId })
                                     .getAsJsonArray()
                             )
-                            Log.d("ssafy_pcs/register_favorite", requestBody.toString())
                             postFavoriteList(requestBody)
                         } // End of viewModel.apply
                     } // End of CoroutineScope
@@ -144,7 +139,6 @@ class MyPageFavoriteRegisterFragment :
                     requireView().showSnackBarMessage("서버 통신 에러 발생")
                 } // End of Error
                 is NetworkResult.Loading -> {
-                    //TODO Loading
                     Log.d(
                         "ssafy_pcs", "로딩 중.."
                     )
@@ -218,7 +212,6 @@ class MyPageFavoriteRegisterFragment :
                     position: Int,
                     id: Long
                 ) {
-                    Log.d("ssafy_pcs", parent?.getItemAtPosition(position).toString())
                     binding.loadingLayout.isVisible = true
                     CoroutineScope(Dispatchers.Main).launch {
                         launch(Dispatchers.IO) {

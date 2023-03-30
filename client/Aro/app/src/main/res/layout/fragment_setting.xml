@@ -27,7 +27,7 @@
         android:paddingTop="2dp"
         android:text="@string/settings_fragment_title_textview_text"
         android:textColor="@color/main_app_color"
-        android:textSize="28sp"
+        android:textSize="@dimen/fragment_title_textview_size"
         app:layout_constraintBottom_toBottomOf="@id/cancel_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

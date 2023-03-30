@@ -100,8 +100,13 @@ class MyPageServiceRegisterFragment :
                                 when (myPageServiceRegisterFragementViewModel.meteorService) {
                                     true -> {
                                         isNextButtonClicked = false
-                                        requireView().showSnackBarMessage("메테오 관심 위치 선택은 추후 업데이트 됩니다!")
-                                        findNavController().navigate(R.id.action_myPageServiceRegisterFragment_to_myPageFragment)
+                                        CoroutineScope(Dispatchers.IO).launch {
+                                            requireView().showSnackBarMessage("메테오 관심 위치 선택은 추후 업데이트 됩니다!")
+                                            myPageServiceRegisterFragementViewModel.selectService(
+                                                myPageServiceRegisterFragementViewModel.auroraService,
+                                                myPageServiceRegisterFragementViewModel.meteorService
+                                            ) // End of selectService
+                                        } // End of CoroutineScope
                                     }
                                     false -> {
                                         CoroutineScope(Dispatchers.IO).launch {

@@ -22,6 +22,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.isGone
@@ -37,6 +39,7 @@ import com.nassafy.aro.R
 import com.nassafy.aro.data.dto.PlaceItem
 import com.nassafy.aro.databinding.FragmentMyPageBinding
 import com.nassafy.aro.ui.view.BaseFragment
+import com.nassafy.aro.ui.view.custom.NanumSqaureFont
 import com.nassafy.aro.ui.view.dialog.OkDialog
 import com.nassafy.aro.ui.view.main.MainActivity
 import com.nassafy.aro.ui.view.main.MainActivityViewModel
@@ -78,6 +81,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
                     binding.nicknameChangeSaveAlertImagebutton.isVisible = true
                     CoroutineScope(Dispatchers.Main).launch {
                         delay(500)
+                        binding.progressBar.isVisible = false
                         binding.nicknameChangeSaveAlertImagebutton.isGone = true
                     }
                 }
@@ -85,7 +89,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
                     requireView().showSnackBarMessage("닉네임 재설정에 실패했습니다.")
                 }
                 is NetworkResult.Loading -> {
-
+                    binding.progressBar.isVisible = true
                 }
             } // End of when
         } // End of nicknameLiveData.observe
@@ -106,12 +110,13 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
                             binding.serviceNotSelectedGroup.isVisible = true
                         }
                     } // End of when
+                    binding.progressBar.isVisible = false
                 } // End of NetworkResult.Success
                 is NetworkResult.Error -> {
                     requireView().showSnackBarMessage("닉네임 재설정에 실패했습니다.")
                 } // End of NetworkResult.Error
                 is NetworkResult.Loading -> {
-
+                    binding.progressBar.isVisible = true
                 } // End of NetworkResult.Loading
             } // End of when
         } // End of getSelectedServiceNetworResultLiveData.observe
@@ -123,13 +128,17 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
                     myPageFragmentViewModel.favoriteAuroraPlaceList.addAll(
                         it.data?.attractionInterestOrNotDTOList ?: emptyList()
                     )
+                    CoroutineScope(Dispatchers.Main).launch {
+                        delay(800)
+                        binding.progressBar.isVisible = false
+                    }
 //                    myPageFragmentViewModel.favoriteMeteorPlaceList.addAll(it.data?.memteorInterestOrNotDTO!!)
                 }// End of NetworkResult.Success
                 is NetworkResult.Error -> {
                     requireView().showSnackBarMessage("닉네임 재설정에 실패했습니다.")
                 } // End of NetworkResult.Error
                 is NetworkResult.Loading -> {
-
+                    binding.progressBar.isVisible = true
                 } // End of NetworkResult.Loading
             } // End of when
         } // End of favoriteListNetworkResultLiveData.observe
@@ -138,12 +147,13 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
             when(result) {
                 is NetworkResult.Success -> {
                     myPageFragmentViewModel.favoriteAuroraPlaceList.removeAll { it.interestId.equals(result.data!!) }
+                    binding.progressBar.isVisible = false
                 }
                 is NetworkResult.Error -> {
                     requireView().showSnackBarMessage("관심지역 삭제에 실패했습니다.")
                 }
                 is NetworkResult.Loading -> {
-
+                    binding.progressBar.isVisible = true
                 }
             } // End of when
         } // End of deleteFavoriteNetworkResultLiveData.observe
@@ -289,23 +299,30 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
                                             } // End of CompositionLocalProvider
                                             Column(
                                                 modifier = Modifier
-                                                    .weight(7f),
+                                                    .weight(7f).padding(start = 20.dp),
                                                 verticalArrangement = Arrangement.Center,
                                                 horizontalAlignment = Alignment.CenterHorizontally
                                             ) {
-                                                //TODO change text
                                                 Box(contentAlignment = Alignment.Center) {
                                                     Text(
-                                                        text = it.placeName, fontSize = 20.sp,
+                                                        text = it.placeName,
+                                                        style = TextStyle(
+                                                            fontFamily = NanumSqaureFont,
+                                                            fontWeight = FontWeight.Bold,
+                                                            fontSize = 20.sp
+                                                        ),
                                                         color = Color.White
                                                     ) // End of Text
                                                 } // End of Box
                                                 Spacer(modifier = Modifier.height(4.dp))
                                                 Box(contentAlignment = Alignment.Center) {
-//                                                    TODO Active
                                                     Text(
                                                         text = it.description,
-                                                        fontSize = 12.sp,
+                                                        style = TextStyle(
+                                                            fontFamily = NanumSqaureFont,
+                                                            fontWeight = FontWeight.Normal,
+                                                            fontSize = 12.sp
+                                                        ),
                                                         color = Color.White
                                                     )
                                                 } // End of Box
