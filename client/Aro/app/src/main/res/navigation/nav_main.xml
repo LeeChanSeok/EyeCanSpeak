@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_main"
     app:startDestination="@id/mainFragment">
 
@@ -18,6 +19,13 @@
         <action
             android:id="@+id/action_mainFragment_to_myPageFragment"
             app:destination="@id/myPageFragment"
+            app:enterAnim="@anim/enter_right_anim"
+            app:exitAnim="@anim/exit_left_anim"
+            app:popEnterAnim="@anim/enter_left_anim"
+            app:popExitAnim="@anim/exit_right_anim" />
+        <action
+            android:id="@+id/action_mainFragment_to_settingFragment"
+            app:destination="@id/settingFragment"
             app:enterAnim="@anim/enter_right_anim"
             app:exitAnim="@anim/exit_left_anim"
             app:popEnterAnim="@anim/enter_left_anim"
@@ -163,5 +171,9 @@
             android:defaultValue="false"
             app:argType="boolean" />
     </fragment>
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="com.nassafy.aro.ui.view.main.setting.SettingFragment"
+        android:label="SettingFragment" />
 
 </navigation>

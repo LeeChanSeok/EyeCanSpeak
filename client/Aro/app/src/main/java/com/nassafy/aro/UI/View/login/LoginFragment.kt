@@ -111,6 +111,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
             when (it) {
                 is NetworkResult.Success -> {
                     val data = it.data
+                    Log.d("ssafy/login", it.data.toString())
                     Application.sharedPreferencesUtil.addUserAccessToken(data?.accessToken ?: "")
                     Application.sharedPreferencesUtil.addUserRefreshToken(data?.refreshToken ?: "")
                     startMainActivity()

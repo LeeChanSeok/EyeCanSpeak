@@ -28,7 +28,6 @@ import com.nassafy.aro.databinding.ActivityMainBinding
 import com.nassafy.aro.service.AroFCM
 import com.nassafy.aro.util.NetworkResult
 import com.nassafy.aro.util.showSnackBarMessage
-import com.nassafy.aro.util.showToastMessage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -71,6 +70,7 @@ class MainActivity : AppCompatActivity() {
 
         initObserver()
         initDrawer()
+        initOption()
 
         CoroutineScope(Dispatchers.IO).launch {
             mainActivityViewModel.getUserInfo(callFcmToken())
@@ -165,7 +165,7 @@ class MainActivity : AppCompatActivity() {
                 if (isLocationServicesAvailable()) {
                     isRunTimePermissionsGranted()
                 } else {
-                    this.showToastMessage("위치 서비스를 사용할 수 없습니다.")
+                    binding.root.showSnackBarMessage("위치 서비스를 사용할 수 없습니다.")
                     finish()
                 }
             }
@@ -191,7 +191,7 @@ class MainActivity : AppCompatActivity() {
             // 취소 버튼 설정
             setNegativeButton("취소", DialogInterface.OnClickListener { dialog, id ->
                 dialog.cancel()
-                context.showToastMessage("기기에서 위치서비스를 설정 후 사용해주세요")
+                binding.root.showSnackBarMessage("기기에서 위치서비스를 설정 후 사용해주세요")
                 finish()
             })
             create().show() // 다이얼로그 생성
@@ -210,17 +210,50 @@ class MainActivity : AppCompatActivity() {
                 is NetworkResult.Success -> {
                     mainActivityViewModel.email = it.data!!.email
                     mainActivityViewModel.nickname = it.data!!.nickname
+
+                    binding.mainNavigation.getHeaderView(0).apply {
+                        findViewById<TextView>(R.id.nickname_textview).text = mainActivityViewModel.nickname
+                        findViewById<TextView>(R.id.email_textview).text = mainActivityViewModel.email
+                    }
                 }
                 is NetworkResult.Error -> {
                     binding.root.showSnackBarMessage("유저 정보를 불러오는데 실패했습니다.")
                 }
                 is NetworkResult.Loading -> {
                 }
-            }
-        }
+            } // End of when
+        } // End of userInfo.observe
+
+        mainActivityViewModel.getAlarmOptionNetworkResultLiveData.observe(this) {
+            when (it) {
+                is NetworkResult.Success -> {
+                    mainActivityViewModel.alarmOption = it.data!!
+                }
+                is NetworkResult.Error -> {
+                    binding.root.showSnackBarMessage("유저 정보를 불러오는데 실패했습니다.")
+                }
+                is NetworkResult.Loading -> {
+                }
+            } // End of when
+        } // End of getAlarmOptionNetworkResultLiveData.observe
+
+        mainActivityViewModel.getAuroraOptionNetworkResultLiveData.observe(this) {
+            when (it) {
+                is NetworkResult.Success -> {
+                    mainActivityViewModel.auroraDisplayOption = it.data!!
+                }
+                is NetworkResult.Error -> {
+                    binding.root.showSnackBarMessage("유저 정보를 불러오는데 실패했습니다.")
+                }
+                is NetworkResult.Loading -> {
+                }
+            } // End of when
+        } // End of getAuroraOptionNetworkResultLiveData.observe
+
     }
 
     private fun initDrawer() {
+
         val toggle: ActionBarDrawerToggle = object : ActionBarDrawerToggle(
             this,
             binding.mainDrawerlayout,
@@ -269,4 +302,12 @@ class MainActivity : AppCompatActivity() {
             LocationManager.NETWORK_PROVIDER
         ))
     } // End of isLocationServicesAvailable
+
+    private fun initOption() {
+        CoroutineScope(Dispatchers.IO).launch {
+            mainActivityViewModel.getAlarmOption()
+            mainActivityViewModel.getAuroraDisplayOption()
+        }
+    } // End of initOption
+
 } // End of MainActivity class

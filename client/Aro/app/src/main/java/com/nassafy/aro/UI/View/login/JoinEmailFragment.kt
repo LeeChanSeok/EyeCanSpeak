@@ -96,7 +96,6 @@ class JoinEmailFragment :
             findNavController().popBackStack()
         } // End of cancelButton.setOnClickListener
         binding.verifyEmailTextview.setOnClickListener {
-            Log.d("ssafy", "clicked")
             CoroutineScope(Dispatchers.IO).launch {
                 joinEmailFragmentViewModel.validateEmail(binding.joinEmailIdTextfield.editText?.text.toString())
             }

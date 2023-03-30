@@ -1,6 +1,7 @@
 package com.nassafy.aro.ui.view.dialog
 
 import android.graphics.Color
+import android.graphics.Paint
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,7 +11,8 @@ import androidx.fragment.app.DialogFragment
 import com.nassafy.aro.databinding.DialogOkBinding
 import com.nassafy.aro.databinding.DialogOkCancelBinding
 
-abstract class OkCancelDialog(private val title: String, private val content: String) :
+class OkCancelDialog(private val title: String, private val content: String, setOnOkButtonClickListener: SetOnOkButtonClickListener
+) :
     DialogFragment() {
 
     private var _binding: DialogOkCancelBinding? = null
@@ -20,7 +22,11 @@ abstract class OkCancelDialog(private val title: String, private val content: St
         fun onOkButtonClick()
     }
 
-    abstract val setOnOkButtonClickListener: SetOnOkButtonClickListener
+    private var setOnOkButtonClickListener: SetOnOkButtonClickListener? = null
+
+    init {
+        this.setOnOkButtonClickListener = setOnOkButtonClickListener
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,14 +43,19 @@ abstract class OkCancelDialog(private val title: String, private val content: St
 
         binding.dialogTitleTextview.text = title
         binding.dialogContentTextview.text = content
-        binding.dialogOkTextview.setOnClickListener {
-            dismiss()
+        binding.dialogOkTextview.apply {
+            paintFlags = Paint.UNDERLINE_TEXT_FLAG
+            setOnClickListener {
+                setOnOkButtonClickListener?.onOkButtonClick()
+                dismiss()
+            }
         }
-        binding.dialogCancelTextview.setOnClickListener {
-            setOnOkButtonClickListener.onOkButtonClick()
-            dismiss()
+        binding.dialogCancelTextview.apply {
+            paintFlags = Paint.UNDERLINE_TEXT_FLAG
+            setOnClickListener {
+                dismiss()
+            }
         }
-
     } // End of onViewCreated
 
     override fun onDestroyView() {

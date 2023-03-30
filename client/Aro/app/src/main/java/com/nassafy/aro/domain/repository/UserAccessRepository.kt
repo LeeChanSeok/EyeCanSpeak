@@ -127,7 +127,6 @@ class UserAccessRepository @Inject constructor(private val userAccessApi: UserAc
 
     suspend fun getPlaceList(nation: String) {
         val response = userAccessApi.getPlaceList(nation)
-        Log.d("ssafy_pcs", response.toString())
         _placeListLiveData.postValue(NetworkResult.Loading())
         try {
             when {
@@ -145,7 +144,6 @@ class UserAccessRepository @Inject constructor(private val userAccessApi: UserAc
 
     suspend fun join(user: UserTest) {
         val response = userAccessApi.join(user)
-        Log.d("ssafy_pcs", response.toString())
         _userJoinNetworkResultLiveData.postValue(NetworkResult.Loading())
         try {
             when {

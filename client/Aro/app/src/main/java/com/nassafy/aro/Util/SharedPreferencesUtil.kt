@@ -2,6 +2,7 @@ package com.nassafy.aro.util
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 
 class SharedPreferencesUtil(context: Context) {
     private var preferences: SharedPreferences =
@@ -33,8 +34,5 @@ class SharedPreferencesUtil(context: Context) {
         const val SHARED_PREFERENCES_NAME = "aro_preference"
         const val ACCESS_TOKEN = "access_token"
         const val REFRESH_TOKEN = "refresh_token"
-
-        const val to =
-            "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzZGZzZGZAbmFzc2FmeS5jb20iLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNjc5NjMwOTk3fQ.DtAAbajGO5bDr2A9NWMD8CLREXFdL-U6d7_Qa6boHnA"
     }
 } // End of SharedPreferencesUtil class

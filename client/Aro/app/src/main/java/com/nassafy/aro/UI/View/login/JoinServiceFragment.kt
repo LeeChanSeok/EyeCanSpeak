@@ -59,7 +59,6 @@ class JoinServiceFragment : BaseFragment<FragmentAroServiceSelectBinding>(Fragme
     private fun initView() {
         binding.nextButton.setOnClickListener {
             loginActivityViewModel.apply {
-                Log.d("ssafy_isSelected?", "${binding.auroraServiceCardview.getIsSelected()}, ${binding.meteorServiceCardview.getIsSelected()}")
                 isAuroraServiceSelected = binding.auroraServiceCardview.getIsSelected()
                 isMeteorServiceSelected = binding.meteorServiceCardview.getIsSelected()
             }

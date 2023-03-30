@@ -9,7 +9,7 @@
             android:icon="@drawable/menu_stamp_icon"
             android:title="@string/stamp_main_title_textview_text" />
     <item
-            android:id="@+id/setting_item"
+            android:id="@+id/action_mainFragment_to_settingFragment"
             android:icon="@drawable/menu_setting_icon"
             android:title="@string/settings_fragment_title_textview_text" />
 

@@ -15,11 +15,29 @@ class MainActivityViewModel @Inject constructor(private val mainRepository: Main
     ViewModel() {
     var nickname: String = ""
     var email: String = ""
+    var alarmOption: Boolean = false
+    var auroraDisplayOption: Boolean = false
+
     val userInfo: LiveData<NetworkResult<UserTest>> get() = mainRepository.userInfo
+    val getAlarmOptionNetworkResultLiveData get() = mainRepository.getAlarmOptionNetworkResultLiveData
+    val getAuroraOptionNetworkResultLiveData get() = mainRepository.getAuroraDisplayOptionNetworkResultLiveData
 
     fun getUserInfo(fcmToken: String) {
         viewModelScope.launch {
             mainRepository.getUserInfo(fcmToken)
         }
-    }
+    } // End of getUserInfo
+
+    fun getAlarmOption() {
+        viewModelScope.launch {
+            mainRepository.getAlarmOption()
+        }
+    } // End of getAlarmOption
+
+    fun getAuroraDisplayOption() {
+        viewModelScope.launch {
+            mainRepository.getAuroraDisplayOption()
+        }
+    } // End of getAuroraDisplayOption
+
 } // End of MainActivityViewModel class

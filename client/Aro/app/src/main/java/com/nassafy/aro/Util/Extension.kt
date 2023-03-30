@@ -11,7 +11,9 @@ import android.renderscript.RenderScript
 import android.renderscript.ScriptIntrinsicBlur
 import android.util.Log
 import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.compose.ui.graphics.Outline
@@ -20,14 +22,19 @@ import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
 import com.google.android.material.snackbar.Snackbar
+import com.nassafy.aro.ui.view.Inflate
 import retrofit2.Response
 
-
-fun Context.showToastMessage(message: String) {
-    val toast = Toast.makeText(this, message, Toast.LENGTH_SHORT)
-    toast.setGravity(Gravity.TOP, 0, 0)
-    //toast.setGravity(Gravity.CENTER, Gravity.CENTER_HORIZONTAL, Gravity.CENTER_VERTICAL)
-    toast.show()
+/**
+ * ex) val layout = layoutInflater.inflate(R.layout.custom_toast, null)
+        context?.showToastView(layout)
+ */
+fun Context.showToastView(toastView: View) {
+    Toast(this).apply {
+        duration = Toast.LENGTH_SHORT
+        setGravity(Gravity.CENTER, 0, 0)
+        view = toastView
+    }.show()
 } // End of showToastMessage
 
 fun View.showSnackBarMessage(message: String) {
