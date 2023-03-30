@@ -285,4 +285,18 @@ object ApiModule {
             .build()
             .create(SplashApi::class.java)
     } // End of provideHeaderSplashApi
+
+    // ============================================= Setting =============================================
+
+    @Provides
+    fun provideHeaderSettingApi(@HeaderInterceptorOkHttpClient okHttpClient: OkHttpClient): SettingApi {
+        return Retrofit.Builder()
+            .client(okHttpClient)
+            .baseUrl(provideBaseUrl())
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .build()
+            .create(SettingApi::class.java)
+    } // End of provideHeaderSplashApi
+
+
 } // End of ApiModule

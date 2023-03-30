@@ -10,6 +10,7 @@ import android.view.Gravity
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -21,9 +22,7 @@ import com.nassafy.aro.R
 import com.nassafy.aro.data.dto.Diary
 import com.nassafy.aro.databinding.FragmentStampDiaryBinding
 import com.nassafy.aro.ui.view.BaseFragment
-import com.nassafy.aro.util.ChangeMultipartUtil
-import com.nassafy.aro.util.NetworkResult
-import com.nassafy.aro.util.showSnackBarMessage
+import com.nassafy.aro.util.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -272,12 +271,7 @@ class StampDiaryFragment() :
             binding.stampDiaryProgressbarInformText.isVisible = false
 
             val layout = layoutInflater.inflate(R.layout.custom_toast, null)
-
-            Toast(mContext).apply {
-                duration = Toast.LENGTH_SHORT
-                setGravity(Gravity.CENTER, 0, 0)
-                view = layout
-            }.show()
+            context?.showToastView(layout)
 
             when (it) {
                 is NetworkResult.Success -> {

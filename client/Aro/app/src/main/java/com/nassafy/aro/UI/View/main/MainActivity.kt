@@ -28,7 +28,6 @@ import com.nassafy.aro.databinding.ActivityMainBinding
 import com.nassafy.aro.service.AroFCM
 import com.nassafy.aro.util.NetworkResult
 import com.nassafy.aro.util.showSnackBarMessage
-import com.nassafy.aro.util.showToastMessage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -166,7 +165,7 @@ class MainActivity : AppCompatActivity() {
                 if (isLocationServicesAvailable()) {
                     isRunTimePermissionsGranted()
                 } else {
-                    this.showToastMessage("위치 서비스를 사용할 수 없습니다.")
+                    binding.root.showSnackBarMessage("위치 서비스를 사용할 수 없습니다.")
                     finish()
                 }
             }
@@ -192,7 +191,7 @@ class MainActivity : AppCompatActivity() {
             // 취소 버튼 설정
             setNegativeButton("취소", DialogInterface.OnClickListener { dialog, id ->
                 dialog.cancel()
-                context.showToastMessage("기기에서 위치서비스를 설정 후 사용해주세요")
+                binding.root.showSnackBarMessage("기기에서 위치서비스를 설정 후 사용해주세요")
                 finish()
             })
             create().show() // 다이얼로그 생성
