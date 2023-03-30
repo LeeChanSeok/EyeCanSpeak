@@ -44,20 +44,23 @@ class StampCountryPlacesFragment :
 
         getUserPlaceDataGroupByCountryResponseLiveDataObserve()
 
-        if (stampHomeNavViewModel.selectedCountry != "") {
-            // View가져오기.
-            CoroutineScope(Dispatchers.IO).launch {
-                val def: Deferred<Int> = async {
-                    initViewGetData()
-                    1
-                }
-
-                def.await()
-
-                initViewPagerAdapter()
-                initEventListeners()
+        // View가져오기.
+        CoroutineScope(Dispatchers.IO).launch {
+            val def: Deferred<Int> = async {
+                initViewGetData()
+                1
             }
+
+
+            if(def.isActive) {
+                initViewPagerAdapter()
+            }
+            def.await()
+
+            // initViewPagerAdapter()
+            initEventListeners()
         }
+
     } // End of onViewCreated
 
     private suspend fun initViewGetData() {
@@ -65,6 +68,7 @@ class StampCountryPlacesFragment :
             stampHomeNavViewModel 에서 선택된 국가를 가져와서 통신
          */
         stampCountryPlaceViewModel.setSelectedCountry(stampCountryPlaceViewModel.selectedCountry)
+        Log.d(TAG, "selectedCountry : ${stampHomeNavViewModel.selectedCountry}")
 
         CoroutineScope(Dispatchers.IO).launch {
             stampCountryPlaceViewModel.getUserPlaceDataGroupByCountry(stampHomeNavViewModel.selectedCountry)

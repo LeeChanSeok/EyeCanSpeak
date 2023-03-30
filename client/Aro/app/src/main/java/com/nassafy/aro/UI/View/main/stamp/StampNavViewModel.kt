@@ -27,7 +27,7 @@ class StampNavViewModel : ViewModel() {
         _userCountryPlaceDataList.addAll(dataList)
     } // End of setUserCountryPlaceData
 
-    // ======================================== 선택된 명소 데이터 ========================================
+    // ======================================== 선택된 국가의 명소 데이터 ========================================
     private val _selectedPlaceLiveData = MutableLiveData<UserStampPlace>()
     val selectedPlaceLiveData: LiveData<UserStampPlace>
         get() = _selectedPlaceLiveData
