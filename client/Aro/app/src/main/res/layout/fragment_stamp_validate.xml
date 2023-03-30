@@ -18,6 +18,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/stamp_validate_progressbar_inform_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/nanum_barun_gothic"
+        android:text="오로라 여부 확인중!!.."
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/stamp_validate_progressbar" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/validate_constraintLayout"
         android:layout_width="match_parent"

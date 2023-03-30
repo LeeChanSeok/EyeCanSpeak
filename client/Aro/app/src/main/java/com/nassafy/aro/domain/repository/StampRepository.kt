@@ -51,6 +51,7 @@ class StampRepository @Inject constructor(
 
     suspend fun getUserStampDataGroupByCountry(countryName: String) {
         val response = stampHeaderApi.getUserStampDataGroupByCountry(countryName)
+        Log.d(TAG, "response : ${response.body()}")
 
         _getUserStampDataGroupByCountryResponseLiveData.postValue(NetworkResult.Loading())
 
@@ -80,9 +81,7 @@ class StampRepository @Inject constructor(
 
     suspend fun getUserPlaceDataGroupByCountry(countryName: String) {
         val response = stampHeaderApi.getUserPlaceDataGroupByCountry(countryName)
-        Log.d(TAG, "getUserPlaceDataGroupByCountry: $response")
         Log.d(TAG, "getUserPlaceDataGroupByCountry: ${response.body()}")
-        Log.d(TAG, "getUserPlaceDataGroupByCountry: ${response.message()}")
 
         _getUserPlaceDataGroupByCountryResponseLiveData.postValue(NetworkResult.Loading())
 

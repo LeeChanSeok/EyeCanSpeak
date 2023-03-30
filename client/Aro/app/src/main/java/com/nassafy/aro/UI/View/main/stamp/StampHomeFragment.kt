@@ -31,8 +31,10 @@ class StampHomeFragment :
     BaseFragment<FragmentStampHomeBinding>(FragmentStampHomeBinding::inflate) {
     private lateinit var mContext: Context
 
-    // viewModel
+    // ViewModel
     private val stampHomeViewModel: StampHomeViewModel by viewModels()
+
+    // Navigation ViewModel
     private val stampHomeNavViewModel: StampNavViewModel by navGraphViewModels(R.id.nav_stamp_diary)
 
     private var countryList: List<String> = ArrayList()
@@ -59,10 +61,15 @@ class StampHomeFragment :
         getUserStampDataGroupByCountryResponseLiveDataObserve()
 
         // 처음 데이터 가져오기.
-        initViewGetData()
 
-        // 이벤트 리스너들 등록
-        initEventListeners()
+        CoroutineScope(Dispatchers.IO).launch {
+            initViewGetData()
+
+            withContext(Dispatchers.Default) {
+                // 이벤트 리스너들 등록
+                initEventListeners()
+            }
+        }
 
         var moveX = 0f
         var moveY = 0f
@@ -91,6 +98,11 @@ class StampHomeFragment :
 
         // 국가별 명소 상세보기 버튼 클릭 이벤트
         binding.stampHomeDetailButtonTextview.setOnClickListener {
+            // 선택되어 있는 국가 확인하기
+            if (stampHomeNavViewModel.nowSelectedCountry == "") {
+                stampHomeNavViewModel.setSelectedCountry(countryList[0])
+            }
+
             Navigation.findNavController(binding.stampHomeDetailButtonTextview)
                 .navigate(R.id.action_stampHomeFragment_to_stampCountryPlacesFragment)
         }
@@ -105,10 +117,12 @@ class StampHomeFragment :
                     position: Int,
                     id: Long
                 ) {
+                    // 내가 지금 스피너를 통해서 선택한 국가
                     stampHomeNavViewModel.setSelectedCountry(countryList[position])
 
                     CoroutineScope(Dispatchers.IO).launch {
-                        stampHomeViewModel.getUserStampDataGroupByCountry(stampHomeNavViewModel.selectedCountry)
+                        Log.d(TAG, "onItemSelected : ${stampHomeNavViewModel.nowSelectedCountry} ")
+                        stampHomeViewModel.getUserStampDataGroupByCountry(stampHomeNavViewModel.nowSelectedCountry)
                     }
                 }
 
@@ -118,16 +132,11 @@ class StampHomeFragment :
             }
     } // End of spinnerEventListener
 
-    private suspend fun initSpinner(countryList: List<String>) {
+    private fun initSpinner(countryList: List<String>) {
         arrayAdapter = CountrySpinnerAdapter(mContext, R.layout.item_country_spinner, countryList)
         binding.stampHomeSpinner.adapter = arrayAdapter
 
-        // 가장 처음 시작
         stampHomeNavViewModel.setSelectedCountry(countryList[0])
-
-        CoroutineScope(Dispatchers.IO).launch {
-            stampHomeViewModel.getUserStampDataGroupByCountry(stampHomeNavViewModel.selectedCountry)
-        }
     } // End of initSpinner
 
     private fun initViewGetData() {
@@ -147,8 +156,6 @@ class StampHomeFragment :
 
             when (it) {
                 is NetworkResult.Success -> {
-                    Log.d(TAG, "getUserStampDataGroupByCountryResponseLiveDataObserve: ${it.data}")
-
                     Picasso.get().load(it.data!!.mapImage).fit().centerCrop()
                         .into(binding.stampHomeImageview)
                 }
@@ -179,8 +186,6 @@ class StampHomeFragment :
                     countryList = it.data as ArrayList<String>
                     stampHomeNavViewModel.setCountryList(countryList)
 
-                    Log.d(TAG, "getAllNationListResponseLiveDataObserve: ${countryList}")
-
                     CoroutineScope(Dispatchers.Main).launch {
                         val spinnerDef: Deferred<Int> = async {
                             initSpinner(countryList)
@@ -188,10 +193,7 @@ class StampHomeFragment :
                         }
 
                         spinnerDef.await()
-
-                        withContext(Dispatchers.Default) {
-                            spinnerEventListener()
-                        }
+                        spinnerEventListener()
                     }
                 }
 

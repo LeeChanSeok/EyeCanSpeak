@@ -16,7 +16,6 @@ class StampNavViewModel : ViewModel() {
         _countryList.addAll(countryList)
     } // End of countryListSet
 
-
     // ======================================== stampCountryPlaceFragment 국가 명소데이터 및 유저 데이터 ========================================
     private val _userCountryPlaceDataList: MutableList<UserStampPlace> = ArrayList()
     val userCountryPlaceDataList: List<UserStampPlace>
@@ -36,12 +35,21 @@ class StampNavViewModel : ViewModel() {
         _selectedPlaceLiveData.value = newSelectedPlace
     } // End of setSelectedPlaceLiveData
 
-    // ======================================== stampFragment 국가 리스트 ========================================
-    private var _selectedCountry: String = ""
-    val selectedCountry: String
-        get() = _selectedCountry
+    // ======================================== spinner를 통해서 현재 선택된 국가 ========================================
+    private var _nowSelectedCountry: String = ""
+    val nowSelectedCountry: String
+        get() = _nowSelectedCountry
 
     fun setSelectedCountry(countryName: String) {
-        _selectedCountry = countryName
+        _nowSelectedCountry = countryName
     } // End of setSelectedCountry
+
+    // ======================================== 명소 뷰페이저에서 현재 선택된 명소의 명소ID ========================================
+    private var _nowSelectedAttractionId: Long = 0L
+    val nowSelectedAttractionId: Long
+        get() = _nowSelectedAttractionId
+
+    fun setNowSelectedAttractionId(attractionId: Long) {
+        _nowSelectedAttractionId = attractionId
+    } // End of setNowSelectedAttractionId
 } // End of StampNavViewModel

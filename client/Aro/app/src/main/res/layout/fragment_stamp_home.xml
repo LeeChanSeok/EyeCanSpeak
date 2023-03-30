@@ -30,7 +30,7 @@
                 android:id="@+id/stamp_home_back_button"
                 android:layout_width="@dimen/small_button_size"
                 android:layout_height="@dimen/small_button_size"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="16dp "
                 android:layout_marginTop="16dp"
                 android:background="@android:color/transparent"
                 android:src="@drawable/back_step_arrow_button_icon"
