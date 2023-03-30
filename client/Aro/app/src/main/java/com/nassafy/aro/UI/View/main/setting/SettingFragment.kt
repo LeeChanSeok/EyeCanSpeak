@@ -1,5 +1,6 @@
 package com.nassafy.aro.ui.view.main.setting
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -13,6 +14,7 @@ import com.nassafy.aro.R
 import com.nassafy.aro.databinding.FragmentSettingBinding
 import com.nassafy.aro.ui.view.BaseFragment
 import com.nassafy.aro.ui.view.dialog.OkCancelDialog
+import com.nassafy.aro.ui.view.login.LoginActivity
 import com.nassafy.aro.ui.view.main.MainActivity
 import com.nassafy.aro.ui.view.main.MainActivityViewModel
 import com.nassafy.aro.ui.view.main.mypage.MyPageServiceRegisterFragmentDirections
@@ -102,6 +104,11 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(FragmentSettingBind
                 is NetworkResult.Success -> {
                     val layout = layoutInflater.inflate(R.layout.custom_toast_delete_account, null)
                     requireContext().showToastView(layout)
+
+                    val intent = Intent(requireContext(), LoginActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(intent)
                 }
                 is NetworkResult.Error -> {
                     requireView().showSnackBarMessage("네트워크 통신 에러")
