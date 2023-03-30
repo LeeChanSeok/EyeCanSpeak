@@ -1,97 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:visibility="visible"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/join_background_color"
-    tools:context=".ui.view.main.stamp.StampHomeFragment">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/join_background_color"
+        android:visibility="visible"
+        tools:context=".ui.view.main.stamp.StampHomeFragment">
 
     <ProgressBar
-        android:id="@+id/stamp_home_progressbar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:indeterminateTint="@color/main_app_color"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageButton
-        android:id="@+id/stamp_home_back_button"
-        android:layout_width="@dimen/small_button_size"
-        android:layout_height="@dimen/small_button_size"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:background="@android:color/transparent"
-        android:src="@drawable/back_step_arrow_button_icon"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/stamp_home_country_name_title_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:fontFamily="@font/nanum_square_eb"
-        android:text="@string/stamp_main_title_textview_text"
-        android:textColor="@color/main_app_color"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/stamp_home_back_button" />
-
-    <Spinner
-        android:id="@+id/stamp_home_spinner"
-        android:layout_width="280dp"
-        android:layout_height="46dp"
-        android:layout_marginTop="36dp"
-        android:background="@drawable/country_spinner_selector"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/stamp_home_country_name_title_textview" />
-
-    <TextView
-        android:layout_margin="10dp"
-        android:textColor="@color/white"
-        android:textSize="12sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/stamp_home_detail_button_textview"
-        android:text="상세보기"
-        app:layout_constraintBottom_toTopOf="@id/stamp_home_imageview_constraintLayout"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_marginTop="30dp"
-        android:id="@+id/stamp_home_imageview_constraintLayout"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/stamp_home_spinner">
-
-        <ImageView
-            android:id="@+id/stamp_home_imageview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:id="@+id/stamp_home_progressbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminateTint="@color/main_app_color"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/stamp_home_constlayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible">
+
+        <ImageButton
+                android:id="@+id/stamp_home_back_button"
+                android:layout_width="@dimen/small_button_size"
+                android:layout_height="@dimen/small_button_size"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/back_step_arrow_button_icon"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
-            android:id="@+id/stamp_home_country_by_user_stamp_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:textColor="#D5D5D5"
-            android:textSize="10sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+                android:id="@+id/stamp_home_country_name_title_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/nanum_square_eb"
+                android:text="@string/stamp_main_title_textview_text"
+                android:textColor="@color/main_app_color"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/stamp_home_back_button" />
+
+        <Spinner
+                android:id="@+id/stamp_home_spinner"
+                android:layout_width="280dp"
+                android:layout_height="46dp"
+                android:layout_marginTop="36dp"
+                android:background="@drawable/country_spinner_selector"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/stamp_home_country_name_title_textview" />
+
+        <TextView
+                android:id="@+id/stamp_home_detail_button_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="상세보기"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toTopOf="@id/stamp_home_imageview_constraintLayout"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/stamp_home_imageview_constraintLayout"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="30dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/stamp_home_spinner">
+
+            <ImageView
+                    android:id="@+id/stamp_home_imageview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                    android:id="@+id/stamp_home_country_by_user_stamp_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:textColor="#D5D5D5"
+                    android:textSize="10sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -326,6 +326,6 @@ class StampDiaryFragment() :
     } // End of viewPagerImageListObserve
 
     companion object {
-        const val REQ_GALLERY = 1
+        private const val REQ_GALLERY = 1
     }
 } // End of StampDiaryFragment

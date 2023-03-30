@@ -2,6 +2,7 @@ package com.nassafy.aro.ui.view.main.stamp
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
@@ -35,6 +36,7 @@ class StampCountryPlacesFragment :
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mContext = context
+        Log.d(TAG, "onAttach: 여기 다시 돌음?")
     } // End of onAttach
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -42,15 +44,19 @@ class StampCountryPlacesFragment :
 
         getUserPlaceDataGroupByCountryResponseLiveDataObserve()
 
-        // View가져오기.
-        CoroutineScope(Dispatchers.IO).launch {
-            val def: Deferred<Int> = async {
-                initViewGetData()
-                1
-            }
+        if (stampHomeNavViewModel.selectedCountry != "") {
+            // View가져오기.
+            CoroutineScope(Dispatchers.IO).launch {
+                val def: Deferred<Int> = async {
+                    initViewGetData()
+                    1
+                }
 
-            def.await()
-            initEventListeners()
+                def.await()
+
+                initViewPagerAdapter()
+                initEventListeners()
+            }
         }
     } // End of onViewCreated
 
@@ -104,8 +110,9 @@ class StampCountryPlacesFragment :
 
             when (it) {
                 is NetworkResult.Success -> {
-                    stampHomeNavViewModel.setUserCountryPlaceDataList(it.data!!)
-                    initViewPagerAdapter()
+                    if (stampHomeNavViewModel.userCountryPlaceDataList.isEmpty()) {
+                        stampHomeNavViewModel.setUserCountryPlaceDataList(it.data!!)
+                    }
                 }
 
                 is NetworkResult.Error -> {

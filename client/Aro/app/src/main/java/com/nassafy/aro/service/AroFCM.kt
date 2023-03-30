@@ -8,8 +8,8 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Build
-import android.util.Log
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.*
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -26,13 +26,11 @@ class AroFCM : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        Log.d(TAG, "onNewToken: $token")
     } // End of onNewToken
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        // Log.d(TAG, "remoteMessage: $remoteMessage ")
 
         if (remoteMessage.notification != null) {
             showNotifictaion(
@@ -87,7 +85,6 @@ class AroFCM : FirebaseMessagingService() {
     fun getFirebaseToken(): String {
         var token = ""
         FirebaseMessaging.getInstance().token.addOnSuccessListener {
-            Log.d(TAG, "getFirebaseToken : ${it}")
             token = it.toString()
         }
 

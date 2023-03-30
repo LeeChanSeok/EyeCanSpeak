@@ -1,7 +1,7 @@
 package com.nassafy.aro.domain.api
 
 import retrofit2.Response
-import retrofit2.http.POST
+import retrofit2.http.GET
 
 interface SplashApi {
     // AccessToken을 토큰을 보내서 회원정보를 반환 받음
@@ -13,6 +13,6 @@ interface SplashApi {
     200  OK
     400  Bad Request
      */
-    @POST("api/members/autologin")
+    @GET("api/members/autologin")
     suspend fun postAccessTokenGetUserData(): Response<Void>
 } // End of SplashApi

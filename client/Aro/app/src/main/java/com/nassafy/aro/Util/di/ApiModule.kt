@@ -256,7 +256,7 @@ object ApiModule {
     fun provideWithoutHeaderWeatherApi(@WithoutHeaderInterceptorOkHttpClient okHttpClient: OkHttpClient): WeatherApi {
         return Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl(WEATHER_URL)
+            .baseUrl(provideBaseUrl())
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
             .create(WeatherApi::class.java)
@@ -268,7 +268,7 @@ object ApiModule {
     fun provideWithoutHeaderSplashApi(@WithoutHeaderInterceptorOkHttpClient okHttpClient: OkHttpClient): SplashApi {
         return Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl(WEATHER_URL)
+            .baseUrl(provideBaseUrl())
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
             .create(SplashApi::class.java)
@@ -285,4 +285,18 @@ object ApiModule {
             .build()
             .create(SplashApi::class.java)
     } // End of provideHeaderSplashApi
+
+    // ============================================= Validate =============================================
+    @Provides
+    @WithoutHeaderInterceptorApi
+    fun provideWithoutHeaderValidateApi(@WithoutHeaderInterceptorOkHttpClient okHttpClient: OkHttpClient): ValidateApi {
+        return Retrofit.Builder()
+            .client(okHttpClient)
+            .baseUrl(provideBaseUrl())
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .build()
+            .create(ValidateApi::class.java)
+    } // End of provideWithoutHeaderValidateApi
+
+
 } // End of ApiModule
