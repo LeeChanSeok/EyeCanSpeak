@@ -52,6 +52,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
+                    android:fontFamily="@font/nanum_square_r"
                     android:translationZ="0dp" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -63,6 +64,7 @@
                 android:layout_gravity="center_vertical|end"
                 android:paddingEnd="8dp"
                 android:paddingBottom="16dp"
+                android:fontFamily="@font/nanum_square_r"
                 android:text="@string/email_verify_textview_text"
                 android:textColor="@color/white"
                 android:translationZ="4dp" />
@@ -89,6 +91,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
+                android:fontFamily="@font/nanum_square_r"
                 android:maxLength="6"
                 android:translationZ="0dp" />
 
