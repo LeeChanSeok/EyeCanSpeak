@@ -10,6 +10,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Polyline
 import com.nassafy.aro.R
+import com.nassafy.aro.data.dto.KpResponse
 import com.nassafy.aro.data.dto.PlaceItem
 import com.nassafy.aro.data.dto.weather.WeatherResponse
 import com.nassafy.aro.domain.repository.AuroraRepository
@@ -36,7 +37,6 @@ class AuroraViewModel @Inject constructor(
         _clickedLocation.value = location
     } // End of setClickedLocation
 
-//    val placeItemList = arrayListOf<PlaceItem>()
     val placeItemListLiveData: LiveData<NetworkResult<List<PlaceItem>>>
         get() = auroraRepository.placeItemListLiveData
 
@@ -54,5 +54,13 @@ class AuroraViewModel @Inject constructor(
         }
     }
 
+    val currentKpIndexLiveData: LiveData<NetworkResult<KpResponse>>
+        get() = auroraRepository.kpCurrentLiveData
+    fun getCurrentKpIndex(dateString: String, hour: Int) {
+        viewModelScope.launch {
+            Log.d(TAG, "getCurrentKpIndex: vm go")
+            auroraRepository.getCurrentKpIndex(dateString, hour)
+        }
+    }
 
 } // End of AuroraViewModel
