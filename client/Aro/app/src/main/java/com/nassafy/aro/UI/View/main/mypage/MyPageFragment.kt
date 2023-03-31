@@ -1,48 +1,24 @@
 package com.nassafy.aro.ui.view.main.mypage
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.*
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import coil.ImageLoader
-import coil.compose.LocalImageLoader
-import coil.compose.rememberImagePainter
-import coil.decode.SvgDecoder
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
 import com.nassafy.aro.R
 import com.nassafy.aro.data.dto.PlaceItem
 import com.nassafy.aro.databinding.FragmentMyPageBinding
 import com.nassafy.aro.ui.view.BaseFragment
-import com.nassafy.aro.ui.view.custom.NanumSqaureFont
 import com.nassafy.aro.ui.view.dialog.OkDialog
 import com.nassafy.aro.ui.view.main.MainActivity
 import com.nassafy.aro.ui.view.main.MainActivityViewModel
@@ -147,9 +123,13 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
         } // End of favoriteListNetworkResultLiveData.observe
 
         myPageFragmentViewModel.deleteFavoriteNetworkResultLiveData.observe(this.viewLifecycleOwner) { result ->
-            when(result) {
+            when (result) {
                 is NetworkResult.Success -> {
-                    myPageFragmentViewModel.favoriteAuroraPlaceList.removeAll { it.interestId.equals(result.data!!) }
+                    myPageFragmentViewModel.favoriteAuroraPlaceList.removeAll {
+                        it.interestId.equals(
+                            result.data!!
+                        )
+                    }
                     binding.progressBar.isVisible = false
                 }
                 is NetworkResult.Error -> {
@@ -233,7 +213,6 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
         findNavController().navigate(action)
     } // End of moveToFavoriteRegisterFragment
 
-    @OptIn(ExperimentalPagerApi::class)
     fun initComposeView() {
         CoroutineScope(Dispatchers.IO).launch {
             myPageFragmentViewModel.getFavoriteList()
@@ -259,16 +238,10 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
                             .height(this.height.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        HorizontalPager(count = 2) {page ->
-                            when (page) {
-                                0 -> {
-                                    MyAuroraFavorite(auroraFavoriteList = auroraFavoriteList, myPageFragmentViewModel = myPageFragmentViewModel)
-                                }
-                                1 -> {
-                                    // Todo
-                                }
-                            }
-                        }
+                        MyAuroraFavorite(
+                            auroraFavoriteList = auroraFavoriteList,
+                            myPageFragmentViewModel = myPageFragmentViewModel
+                        )
                     } // End of Column
                 } // End of MaterialTheme
             } // End of setContent

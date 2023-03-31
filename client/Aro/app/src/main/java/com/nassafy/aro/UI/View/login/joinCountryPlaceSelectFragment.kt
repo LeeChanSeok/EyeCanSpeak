@@ -1,5 +1,6 @@
 package com.nassafy.aro.ui.view.login
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -24,6 +25,8 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.gson.JsonObject
+import com.nassafy.aro.Application
 import com.nassafy.aro.R
 import com.nassafy.aro.data.dto.PlaceItem
 import com.nassafy.aro.data.dto.UserTest
@@ -34,10 +37,12 @@ import com.nassafy.aro.ui.view.custom.CountryPlaceChips
 import com.nassafy.aro.ui.view.custom.CountryPlaceLazyColumn
 import com.nassafy.aro.ui.view.login.viewmodel.JoinCountryPlaceSelectFragmentViewModel
 import com.nassafy.aro.ui.view.login.viewmodel.LoginActivityViewModel
+import com.nassafy.aro.ui.view.main.MainActivity
 import com.nassafy.aro.util.NetworkResult
 import com.nassafy.aro.util.showSnackBarMessage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
+import org.json.JSONArray
 
 @AndroidEntryPoint
 class JoinCountryPlaceSelectFragment : BaseFragment<FragmentAroCountryPlaceSelectBinding>(
@@ -76,17 +81,17 @@ class JoinCountryPlaceSelectFragment : BaseFragment<FragmentAroCountryPlaceSelec
         binding.nextButton.setOnClickListener {
 
             loginActivityViewModel.apply {
-                val userT = UserTest(
-                    email = email,
-                    password = password,
-                    nickname = nickname,
-                    alarm = true,
-                    auroraService = isAuroraServiceSelected,
-                    auroraPlaces = selectedAuroraPlaces.value?.map { it.placeId } ?: emptyList(),
-                    meteorService = isMeteorServiceSelected,
-                    meteorPlaces = selectedMeteorPlaces.value?.map { it.placeId } ?: emptyList(),
-                )
-                joinCountryPlaceServiceSelectFragmentViewModel.join(userT)
+                joinCountryPlaceServiceSelectFragmentViewModel.join(
+                    JsonObject().apply {
+                        addProperty("providerType", providerType)
+                        addProperty("email", email)
+                        addProperty("password", password)
+                        addProperty("nickname", nickname)
+                        addProperty("auroraService", false)
+                        addProperty("auroraPlaces", JSONArray(selectedAuroraPlaces.value?.map { it.placeId } ?: emptyList<PlaceItem>()).toString())
+                        addProperty("meteorService", false)
+                        addProperty("meteorPlaces", JSONArray(selectedMeteorPlaces.value?.map { it.placeId } ?: emptyList<PlaceItem>()).toString())
+                    })
             }
         }
         binding.cancelButton.setOnClickListener {
@@ -173,7 +178,12 @@ class JoinCountryPlaceSelectFragment : BaseFragment<FragmentAroCountryPlaceSelec
             when (loginActivityViewModel.placeListLiveData.value!!) {
                 is NetworkResult.Success<List<PlaceItem>> -> {
                     requireView().showSnackBarMessage("회원가입 성공!")
-                    findNavController().navigate(R.id.action_joinCountryPlaceSelectFragment_to_loginFragment)
+                    Application.sharedPreferencesUtil.addUserAccessToken(it.data?.accessToken ?: "")
+                    Application.sharedPreferencesUtil.addUserRefreshToken(it.data?.refreshToken ?: "")
+                    val intent = Intent(requireContext(), MainActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(intent)
                 }
                 is NetworkResult.Error<*> -> {
                     requireView().showSnackBarMessage("서버 통신 에러 발생")

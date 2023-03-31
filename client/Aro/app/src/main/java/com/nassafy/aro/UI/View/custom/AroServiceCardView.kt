@@ -45,7 +45,7 @@ class AroServiceCardView @JvmOverloads constructor(
         onSelectedChangeListener = object: OnSelectedChangeListener {
             override fun onSelectedChanged(isSelected: Boolean) {
 
-                val picasso = Picasso.get()
+                val grayScalePicasso = Picasso.get()
                     .load(resourceId)
                     .transform(
                         listOf(
@@ -53,14 +53,15 @@ class AroServiceCardView @JvmOverloads constructor(
                             GrayscaleTransformation()
                         )
                     ).fit().centerCrop()
-
+                val normalPicasso = Picasso.get()
+                    .load(resourceId)
+                    .fit().centerCrop()
                 when (isSelected) {
                     true -> {
-                        binding.serviceImageview.colorFilter = null
-                        binding.serviceImageview.setImageResource(resourceId)
+                        normalPicasso.into(binding.serviceImageview)
                     }
                     false -> {
-                        picasso.into(binding.serviceImageview)
+                        grayScalePicasso.into(binding.serviceImageview)
                     }
                 }
             }

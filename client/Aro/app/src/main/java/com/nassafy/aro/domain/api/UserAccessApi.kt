@@ -1,8 +1,9 @@
 package com.nassafy.aro.domain.api
 
 import com.google.gson.JsonObject
-import com.nassafy.aro.data.dto.LoginToken
+import com.nassafy.aro.data.dto.TokenResponse
 import com.nassafy.aro.data.dto.PlaceItem
+import com.nassafy.aro.data.dto.SnsLoginResposne
 import com.nassafy.aro.data.dto.UserTest
 import retrofit2.Response
 import retrofit2.http.*
@@ -12,7 +13,7 @@ interface UserAccessApi {
     @POST("api/members/login")
     suspend fun login(
         @Body loginBody: JsonObject
-    ): Response<LoginToken> // End of login
+    ): Response<TokenResponse> // End of login
 
     @POST("api/members/codecheck")
     suspend fun validateEmailAuthenticationCode(
@@ -34,12 +35,12 @@ interface UserAccessApi {
 
     @POST("api/members/signup")
     suspend fun join(
-        @Body user: UserTest
-    ): Response<Unit>
+        @Body user: JsonObject
+    ): Response<TokenResponse>
 
     @POST("api/members/snslogin")
     suspend fun snsLogin(
         @Body reuqestBody: JsonObject
-    ): Response<JsonObject>
+    ): Response<SnsLoginResposne>
 
 } // End of UserAccessApi

@@ -3,9 +3,7 @@ package com.nassafy.aro.ui.view.login.viewmodel
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
-import com.nassafy.aro.data.dto.LoginToken
 import com.nassafy.aro.data.dto.PlaceItem
-import com.nassafy.aro.data.dto.UserTest
 import com.nassafy.aro.domain.repository.UserAccessRepository
 import com.nassafy.aro.ui.view.ServiceViewModel
 import com.nassafy.aro.util.NetworkResult
@@ -18,8 +16,9 @@ class LoginActivityViewModel @Inject constructor(
     private val userAccessRepository: UserAccessRepository
 ) : ServiceViewModel() {
 
+    var providerType: String = "LOCAL"
     var email: String = ""
-    var password: String = ""
+    var password: String? = null
     var nickname: String = ""
     override var isAuroraServiceSelected: Boolean = false
     override var isMeteorServiceSelected: Boolean = false
