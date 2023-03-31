@@ -28,13 +28,12 @@ import com.navercorp.nid.oauth.OAuthLoginCallback
 import com.navercorp.nid.profile.NidProfileCallback
 import com.navercorp.nid.profile.data.NidProfileResponse
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 @AndroidEntryPoint
 class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::inflate) {
 
+    private val loginActivityViewModel: LoginActivityViewModel by activityViewModels()
     private val loginFragmentViewModel: LoginFragmentViewModel by viewModels()
     private var isTriedLoginState = false
 
@@ -57,55 +56,70 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                 NidOAuthLogin().callProfileApi(object : NidProfileCallback<NidProfileResponse> {
                     override fun onSuccess(result: NidProfileResponse) {
                         val naverAccessToken = NaverIdLoginSDK.getAccessToken()
-
+                        naverAccessToken ?: return
+                        val providerType = "NAVER"
                         Log.d("ssafy/auth/naver", "naverAccessToken: $naverAccessToken")
+
+                        //todo Fix Naver 안깔린 경우 버그
 
                         // 성공으로 AccessToken이 넘어왔을 때, 통신 시작.
                         CoroutineScope(Dispatchers.IO).launch {
-                            //TODO retrofit
-//                            tokenViewModel.postNaverAccessToken(naverAccessToken.toString())
+                            loginFragmentViewModel.apply {
+                                snsLogin(providerType, naverAccessToken)
+                                val networkResult = userSnsLoginNetworkResultLiveData.value!!
+                                when (networkResult) {
+                                    is NetworkResult.Success -> {
+                                        when (networkResult.data!!.signup) {
+                                            true -> {
+                                                loginByIdPassword(
+                                                    networkResult.data!!.providerType,
+                                                    networkResult.data!!.email,
+                                                    null
+                                                )
+                                            }
+                                            false -> {
+                                                loginActivityViewModel.email =
+                                                    networkResult.data!!.email
+                                                findNavController().navigate(R.id.action_loginFragment_to_joinEmailFragment)
+                                            }
+                                        }
+                                    }
+                                    is NetworkResult.Error -> {
+                                        requireView().showSnackBarMessage("네이버 로그인에 실패했습니다.")
+                                    }
+                                    is NetworkResult.Loading -> {
+                                        // Todo loading progressBar
+                                    }
+                                }
+                            }
                         }
                         //TODO retrofit
 //                        email = result.profile?.email.toString()
                     }
 
                     override fun onError(errorCode: Int, message: String) {
-                        //
+                        requireView().showSnackBarMessage("네이버 로그인에 실패했습니다.")
                     }
 
                     override fun onFailure(httpStatus: Int, message: String) {
-                        //
+                        // Todo loading progressBar
                     }
                 })
             }
 
             override fun onError(errorCode: Int, message: String) {
-                val naverAccessToken = NaverIdLoginSDK.getAccessToken()
-                Log.e("ssafy/login/naver", "naverAccessToken : $naverAccessToken")
+                requireView().showSnackBarMessage("네이버 로그인에 실패했습니다.")
             }
 
             override fun onFailure(httpStatus: Int, message: String) {
-                //
+                requireView().showSnackBarMessage("네이버 로그인에 실패했습니다.")
             }
         }
-
-
         NaverIdLoginSDK.initialize(requireContext(), NAVER_CLIENT_ID, NAVER_CLIENT_SECRET, "ARO")
         NaverIdLoginSDK.authenticate(requireContext(), oAuthLoginCallback)
     } // End of naverLogin
 
     private fun initObserve() {
-        initJoinObserve()
-    } // End of initObserve
-
-    private fun startMainActivity() {
-        val intent = Intent(requireContext(), MainActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        startActivity(intent)
-    }
-
-    private fun initJoinObserve() {
 
         loginFragmentViewModel.loginToken.observe(this.viewLifecycleOwner) {
             when (it) {
@@ -118,20 +132,31 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                 }
                 is NetworkResult.Error -> {
                     when (isTriedLoginState) {
-                        true -> {requireView().showSnackBarMessage("로그인에 실패했습니다.")}
+                        true -> {
+                            requireView().showSnackBarMessage("로그인에 실패했습니다.")
+                        }
                         false -> {}
                     }
 
                 }
                 is NetworkResult.Loading -> {
+                    // todo loading progressBar
                 }
             }
             isTriedLoginState = false
         }
+    } // End of initObserve
+
+    private fun startMainActivity() {
+        val intent = Intent(requireContext(), MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
     }
 
     private fun initView() {
         binding.joinTextview.setOnClickListener {
+            loginActivityViewModel.providerType = "LOCAL"
             findNavController().navigate(R.id.action_loginFragment_to_joinEmailFragment)
         }
         binding.loginNaverImagebutton.setOnClickListener {
@@ -143,15 +168,15 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
             githubLogin()
         }
         binding.loginButton.setOnClickListener {
-            when(binding.loginEmailIdEdittext.text.toString().trim().length) {
-                0 ->  {
+            when (binding.loginEmailIdEdittext.text.toString().trim().length) {
+                0 -> {
                     requireView().showSnackBarMessage(getString(R.string.email_empty_text))
                     return@setOnClickListener
                 }
                 else -> {}
             }
-            when(binding.loginPasswordEdittext.text.toString().trim().length) {
-                0 ->  {
+            when (binding.loginPasswordEdittext.text.toString().trim().length) {
+                0 -> {
                     requireView().showSnackBarMessage(getString(R.string.password_empty_text))
                     return@setOnClickListener
                 }
@@ -161,8 +186,9 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
             isTriedLoginState = true
             CoroutineScope(Dispatchers.IO).launch {
                 loginFragmentViewModel.loginByIdPassword(
+                    "LOCAL",
                     binding.loginEmailIdEdittext.text.toString(),
-                    binding.loginPasswordEdittext.text.toString()
+                    binding.loginPasswordEdittext.text.toString(),
                 )
             }
 

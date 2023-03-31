@@ -92,7 +92,6 @@ class MyPageServiceRegisterFragment :
                                 myPageServiceRegisterFragementViewModel.auroraService,
                                 myPageServiceRegisterFragementViewModel.meteorService,
                             )
-                        Log.d("싸피 다이얼", "왜 안됨?")
                         when (myPageServiceRegisterFragementViewModel.auroraService) {
                             true -> {
                                 findNavController().navigate(action)

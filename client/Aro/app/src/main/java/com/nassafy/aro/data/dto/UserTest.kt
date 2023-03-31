@@ -7,6 +7,6 @@ data class UserTest(
     val meteorPlaces: List<Int>,
     val meteorService: Boolean,
     val nickname: String,
-    val password: String,
+    val password: String?,
     val alarm: Boolean = true
 )

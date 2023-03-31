@@ -4,17 +4,19 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.JsonObject
-import com.nassafy.aro.data.dto.LoginToken
+import com.nassafy.aro.data.dto.TokenResponse
 import com.nassafy.aro.data.dto.PlaceItem
+import com.nassafy.aro.data.dto.SnsLoginResposne
 import com.nassafy.aro.data.dto.UserTest
 import com.nassafy.aro.domain.api.UserAccessApi
 import com.nassafy.aro.util.NetworkResult
+import com.nassafy.aro.util.setNetworkResult
 import javax.inject.Inject
 
 class UserAccessRepository @Inject constructor(private val userAccessApi: UserAccessApi) { // End of UserAccessRepository
 
-    private val _loginToken = MutableLiveData<NetworkResult<LoginToken>>()
-    val loginToken: LiveData<NetworkResult<LoginToken>> get() = _loginToken
+    private val _loginToken = MutableLiveData<NetworkResult<TokenResponse>>()
+    val loginToken: LiveData<NetworkResult<TokenResponse>> get() = _loginToken
 
     private val _isEmailValidated = MutableLiveData<Boolean>()
     val isEmailValidated get() = _isEmailValidated
@@ -33,8 +35,11 @@ class UserAccessRepository @Inject constructor(private val userAccessApi: UserAc
     private val _selectedMeteorPlaceListLiveData = MutableLiveData<MutableList<PlaceItem>>()
     val selectedMeteorPlaceListLiveData get() = _selectedMeteorPlaceListLiveData
 
-    private val _userJoinNetworkResultLiveData = MutableLiveData<NetworkResult<Unit>>()
-    val userJoinNetworkResultLiveData get() = _userJoinNetworkResultLiveData
+    private val _userJoinNetworkResultLiveData = MutableLiveData<NetworkResult<TokenResponse>>()
+    val userJoinNetworkResultLiveData:LiveData<NetworkResult<TokenResponse>> get() = _userJoinNetworkResultLiveData
+
+    private val _userSnsLoginNetworkResultLiveData = MutableLiveData<NetworkResult<SnsLoginResposne>>()
+    val userSnsLoginNetworkResultLiveData: LiveData<NetworkResult<SnsLoginResposne>> get() = _userSnsLoginNetworkResultLiveData
 
     init {
         _placeListLiveData.value = NetworkResult.Loading()
@@ -49,8 +54,9 @@ class UserAccessRepository @Inject constructor(private val userAccessApi: UserAc
         _isEmailAuthCodeValidated.postValue(false)
     }
 
-    suspend fun loginByIdPassword(email: String, password: String) {
+    suspend fun loginByIdPassword(providerType: String, email: String, password: String?) {
         val response = userAccessApi.login(JsonObject().apply {
+            addProperty("providerType", providerType)
             addProperty("email", email)
             addProperty("password", password)
         })
@@ -142,7 +148,7 @@ class UserAccessRepository @Inject constructor(private val userAccessApi: UserAc
         } // End of try-catch
     }
 
-    suspend fun join(user: UserTest) {
+    suspend fun join(user: JsonObject) {
         val response = userAccessApi.join(user)
         _userJoinNetworkResultLiveData.postValue(NetworkResult.Loading())
         try {
@@ -179,6 +185,14 @@ class UserAccessRepository @Inject constructor(private val userAccessApi: UserAc
     fun clearSelectedMeteorPlaceList() {
         val temp = mutableListOf<PlaceItem>()
         _selectedMeteorPlaceListLiveData.value = temp
+    }
+
+    suspend fun snsLogin(providerType: String, accessToken: String) {
+        val response = userAccessApi.snsLogin(JsonObject().apply {
+            addProperty("providerType", providerType)
+            addProperty("accessToken", accessToken)
+        })
+        _userSnsLoginNetworkResultLiveData.setNetworkResult(response)
     }
 
 }
