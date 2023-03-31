@@ -3,6 +3,7 @@ package com.nassafy.aro.domain.repository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.gson.JsonObject
 import com.nassafy.aro.data.dto.UserTest
 import com.nassafy.aro.domain.api.MainApi
 import com.nassafy.aro.util.NetworkResult
@@ -21,7 +22,9 @@ class MainRepository @Inject constructor(private val mainApi: MainApi) {
 
     suspend fun getUserInfo(fcmToken: String) {
         Log.d("ssafy/getInfo", fcmToken)
-        val response = mainApi.getUserInfo(fcmToken)
+        val response = mainApi.getUserInfo(JsonObject().apply {
+            addProperty("fcmToken", fcmToken)
+        })
         _userInfo.postValue(NetworkResult.Loading())
 
         try {

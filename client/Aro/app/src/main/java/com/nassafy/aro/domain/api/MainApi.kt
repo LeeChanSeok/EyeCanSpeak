@@ -11,7 +11,7 @@ interface MainApi {
 
     @POST("api/members/memberInfo")
     suspend fun getUserInfo(
-        @Body fcmToken: String
+        @Body requestBody: JsonObject
     ): Response<UserTest>
 
     @GET("api/members/alarm")
