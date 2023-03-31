@@ -25,6 +25,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.nassafy.aro.Application
 import com.nassafy.aro.R
@@ -81,17 +82,26 @@ class JoinCountryPlaceSelectFragment : BaseFragment<FragmentAroCountryPlaceSelec
         binding.nextButton.setOnClickListener {
 
             loginActivityViewModel.apply {
-                joinCountryPlaceServiceSelectFragmentViewModel.join(
-                    JsonObject().apply {
-                        addProperty("providerType", providerType)
-                        addProperty("email", email)
-                        addProperty("password", password)
-                        addProperty("nickname", nickname)
-                        addProperty("auroraService", false)
-                        addProperty("auroraPlaces", JSONArray(selectedAuroraPlaces.value?.map { it.placeId } ?: emptyList<PlaceItem>()).toString())
-                        addProperty("meteorService", false)
-                        addProperty("meteorPlaces", JSONArray(selectedMeteorPlaces.value?.map { it.placeId } ?: emptyList<PlaceItem>()).toString())
-                    })
+                val gson = GsonBuilder().create()
+                val user = JsonObject().apply {
+                    addProperty("providerType", providerType)
+                    addProperty("email", email)
+                    addProperty("password", password)
+                    addProperty("nickname", nickname)
+                    addProperty("auroraService", false)
+                    addProperty("meteorService", false)
+                }
+                user.add(
+                    "auroraPlaces",
+                    gson.toJsonTree(selectedAuroraPlaceList.map { it.placeId })
+                        .getAsJsonArray()
+                )
+                user.add(
+                    "meteorPlaces",
+                    gson.toJsonTree(selectedMeteorPlaces.value?.map { it.placeId } ?: emptyList<PlaceItem>())
+                        .getAsJsonArray()
+                )
+                joinCountryPlaceServiceSelectFragmentViewModel.join(user)
             }
         }
         binding.cancelButton.setOnClickListener {
@@ -175,23 +185,37 @@ class JoinCountryPlaceSelectFragment : BaseFragment<FragmentAroCountryPlaceSelec
         }
 
         joinCountryPlaceServiceSelectFragmentViewModel.userJoinNetworkResultLiveData.observe(this.viewLifecycleOwner) {
-            when (loginActivityViewModel.placeListLiveData.value!!) {
-                is NetworkResult.Success<List<PlaceItem>> -> {
-                    requireView().showSnackBarMessage("회원가입 성공!")
-                    Application.sharedPreferencesUtil.addUserAccessToken(it.data?.accessToken ?: "")
-                    Application.sharedPreferencesUtil.addUserRefreshToken(it.data?.refreshToken ?: "")
-                    val intent = Intent(requireContext(), MainActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    startActivity(intent)
+            when (it) {
+                is NetworkResult.Success -> {
+                    when (loginActivityViewModel.placeListLiveData.value!!) {
+                        is NetworkResult.Success<List<PlaceItem>> -> {
+                            requireView().showSnackBarMessage("회원가입 성공!")
+                            Log.d("ssafy_pcs/it", it.toString())
+                            Log.d("ssafy_pcs/it.data", it.data.toString())
+                            Application.sharedPreferencesUtil.addUserAccessToken(
+                                it.data?.accessToken ?: ""
+                            )
+                            Application.sharedPreferencesUtil.addUserRefreshToken(
+                                it.data?.refreshToken ?: ""
+                            )
+                            val intent = Intent(requireContext(), MainActivity::class.java)
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            startActivity(intent)
+                        }
+                        is NetworkResult.Error<*> -> {
+                            requireView().showSnackBarMessage("서버 통신 에러 발생")
+                        }
+                        is NetworkResult.Loading<*> -> {
+                            Log.d("ssafy_pcs", "로딩 중..")
+                        }
+                    }
                 }
-                is NetworkResult.Error<*> -> {
+                is NetworkResult.Error -> {
                     requireView().showSnackBarMessage("서버 통신 에러 발생")
                 }
-                is NetworkResult.Loading<*> -> {
-                    Log.d(
-                        "ssafy_pcs", "로딩 중.."
-                    )
+                is NetworkResult.Loading -> {
+                    Log.d("ssafy_pcs", "로딩 중..")
                 }
             }
         } // End of userJoinNetworkResultLiveData.observe
@@ -207,7 +231,8 @@ class JoinCountryPlaceSelectFragment : BaseFragment<FragmentAroCountryPlaceSelec
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 val placeList = remember { loginActivityViewModel.placeListData }
-                val selectedAuroraPlaceList = remember { loginActivityViewModel.selectedAuroraPlaceList }
+                val selectedAuroraPlaceList =
+                    remember { loginActivityViewModel.selectedAuroraPlaceList }
                 // In Compose world
                 MaterialTheme {
                     Column(

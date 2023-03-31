@@ -20,6 +20,7 @@ class MainRepository @Inject constructor(private val mainApi: MainApi) {
     val getAuroraDisplayOptionNetworkResultLiveData: LiveData<NetworkResult<Boolean>> get() = _getAuroraDisplayOptionNetworkResultLiveData
 
     suspend fun getUserInfo(fcmToken: String) {
+        Log.d("ssafy/getInfo", fcmToken)
         val response = mainApi.getUserInfo(fcmToken)
         _userInfo.postValue(NetworkResult.Loading())
 

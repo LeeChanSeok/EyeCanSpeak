@@ -5,6 +5,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
@@ -15,6 +16,8 @@ import com.nassafy.aro.databinding.FragmentJoinEmailBinding
 import com.nassafy.aro.ui.view.BaseFragment
 import com.nassafy.aro.ui.view.login.viewmodel.JoinEmailFragmentViewModel
 import com.nassafy.aro.ui.view.login.viewmodel.LoginActivityViewModel
+import com.nassafy.aro.util.NetworkResult
+import com.nassafy.aro.util.showSnackBarMessage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 
@@ -22,6 +25,7 @@ import kotlinx.coroutines.*
 class JoinEmailFragment :
     BaseFragment<FragmentJoinEmailBinding>(FragmentJoinEmailBinding::inflate) {
 
+    private var isVerifyEmailTextviewClicked = false
     private val loginActivityViewModel: LoginActivityViewModel by activityViewModels()
     private val joinEmailFragmentViewModel: JoinEmailFragmentViewModel by viewModels()
 
@@ -33,7 +37,8 @@ class JoinEmailFragment :
 
     override fun onResume() {
         super.onResume()
-        setNextButtonAvailable(false) // TODO ACITVE
+        isVerifyEmailTextviewClicked = false
+        setNextButtonAvailable(false)
     } // End of onResume
 
     private fun initObserve() {
@@ -48,15 +53,34 @@ class JoinEmailFragment :
 
     private fun initEmailValidateObserve() {
         joinEmailFragmentViewModel.isEmailValidated.observe(this.viewLifecycleOwner) {
+            Log.d("ssafy_pcs", "progress.Off")
             when (it) {
-                true -> {
-                    binding.joinEmailIdTextfield.error = null
-                    binding.verificationEmailCodeTextfield.isVisible = true
+                is NetworkResult.Success -> {
+                    isVerifyEmailTextviewClicked = false
+                    binding.progressGroup.isGone = true
+                    when(it.data!!){
+                        true -> {
+                            binding.joinEmailIdTextfield.error = null
+                            binding.verificationEmailCodeTextfield.isVisible = true
+                        }
+                        false -> {
+                            binding.joinEmailIdTextfield.error =
+                                getString(R.string.join_already_exist_email_text)
+                            binding.verificationEmailCodeTextfield.isVisible = false
+                        }
+                    }
                 }
-                false -> {
-                    binding.joinEmailIdTextfield.error =
-                        getString(R.string.join_already_exist_email_text)
-                    binding.verificationEmailCodeTextfield.isVisible = false
+                is NetworkResult.Error -> {
+                    isVerifyEmailTextviewClicked = false
+                    binding.progressGroup.isGone = true
+                    requireView().showSnackBarMessage(getString(R.string.join_already_exist_email_text))
+                }
+                is NetworkResult.Loading -> {
+                    Log.d("ssafy_pcs", "progress.On")
+                    when (isVerifyEmailTextviewClicked) {
+                        true -> {binding.progressGroup.isVisible = true}
+                        false -> {}
+                    }
                 }
             } // End of when
         } // End of isEmailValidated.observe
@@ -64,12 +88,11 @@ class JoinEmailFragment :
             when (it) {
                 true -> {
                     binding.verificationEmailCodeTextfield.error = null
-                    when (joinEmailFragmentViewModel.isEmailValidated.value) {
+                    when (joinEmailFragmentViewModel.isEmailValidated.value?.data) {
                         true -> {
                             setNextButtonAvailable(true)
                         }
                         else -> {
-//                            setNextButtonAvailable(true)//TODO DELETE
                             setNextButtonAvailable(false) // TODO ACTIVE
                         }
                     } // End of when
@@ -96,8 +119,13 @@ class JoinEmailFragment :
             findNavController().popBackStack()
         } // End of cancelButton.setOnClickListener
         binding.verifyEmailTextview.setOnClickListener {
+            isVerifyEmailTextviewClicked = true
             CoroutineScope(Dispatchers.IO).launch {
                 joinEmailFragmentViewModel.validateEmail(binding.joinEmailIdTextfield.editText?.text.toString())
+            }
+            when (isVerifyEmailTextviewClicked) {
+                true -> {binding.progressGroup.isVisible = true}
+                false -> {}
             }
         } // End of verifyEmailTextview.setOnClickListener
 
@@ -108,7 +136,8 @@ class JoinEmailFragment :
                     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
                     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
                     override fun afterTextChanged(p0: Editable?) {
-                        joinEmailFragmentViewModel.setIsEmailValidatedFalse()
+                        binding.verificationEmailCodeTextfield.editText?.setText("")
+                        binding.verificationEmailCodeTextfield.isGone = true
                     }
                 }
             } // End of addTextChangedListener
@@ -137,5 +166,4 @@ class JoinEmailFragment :
             }) // End of addTextChangedListener
         } // End of verificationEmailCodeTextfield.apply
     } // End of initView
-
-}
+} // End of JoinEmailFragment

@@ -73,8 +73,16 @@ class JoinServiceFragment : BaseFragment<FragmentAroServiceSelectBinding>(Fragme
             loginActivityViewModel.apply {
                 isAuroraServiceSelected = binding.auroraServiceCardview.getIsSelected()
                 isMeteorServiceSelected = binding.meteorServiceCardview.getIsSelected()
+                when(isAuroraServiceSelected) {
+                    true -> {
+                        findNavController().navigate(R.id.action_joinServiceFragment_to_joinCountryPlaceSelectFragment)
+                    }
+                    false -> {
+                        join()
+                    }
+                }
             }
-            findNavController().navigate(R.id.action_joinServiceFragment_to_joinCountryPlaceSelectFragment)
+
         }
         binding.cancelButton.setOnClickListener {
             findNavController().popBackStack()
@@ -83,20 +91,34 @@ class JoinServiceFragment : BaseFragment<FragmentAroServiceSelectBinding>(Fragme
             val gson = GsonBuilder().create()
             paintFlags = Paint.UNDERLINE_TEXT_FLAG
             setOnClickListener {
-                loginActivityViewModel.apply {
-                    joinSericeFragmentViewModel.join(JsonObject().apply {
-                        addProperty("providerType", providerType)
-                        addProperty("email", email)
-                        addProperty("password", password)
-                        addProperty("nickname", nickname)
-                        addProperty("auroraService", false)
-                        addProperty("auroraPlaces", JSONArray(emptyArray<PlaceItem>()).toString())
-                        addProperty("meteorService", false)
-                        addProperty("meteorPlaces", JSONArray(emptyArray<PlaceItem>()).toString())
-                    })
-                }
+                join()
             }
         }
     } // End of initView
+
+    fun join() {
+        val gson = GsonBuilder().create()
+        loginActivityViewModel.apply {
+            val user = JsonObject().apply {
+                addProperty("providerType", providerType)
+                addProperty("email", email)
+                addProperty("password", password)
+                addProperty("nickname", nickname)
+                addProperty("auroraService", false)
+                addProperty("meteorService", false)
+            }
+            user.add(
+                "auroraPlaces",
+                gson.toJsonTree(emptyList<PlaceItem>())
+                    .getAsJsonArray()
+            )
+            user.add(
+                "meteorPlaces",
+                gson.toJsonTree(emptyList<PlaceItem>())
+                    .getAsJsonArray()
+            )
+            joinSericeFragmentViewModel.join(user)
+        }
+    }
 
 } // End of JoinServiceFragment

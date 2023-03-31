@@ -104,7 +104,6 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(FragmentSettingBind
                 is NetworkResult.Success -> {
                     val layout = layoutInflater.inflate(R.layout.custom_toast_delete_account, null)
                     requireContext().showToastView(layout)
-
                     val intent = Intent(requireContext(), LoginActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

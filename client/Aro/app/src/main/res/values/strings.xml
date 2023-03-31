@@ -18,6 +18,7 @@
     <string name="email_validate_number_edittext_text">이메일 인증 번호</string>
     <string name="email_validate_number_fail_textview_text">인증번호가 다릅니다</string>
     <string name="email_verify_textview_text">인증하기</string>
+    <string name="email_verify_progress_textview_text">인증 이메일을 보내는 중 입니다.\n잠시만 기다려주세요!</string>
 
     <string name="password_edittext_text">비밀번호</string>
     <string name="password_validate_edittext_text">비밀번호 확인</string>

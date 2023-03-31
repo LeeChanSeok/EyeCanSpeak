@@ -18,8 +18,9 @@ class UserAccessRepository @Inject constructor(private val userAccessApi: UserAc
     private val _loginToken = MutableLiveData<NetworkResult<TokenResponse>>()
     val loginToken: LiveData<NetworkResult<TokenResponse>> get() = _loginToken
 
-    private val _isEmailValidated = MutableLiveData<Boolean>()
-    val isEmailValidated get() = _isEmailValidated
+    private val _isEmailValidated = MutableLiveData<NetworkResult<Boolean>>()
+    val isEmailValidated: LiveData<NetworkResult<Boolean>> get() = _isEmailValidated
+
     private val _isEmailAuthCodeValidated = MutableLiveData<Boolean>()
     val isEmailAuthCodeValidated get() = _isEmailAuthCodeValidated
 
@@ -45,13 +46,6 @@ class UserAccessRepository @Inject constructor(private val userAccessApi: UserAc
         _placeListLiveData.value = NetworkResult.Loading()
         _selectedAuraraPlaceListLiveData.value = mutableListOf()
         _selectedMeteorPlaceListLiveData.value = mutableListOf()
-    }
-
-    fun setIsEmailValidatedFalse() {
-        _isEmailValidated.postValue(false)
-    }
-    fun setisEmailAuthCodeValidatedFalse() {
-        _isEmailAuthCodeValidated.postValue(false)
     }
 
     suspend fun loginByIdPassword(providerType: String, email: String, password: String?) {
@@ -104,10 +98,12 @@ class UserAccessRepository @Inject constructor(private val userAccessApi: UserAc
         val response = userAccessApi.validateEmail(JsonObject().apply {
             addProperty("email", email)
         })
+        Log.d("ssafy_pcs/validate", response.toString())
+        _isEmailValidated.postValue(NetworkResult.Loading())
         try {
             when {
-                response.isSuccessful -> _isEmailValidated.postValue(true)
-                response.errorBody() != null -> _isEmailValidated.postValue(false)
+                response.isSuccessful -> _isEmailValidated.postValue(NetworkResult.Success(true))
+                response.errorBody() != null -> _isEmailValidated.postValue(NetworkResult.Error(response.errorBody().toString()))
             }
         } catch (e: java.lang.Exception) {
             Log.e("ssafy", "getServerCallTest: ${e.message}")
@@ -149,7 +145,9 @@ class UserAccessRepository @Inject constructor(private val userAccessApi: UserAc
     }
 
     suspend fun join(user: JsonObject) {
+        Log.d("ssafy_pcs/join/request", user.toString())
         val response = userAccessApi.join(user)
+        Log.d("ssafy_pcs/join/response", response.toString())
         _userJoinNetworkResultLiveData.postValue(NetworkResult.Loading())
         try {
             when {
