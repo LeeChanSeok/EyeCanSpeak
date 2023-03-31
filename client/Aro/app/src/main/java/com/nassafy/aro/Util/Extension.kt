@@ -74,7 +74,7 @@ fun generateBitmapDescriptorFromRes(context: Context, resId: Int): BitmapDescrip
 }
 
 /**
- * Codel: 204의 경우는 처리하지 못합니다.
+ * Code: 204의 경우는 처리하지 못합니다.
  */
 suspend fun <T> MutableLiveData<NetworkResult<T>>.setNetworkResult(response: Response<T>) {
     this.postValue(NetworkResult.Loading())
