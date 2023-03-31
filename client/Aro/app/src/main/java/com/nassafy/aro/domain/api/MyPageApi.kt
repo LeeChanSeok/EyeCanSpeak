@@ -5,11 +5,7 @@ import com.nassafy.aro.data.dto.FavoriteList
 import com.nassafy.aro.data.dto.PlaceItem
 import com.nassafy.aro.data.dto.UserTest
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.DELETE
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
 
 interface MyPageApi {
     @POST("api/members/changenickname/{nickname}")
@@ -31,7 +27,6 @@ interface MyPageApi {
 
     @DELETE("api/interest/{interestId}")
     suspend fun deleteFavorite(@Path("interestId") interestId: Long): Response<Unit>
-
 }
 
 interface WithoutHeaderMyPageApi {

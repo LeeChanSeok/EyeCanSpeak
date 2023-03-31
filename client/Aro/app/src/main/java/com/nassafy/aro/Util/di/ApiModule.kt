@@ -7,7 +7,6 @@ import com.google.gson.GsonBuilder
 import com.nassafy.aro.Application
 import com.nassafy.aro.domain.api.*
 import com.nassafy.aro.util.SERVER_URL
-import com.nassafy.aro.util.WEATHER_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -297,6 +296,18 @@ object ApiModule {
             .build()
             .create(ValidateApi::class.java)
     } // End of provideWithoutHeaderValidateApi
+
+
+    @Provides
+    @HeaderInterceptorApi
+    fun provideHeaderValidateApi(@HeaderInterceptorOkHttpClient okHttpClient: OkHttpClient): ValidateApi {
+        return Retrofit.Builder()
+            .client(okHttpClient)
+            .baseUrl(provideBaseUrl())
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .build()
+            .create(ValidateApi::class.java)
+    } // End of provideHeaderValidateApi
 
     // ============================================= Setting =============================================
 

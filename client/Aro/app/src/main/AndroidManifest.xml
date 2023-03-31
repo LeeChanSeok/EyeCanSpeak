@@ -57,7 +57,6 @@
                 android:name=".ui.view.login.LoginActivity"
                 android:enabled="true"
                 android:exported="true"
-                android:launchMode="singleTask"
                 android:screenOrientation="portrait">
 
             <intent-filter>

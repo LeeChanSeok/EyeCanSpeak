@@ -89,7 +89,7 @@
         android:id="@+id/nickname_change_save_alert_imagebutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/save_alert_window"
+        android:src="@drawable/save_success_custom_toast"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

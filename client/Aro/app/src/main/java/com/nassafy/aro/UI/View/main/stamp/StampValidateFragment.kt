@@ -1,7 +1,7 @@
 package com.nassafy.aro.ui.view.main.stamp
 
 import android.app.Activity
-import android.app.Activity.RESULT_OK
+import android.app.Activity.*
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
@@ -13,12 +13,15 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.nassafy.aro.R
 import com.nassafy.aro.databinding.FragmentStampValidateBinding
@@ -27,6 +30,7 @@ import com.nassafy.aro.ui.view.main.MainActivity
 import com.nassafy.aro.util.ChangeMultipartUtil
 import com.nassafy.aro.util.NetworkResult
 import com.nassafy.aro.util.showSnackBarMessage
+import com.nassafy.aro.util.showToastView
 import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
@@ -50,7 +54,10 @@ class StampValidateFragment :
     // Navigation ViewModel
     private val stampNavViewModel: StampNavViewModel by navGraphViewModels(R.id.nav_stamp_diary)
 
+    private var viewPagerPosition: Int = 0
+
     // 갤러리 권한 목록
+    // SDK 버전 올라가서 갤러리 권한 가져오는 부분이 변경됨. (더 세분화 되었음)
     var REQUIRED_PERMISSIONS = arrayOf(
         android.Manifest.permission.READ_MEDIA_IMAGES,
     )
@@ -62,8 +69,11 @@ class StampValidateFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewPagerPosition = requireArguments().getInt("position")
+
 
         postImageValidateResponseLiveDataObserve()
+        postImageValidateSuccessResponseLiveDataObserve()
 
         Log.d(TAG, "현재 선택한 명소 : ${stampNavViewModel.nowSelectedAttractionId}")
 
@@ -83,7 +93,14 @@ class StampValidateFragment :
 
         // 갤러리에서 가져온 사진.
         binding.stampValidateGalleryButton.setOnClickListener {
-            isGalleryServiceAvaliable()
+            openGallery()
+
+            binding.stampValidateProgressbar.visibility = View.VISIBLE
+            binding.stampValidateProgressbar.isVisible = true
+            binding.validateConstraintLayout.visibility = View.GONE
+            binding.validateConstraintLayout.isVisible = false
+            binding.stampValidateProgressbarInformTextview.visibility = View.VISIBLE
+            binding.stampValidateProgressbarInformTextview.isVisible = true
         }
     } // End of onViewCreated
 
@@ -107,7 +124,7 @@ class StampValidateFragment :
 
     // ==================================== 권환 확인 ==================================== 
     // 갤러리 권한을 가지고 있는지 확인하는 메소드
-    private fun isGalleryServiceAvaliable() {
+    private fun openGallery() {
         val hasMediaPermission = ContextCompat.checkSelfPermission(
             mContext as Activity, android.Manifest.permission.READ_MEDIA_IMAGES
         )
@@ -177,10 +194,23 @@ class StampValidateFragment :
             }
 
             val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
-            val body = MultipartBody.Part.createFormData("newImageList", file.name, requestFile)
-            //newImageList.add(body)
+            val body = MultipartBody.Part.createFormData("image", file.name, requestFile)
+
+            Log.d(TAG, "openGallery() : ${body}")
+
+            CoroutineScope(Dispatchers.IO).launch {
+                sendValidateImage(body)
+            }
         }
     } // End of registerForActivityResult
+
+
+    private suspend fun sendValidateImage(imageBody: MultipartBody.Part?) {
+        CoroutineScope(Dispatchers.IO).launch {
+            validateViewModel.imageValidate(imageBody)
+        }
+    } // End of sendValidateImage
+
 
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<out String>, grantResults: IntArray
@@ -238,9 +268,14 @@ class StampValidateFragment :
 
                     val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
                     val body = MultipartBody.Part.createFormData("image", file.name, requestFile)
+
+                    Log.d(TAG, "onActivityResult: $body")
+
                     CoroutineScope(Dispatchers.IO).launch {
-                        validateViewModel.imageValidate(body)
+                        sendValidateImage(body)
                     }
+
+
                 }
             }
         }
@@ -301,30 +336,35 @@ class StampValidateFragment :
 
     private fun postImageValidateResponseLiveDataObserve() {
         validateViewModel.postImageValidateResponseLiveData.observe(this.viewLifecycleOwner) {
-            binding.stampValidateProgressbar.visibility = View.GONE
-            binding.stampValidateProgressbar.isVisible = false
-            binding.validateConstraintLayout.visibility = View.VISIBLE
-            binding.validateConstraintLayout.isVisible = true
-            binding.stampValidateProgressbarInformTextview.visibility = View.GONE
-            binding.stampValidateProgressbarInformTextview.isVisible = false
+//            binding.stampValidateProgressbar.visibility = View.GONE
+//            binding.stampValidateProgressbar.isVisible = false
+//            binding.validateConstraintLayout.visibility = View.VISIBLE
+//            binding.validateConstraintLayout.isVisible = true
+//            binding.stampValidateProgressbarInformTextview.visibility = View.GONE
+//            binding.stampValidateProgressbarInformTextview.isVisible = false
 
 
             when (it) {
                 is NetworkResult.Success -> {
                     if (it.data == 201) {
-                        requireView().showSnackBarMessage("이미지 오로라 맞음!")
 
                         // 이미지 오로라 맞으면 서버에서 검증 성공 데이터 통신 해야됨
                         // TODO 오로라 검증 성공 데이터 통신부 구현
                         CoroutineScope(Dispatchers.IO).launch {
+                            Log.d(TAG, "선택된 명소ID : ${stampNavViewModel.nowSelectedAttractionId}")
                             validateViewModel.postImageValidateSuccess(stampNavViewModel.nowSelectedAttractionId)
                         }
-
                     }
                 }
 
                 is NetworkResult.Error -> {
-                    requireView().showSnackBarMessage("이거 오로라 아님!")
+                    val layout = layoutInflater.inflate(R.layout.custom_toast, null)
+                    layout.findViewById<ImageView>(R.id.custom_toast_imageview).background =
+                        ContextCompat.getDrawable(
+                            mContext.applicationContext,
+                            R.drawable.wrong_aurora_image_custom_toast
+                        )
+                    context?.showToastView(layout)
                 }
 
                 is NetworkResult.Loading -> {
@@ -337,18 +377,64 @@ class StampValidateFragment :
                 }
             }
         }
-    } // End of postImageValidate
+    } // End of postImageValidateResponseLiveDataObserve
 
+    private fun postImageValidateSuccessResponseLiveDataObserve() {
+        validateViewModel.postImageValidateSuccessResponseLiveData.observe(this.viewLifecycleOwner) {
+            binding.stampValidateProgressbar.visibility = View.GONE
+            binding.stampValidateProgressbar.isVisible = false
+            binding.validateConstraintLayout.visibility = View.VISIBLE
+            binding.validateConstraintLayout.isVisible = true
+            binding.stampValidateProgressbarInformTextview.visibility = View.GONE
+            binding.stampValidateProgressbarInformTextview.isVisible = false
+
+            when (it) {
+                is NetworkResult.Success -> {
+                    if (it.data == 200) {
+                        val layout = layoutInflater.inflate(R.layout.custom_toast, null)
+                        layout.findViewById<ImageView>(R.id.custom_toast_imageview).background =
+                            ContextCompat.getDrawable(
+                                mContext.applicationContext,
+                                R.drawable.correct_aurora_image_custom_toast
+                            )
+                        context?.showToastView(layout)
+
+                        // 내 현재 위치 index를 bundle에 저장함
+                        val bundle = bundleOf("position" to viewPagerPosition)
+                        Log.d(TAG, "viewPagerPosition: $viewPagerPosition")
+
+                        findNavController().navigate(
+                            R.id.action_stampValidateFragment_to_stampCountryPlacesFragment,
+                            bundle
+                        )
+                    }
+                }
+
+                is NetworkResult.Error -> {
+                    val layout = layoutInflater.inflate(R.layout.custom_toast, null)
+                    layout.findViewById<ImageView>(R.id.custom_toast_imageview).background =
+                        ContextCompat.getDrawable(
+                            mContext.applicationContext,
+                            R.drawable.wrong_aurora_image_custom_toast
+                        )
+                    context?.showToastView(layout)
+                }
+
+                is NetworkResult.Loading -> {
+                    binding.stampValidateProgressbar.visibility = View.VISIBLE
+                    binding.stampValidateProgressbar.isVisible = true
+                    binding.validateConstraintLayout.visibility = View.GONE
+                    binding.validateConstraintLayout.isVisible = false
+                    binding.stampValidateProgressbarInformTextview.visibility = View.VISIBLE
+                    binding.stampValidateProgressbarInformTextview.isVisible = true
+                }
+            }
+        }
+    } // End of postImageValidateSuccessResponseLiveDataObserve
 
     companion object {
         private const val REQ_GALLERY = 1
         private const val REQUEST_CAMERA = 3
-        private const val REQUEST_STORAGE = 4
-
         private const val CAM_PERMISSION = android.Manifest.permission.CAMERA
-        private const val READ_STORAGE_PERMISSION =
-            android.Manifest.permission.READ_EXTERNAL_STORAGE
-        private const val WRITE_STORAGE_PERMISSION =
-            android.Manifest.permission.WRITE_EXTERNAL_STORAGE
     }
 } // End of StampValidateFragment class

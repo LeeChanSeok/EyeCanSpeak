@@ -13,7 +13,6 @@ import com.nassafy.aro.databinding.FragmentSplashBinding
 import com.nassafy.aro.ui.view.BaseFragment
 import com.nassafy.aro.ui.view.main.MainActivity
 import com.nassafy.aro.util.NetworkResult
-import com.nassafy.aro.util.SharedPreferencesUtil
 import com.nassafy.aro.util.showSnackBarMessage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
@@ -27,8 +26,6 @@ class SplashFragment : BaseFragment<FragmentSplashBinding>(FragmentSplashBinding
     // viewModel
     private val splashViewModel: SplashViewModel by viewModels()
 
-    // sharedPreference
-    private lateinit var sharedPreferencesUtil: SharedPreferencesUtil
 
     // Animation
     private lateinit var splash_top: android.view.animation.Animation

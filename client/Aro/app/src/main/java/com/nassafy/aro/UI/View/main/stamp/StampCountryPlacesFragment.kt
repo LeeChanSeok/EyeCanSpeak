@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import androidx.navigation.navGraphViewModels
@@ -31,6 +32,7 @@ class StampCountryPlacesFragment :
     // Fragment ViewModel
     private val stampCountryPlaceViewModel: StampCountryPlaceViewModel by viewModels()
 
+    private var viewPagerPosition: Int = 0
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -39,6 +41,7 @@ class StampCountryPlacesFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewPagerPosition = requireArguments().getInt("position")
 
         getUserPlaceDataGroupByCountryResponseLiveDataObserve()
 
@@ -50,7 +53,6 @@ class StampCountryPlacesFragment :
                 }
                 1
             }
-
             def.await()
         }
     } // End of onViewCreated
@@ -73,6 +75,8 @@ class StampCountryPlacesFragment :
             ViewPager2.ORIENTATION_HORIZONTAL
         }
 
+        binding.stampCountryCustomViewpager2.setCurrentItem(viewPagerPosition)
+
         countryPlaceViewPager.setItemClickListener(object :
             CountryPlaceViewPagerAdapter.ItemClickListener {
             override fun writeDiaryButtonClick(position: Int) {
@@ -89,8 +93,13 @@ class StampCountryPlacesFragment :
             override fun validateButtonclick(position: Int) {
                 stampHomeNavViewModel.setNowSelectedAttractionId(stampHomeNavViewModel.userCountryPlaceDataList[position].attractionId!!)
 
+                viewPagerPosition = position
+                val bundle = bundleOf("position" to viewPagerPosition)
                 Navigation.findNavController(binding.stampCountryCustomViewpager2.findViewById(R.id.stamp_country_place_validate_button))
-                    .navigate(R.id.action_stampCountryPlacesFragment_to_stampValidateFragment)
+                    .navigate(
+                        R.id.action_stampCountryPlacesFragment_to_stampValidateFragment,
+                        bundle
+                    )
             } // End of validateButtonclick
         })
     } // End of initViewPagerAdapter

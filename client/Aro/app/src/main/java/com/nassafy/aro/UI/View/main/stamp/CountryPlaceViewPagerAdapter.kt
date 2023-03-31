@@ -1,5 +1,6 @@
 package com.nassafy.aro.ui.view.main.stamp
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +10,6 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import com.nassafy.aro.R
-import com.nassafy.aro.data.dto.MapStampItem
 import com.nassafy.aro.data.dto.UserStampPlace
 import com.nassafy.aro.databinding.StampCountryPlaceListItemBinding
 import com.squareup.picasso.Picasso
@@ -41,6 +41,8 @@ class CountryPlaceViewPagerAdapter(
     } // End of onCreateViewHolder
 
     override fun onBindViewHolder(holder: CountryPlaceHolder, position: Int) {
+        Log.d(TAG, "onBindViewHolder: ${countryPlaceList}")
+
         holder.itemView.findViewById<TextView>(R.id.stamp_country_name_textview).text = countryName
         holder.itemView.findViewById<TextView>(R.id.stamp_country_place_name_textview).text =
             countryPlaceList[position].attractionName.toString()

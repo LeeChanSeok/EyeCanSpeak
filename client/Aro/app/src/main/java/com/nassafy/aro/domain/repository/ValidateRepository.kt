@@ -1,9 +1,11 @@
 package com.nassafy.aro.domain.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.nassafy.aro.domain.api.ValidateApi
 import com.nassafy.aro.util.NetworkResult
+import com.nassafy.aro.util.di.HeaderInterceptorApi
 import com.nassafy.aro.util.di.WithoutHeaderInterceptorApi
 import okhttp3.MultipartBody
 import javax.inject.Inject
@@ -11,7 +13,9 @@ import javax.inject.Inject
 private const val TAG = "ValidateRepository_싸피"
 
 class ValidateRepository @Inject constructor(
-    @WithoutHeaderInterceptorApi private val validateApi: ValidateApi
+    @WithoutHeaderInterceptorApi private val validateApi: ValidateApi,
+    @HeaderInterceptorApi private val validateHeaderApi: ValidateApi
+
 ) {
 
     // ======================================  이미지 오로라 여부 플라스크로 확인하기 ===================================
@@ -43,7 +47,7 @@ class ValidateRepository @Inject constructor(
         get() = _postImageValidateSuccessResponseLiveData
 
     suspend fun postImageValidateSuccess(attractionId: Long) {
-        val response = validateApi.postImageValidateSuccess(attractionId)
+        val response = validateHeaderApi.postImageValidateSuccess(attractionId)
 
         _postImageValidateSuccessResponseLiveData.postValue(NetworkResult.Loading())
 

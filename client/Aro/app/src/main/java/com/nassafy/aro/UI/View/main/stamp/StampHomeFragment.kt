@@ -7,6 +7,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
@@ -60,10 +61,14 @@ class StampHomeFragment :
         getAllNationListResponseLiveDataObserve()
         getUserStampDataGroupByCountryResponseLiveDataObserve()
 
-        // 처음 데이터 가져오기.
-
+        // spinner에서 선택한 국가의 데이터 가져오기.
         CoroutineScope(Dispatchers.IO).launch {
-            initViewGetData()
+            if (stampHomeNavViewModel.countryList.isEmpty()) {
+                initViewGetData()
+            } else {
+                initSpinner()
+                spinnerEventListener()
+            }
 
             withContext(Dispatchers.Default) {
                 // 이벤트 리스너들 등록
@@ -103,8 +108,9 @@ class StampHomeFragment :
                 stampHomeNavViewModel.setSelectedCountry(countryList[0])
             }
 
+            val bundle = bundleOf("position" to 0)
             Navigation.findNavController(binding.stampHomeDetailButtonTextview)
-                .navigate(R.id.action_stampHomeFragment_to_stampCountryPlacesFragment)
+                .navigate(R.id.action_stampHomeFragment_to_stampCountryPlacesFragment, bundle)
         }
     } // End of initEventListeners
 
@@ -121,7 +127,6 @@ class StampHomeFragment :
                     stampHomeNavViewModel.setSelectedCountry(countryList[position])
 
                     CoroutineScope(Dispatchers.IO).launch {
-                        Log.d(TAG, "onItemSelected : ${stampHomeNavViewModel.nowSelectedCountry} ")
                         stampHomeViewModel.getUserStampDataGroupByCountry(stampHomeNavViewModel.nowSelectedCountry)
                     }
                 }
@@ -132,11 +137,17 @@ class StampHomeFragment :
             }
     } // End of spinnerEventListener
 
-    private fun initSpinner(countryList: List<String>) {
-        arrayAdapter = CountrySpinnerAdapter(mContext, R.layout.item_country_spinner, countryList)
+    private fun initSpinner() {
+        Log.d(TAG, "initSpinner: 여기는 언제 동작할까?")
+        arrayAdapter = CountrySpinnerAdapter(
+            mContext,
+            R.layout.item_country_spinner,
+            stampHomeNavViewModel.countryList
+        )
         binding.stampHomeSpinner.adapter = arrayAdapter
 
-        stampHomeNavViewModel.setSelectedCountry(countryList[0])
+        // 가장 처음은 기본 선택지로 되어있음
+        stampHomeNavViewModel.setSelectedCountry(stampHomeNavViewModel.countryList[0])
     } // End of initSpinner
 
     private fun initViewGetData() {
@@ -184,11 +195,13 @@ class StampHomeFragment :
             when (it) {
                 is NetworkResult.Success -> {
                     countryList = it.data as ArrayList<String>
-                    stampHomeNavViewModel.setCountryList(countryList)
 
                     CoroutineScope(Dispatchers.Main).launch {
                         val spinnerDef: Deferred<Int> = async {
-                            initSpinner(countryList)
+                            if (stampHomeNavViewModel.countryList.isEmpty()) {
+                                stampHomeNavViewModel.setCountryList(countryList)
+                                initSpinner()
+                            }
                             1
                         }
 
