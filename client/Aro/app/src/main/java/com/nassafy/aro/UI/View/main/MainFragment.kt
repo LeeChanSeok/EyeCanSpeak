@@ -16,7 +16,7 @@ import com.gun0912.tedpermission.normal.TedPermission
 import com.nassafy.aro.R
 import com.nassafy.aro.databinding.FragmentMainBinding
 import com.nassafy.aro.ui.view.BaseFragment
-import com.nassafy.aro.ui.view.MeteorShowerFragment
+import com.nassafy.aro.ui.view.meteorshower.MeteorShowerFragment
 import com.nassafy.aro.ui.view.aurora.AuroraFragment
 
 private const val TAG = "MainFragment_싸피"
