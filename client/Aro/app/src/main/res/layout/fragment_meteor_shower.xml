@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.view.MeteorShowerFragment"
+    tools:context=".ui.view.meteorshower.MeteorShowerFragment"
     android:background="@color/dialog_background_color">
 
     <FrameLayout
@@ -17,6 +17,19 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:id="@+id/meteor_shower_country_textview"
+            android:layout_width="wrap_content"
+            android:maxWidth="280dp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center"
+            android:layout_marginStart="16dp"
+            android:text="대한민국"
+            android:textSize="24sp"
+            android:textColor="@color/white"/>
 
         <ImageButton
             android:id="@+id/drawer_imagebutton"
@@ -31,19 +44,15 @@
             android:contentDescription="@string/navigation_drawer_open" />
     </FrameLayout>
 
-    <TextView
-        android:id="@+id/meteor_shower_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/app_name"
-        android:textSize="20sp"
-        android:textColor="@color/white"
-        android:fontFamily="@font/nanum_square_r"
-        app:layout_constraintTop_toBottomOf="@id/meteor_shower_header_framelayout"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/meteor_shower_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:descendantFocusability="blocksDescendants"
+        app:layout_constraintTop_toBottomOf="@+id/meteor_shower_header_framelayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 
 
