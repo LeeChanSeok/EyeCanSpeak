@@ -357,7 +357,6 @@ class AuroraFragment : BaseFragment<FragmentAuroraBinding>(FragmentAuroraBinding
     }
 
     private fun setClusterManager() {
-        Log.d(TAG, "setClusterManager: ")
         mClusterManager = ClusterManager<PlaceItem>(requireContext(), mMap)
         mMap!!.setOnCameraIdleListener(mClusterManager)
         mClusterManager.renderer = CustomMarkerRenderer(requireContext(), mMap!!, mClusterManager)
@@ -376,9 +375,7 @@ class AuroraFragment : BaseFragment<FragmentAuroraBinding>(FragmentAuroraBinding
                 1
             }
             result.await()
-//            mClusterManager.cluster()
         }
-
     } // End of setClusterManager
 
 
@@ -427,6 +424,5 @@ class AuroraFragment : BaseFragment<FragmentAuroraBinding>(FragmentAuroraBinding
         super.onDestroyView()
         mClusterManager.clearItems()
         mClusterManager.cluster()
-        Log.d(TAG, "onDestroyView: gone")
     }
 }
