@@ -11,6 +11,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.nassafy.aro.R
 import com.nassafy.aro.data.dto.MeteorShower
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MeteorShowerAdapter(var itemList: MutableList<MeteorShower>) :
     RecyclerView.Adapter<MeteorShowerAdapter.ViewHolder>() {
@@ -56,14 +59,13 @@ class MeteorShowerAdapter(var itemList: MutableList<MeteorShower>) :
             .centerCrop()
         iconPicasso.into(holder.iconImageView)
 
-        val subImagePicasso = Picasso.get()
-            .load(item.subImage)
-            .fit().centerCrop()
-            .tag(holder)
         if (isExpanded) {
-            subImagePicasso.into(holder.subImageView)
-        } else {
-            Picasso.get().cancelTag(holder)
+            CoroutineScope(Dispatchers.Main).launch {
+                val subImagePicasso = Picasso.get()
+                    .load(item.subImage)
+                    .fit().centerCrop()
+                subImagePicasso.into(holder.subImageView)
+            }
         }
 
         holder.nameTextView.text = item.name
