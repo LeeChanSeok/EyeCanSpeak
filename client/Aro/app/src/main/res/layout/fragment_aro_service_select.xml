@@ -13,6 +13,7 @@
         android:layout_height="@dimen/small_button_size"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:scaleType="fitXY"
         android:background="@android:color/transparent"
         android:src="@drawable/back_step_arrow_button_icon"
         app:layout_constraintStart_toStartOf="parent"
@@ -49,7 +50,7 @@
             android:layout_marginEnd="2dp"
             android:layout_weight="1"
             app:service_name_text="AURORA"
-            app:service_image="@drawable/usa_fairbanks_color" />
+            app:service_image="@drawable/card_aurora_service_image" />
 
         <com.nassafy.aro.ui.view.custom.AroServiceCardView
             android:id="@+id/meteor_service_cardview"
@@ -57,7 +58,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             app:service_name_text="METEOR SHOWER"
-            app:service_image="@drawable/cook_county_image" />
+            app:service_image="@drawable/card_meteor_service_image" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

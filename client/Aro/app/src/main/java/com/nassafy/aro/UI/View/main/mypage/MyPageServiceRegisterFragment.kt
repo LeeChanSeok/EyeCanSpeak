@@ -45,25 +45,26 @@ class MyPageServiceRegisterFragment :
     private fun initObserve() {
 
         myPageServiceRegisterFragementViewModel.setSelectServiceNetworkResultLiveData.observe(this.viewLifecycleOwner) {
-            when (isNextButtonClicked) {
-                true -> {
-                    when (it) {
-                        is NetworkResult.Success -> {
-                            Log.d("ssafy", "success")
-                            requireView().showSnackBarMessage(getString(R.string.service_modify_success_text))
-                            findNavController().navigate(R.id.action_myPageServiceRegisterFragment_to_myPageFragment)
-                        }
-                        is NetworkResult.Error -> {
-                            Log.d("ssafy", "error")
 
+            when (it) {
+                is NetworkResult.Success -> {
+                    Log.d("ssafy", "success")
+                    when (isNextButtonClicked) {
+                        true -> {
+                            requireView().showSnackBarMessage(getString(R.string.service_modify_success_text))
                         }
-                        is NetworkResult.Loading -> {
-                            Log.d("ssafy", "loading")
+                        false -> {
+                            requireView().showSnackBarMessage("메테오 관심 위치 선택은 추후 업데이트 됩니다!")
                         }
                     }
+                    findNavController().navigate(R.id.action_myPageServiceRegisterFragment_to_myPageFragment)
                 }
-                false -> {
+                is NetworkResult.Error -> {
+                    Log.d("ssafy", "error")
 
+                }
+                is NetworkResult.Loading -> {
+                    Log.d("ssafy", "loading")
                 }
             }
         }
@@ -101,7 +102,6 @@ class MyPageServiceRegisterFragment :
                                     true -> {
                                         isNextButtonClicked = false
                                         CoroutineScope(Dispatchers.IO).launch {
-                                            requireView().showSnackBarMessage("메테오 관심 위치 선택은 추후 업데이트 됩니다!")
                                             myPageServiceRegisterFragementViewModel.selectService(
                                                 myPageServiceRegisterFragementViewModel.auroraService,
                                                 myPageServiceRegisterFragementViewModel.meteorService

@@ -3,6 +3,7 @@ package com.nassafy.aro.ui.view.main.mypage
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -35,6 +36,8 @@ import coil.ImageLoader
 import coil.compose.LocalImageLoader
 import coil.compose.rememberImagePainter
 import coil.decode.SvgDecoder
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
 import com.nassafy.aro.R
 import com.nassafy.aro.data.dto.PlaceItem
 import com.nassafy.aro.databinding.FragmentMyPageBinding
@@ -230,6 +233,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
         findNavController().navigate(action)
     } // End of moveToFavoriteRegisterFragment
 
+    @OptIn(ExperimentalPagerApi::class)
     fun initComposeView() {
         CoroutineScope(Dispatchers.IO).launch {
             myPageFragmentViewModel.getFavoriteList()
@@ -251,103 +255,20 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
 
                 MaterialTheme {
                     Column(
-                        modifier = androidx.compose.ui.Modifier
+                        modifier = Modifier
                             .height(this.height.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        LazyColumn(
-                            Modifier.fillMaxWidth(0.9f)
-                        ) {
-                            // TODO Change items DTO List
-                            items(auroraFavoriteList) {
-                                val imageLoader = ImageLoader.Builder(LocalContext.current)
-                                    .componentRegistry {
-                                        add(SvgDecoder(LocalContext.current))
-                                    }
-                                    .build()
-
-                                Card(
-                                    shape = RoundedCornerShape(4.dp),
-                                    modifier = Modifier
-                                        .padding(8.dp)
-                                        .fillMaxWidth()
-                                        .height(100.dp),
-                                    colors = CardDefaults.cardColors(
-                                        containerColor = Color.Transparent,
-                                    )
-                                ) {
-                                    Column(
-                                        Modifier
-                                            .fillMaxWidth(1f)
-                                    ) {
-                                        Row(
-                                            modifier = Modifier.fillMaxHeight(0.95f),
-                                            verticalAlignment = Alignment.CenterVertically
-                                        ) {
-                                            CompositionLocalProvider(LocalImageLoader provides imageLoader) {
-                                                val painter =
-                                                    rememberImagePainter(
-                                                        it.stamp,
-                                                        builder = { }) // End of rememberImagePainter
-                                                Image(
-                                                    painter = painter,
-                                                    contentDescription = "SVG Image",
-                                                    modifier = Modifier
-                                                        .weight(2f),
-                                                    contentScale = ContentScale.FillWidth,
-                                                ) // End of Image
-                                            } // End of CompositionLocalProvider
-                                            Column(
-                                                modifier = Modifier
-                                                    .weight(7f).padding(start = 20.dp),
-                                                verticalArrangement = Arrangement.Center,
-                                                horizontalAlignment = Alignment.CenterHorizontally
-                                            ) {
-                                                Box(contentAlignment = Alignment.Center) {
-                                                    Text(
-                                                        text = it.placeName,
-                                                        style = TextStyle(
-                                                            fontFamily = NanumSqaureFont,
-                                                            fontWeight = FontWeight.Bold,
-                                                            fontSize = 20.sp
-                                                        ),
-                                                        color = Color.White
-                                                    ) // End of Text
-                                                } // End of Box
-                                                Spacer(modifier = Modifier.height(4.dp))
-                                                Box(contentAlignment = Alignment.Center) {
-                                                    Text(
-                                                        text = it.description,
-                                                        style = TextStyle(
-                                                            fontFamily = NanumSqaureFont,
-                                                            fontWeight = FontWeight.Normal,
-                                                            fontSize = 12.sp
-                                                        ),
-                                                        color = Color.White
-                                                    )
-                                                } // End of Box
-                                            } // End of Column
-                                            IconButton(onClick = {
-                                                myPageFragmentViewModel.deleteFavorite(it.interestId)
-                                            }) {
-                                                Icon(
-                                                    imageVector = Icons.Outlined.Close,
-                                                    contentDescription = "checked",
-                                                    tint = colorResource(id = R.color.light_dark_gray),
-                                                ) // End of Icon
-                                            } // End o f IconButton
-                                        } // End of Row
-                                        Spacer(modifier = Modifier.height(4.dp))
-                                        Divider(
-                                            modifier = Modifier
-                                                .fillMaxWidth(1f)
-                                                .height(2.dp),
-                                            color = colorResource(id = R.color.main_app_color),
-                                        ) // End of Divider
-                                    } // End of Column
-                                } // End of Card
-                            } //End of items
-                        } // End of LazyColum
+                        HorizontalPager(count = 2) {page ->
+                            when (page) {
+                                0 -> {
+                                    MyAuroraFavorite(auroraFavoriteList = auroraFavoriteList, myPageFragmentViewModel = myPageFragmentViewModel)
+                                }
+                                1 -> {
+                                    // Todo
+                                }
+                            }
+                        }
                     } // End of Column
                 } // End of MaterialTheme
             } // End of setContent
