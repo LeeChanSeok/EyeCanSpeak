@@ -65,8 +65,7 @@ class MeteorShowerFragment : BaseFragment<FragmentMeteorShowerBinding>(FragmentM
             image = "https://i.pinimg.com/564x/91/d8/3c/91d83c1344a605b3b6f37052cc1e8262.jpg",
             subImage = "https://i.pinimg.com/564x/40/26/93/402693100bf16bdc34c71ae7fb17ab21.jpg"
         )
-        var item4 = MeteorShower()
-        var itemList = arrayListOf<MeteorShower>(item1, item2, item3, item4)
+        var itemList = arrayListOf<MeteorShower>(item1, item2, item3)
     }
 
 }
