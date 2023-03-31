@@ -3,6 +3,7 @@ package com.nassafy.aro.ui.view.main.mypage
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -22,6 +23,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.isGone
@@ -33,10 +36,13 @@ import coil.ImageLoader
 import coil.compose.LocalImageLoader
 import coil.compose.rememberImagePainter
 import coil.decode.SvgDecoder
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
 import com.nassafy.aro.R
 import com.nassafy.aro.data.dto.PlaceItem
 import com.nassafy.aro.databinding.FragmentMyPageBinding
 import com.nassafy.aro.ui.view.BaseFragment
+import com.nassafy.aro.ui.view.custom.NanumSqaureFont
 import com.nassafy.aro.ui.view.dialog.OkDialog
 import com.nassafy.aro.ui.view.main.MainActivity
 import com.nassafy.aro.ui.view.main.MainActivityViewModel
@@ -78,6 +84,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
                     binding.nicknameChangeSaveAlertImagebutton.isVisible = true
                     CoroutineScope(Dispatchers.Main).launch {
                         delay(500)
+                        binding.progressBar.isVisible = false
                         binding.nicknameChangeSaveAlertImagebutton.isGone = true
                     }
                 }
@@ -85,7 +92,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
                     requireView().showSnackBarMessage("닉네임 재설정에 실패했습니다.")
                 }
                 is NetworkResult.Loading -> {
-
+                    binding.progressBar.isVisible = true
                 }
             } // End of when
         } // End of nicknameLiveData.observe
@@ -106,12 +113,13 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
                             binding.serviceNotSelectedGroup.isVisible = true
                         }
                     } // End of when
+                    binding.progressBar.isVisible = false
                 } // End of NetworkResult.Success
                 is NetworkResult.Error -> {
                     requireView().showSnackBarMessage("닉네임 재설정에 실패했습니다.")
                 } // End of NetworkResult.Error
                 is NetworkResult.Loading -> {
-
+                    binding.progressBar.isVisible = true
                 } // End of NetworkResult.Loading
             } // End of when
         } // End of getSelectedServiceNetworResultLiveData.observe
@@ -123,13 +131,17 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
                     myPageFragmentViewModel.favoriteAuroraPlaceList.addAll(
                         it.data?.attractionInterestOrNotDTOList ?: emptyList()
                     )
+                    CoroutineScope(Dispatchers.Main).launch {
+                        delay(800)
+                        binding.progressBar.isVisible = false
+                    }
 //                    myPageFragmentViewModel.favoriteMeteorPlaceList.addAll(it.data?.memteorInterestOrNotDTO!!)
                 }// End of NetworkResult.Success
                 is NetworkResult.Error -> {
                     requireView().showSnackBarMessage("닉네임 재설정에 실패했습니다.")
                 } // End of NetworkResult.Error
                 is NetworkResult.Loading -> {
-
+                    binding.progressBar.isVisible = true
                 } // End of NetworkResult.Loading
             } // End of when
         } // End of favoriteListNetworkResultLiveData.observe
@@ -138,12 +150,13 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
             when(result) {
                 is NetworkResult.Success -> {
                     myPageFragmentViewModel.favoriteAuroraPlaceList.removeAll { it.interestId.equals(result.data!!) }
+                    binding.progressBar.isVisible = false
                 }
                 is NetworkResult.Error -> {
                     requireView().showSnackBarMessage("관심지역 삭제에 실패했습니다.")
                 }
                 is NetworkResult.Loading -> {
-
+                    binding.progressBar.isVisible = true
                 }
             } // End of when
         } // End of deleteFavoriteNetworkResultLiveData.observe
@@ -220,6 +233,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
         findNavController().navigate(action)
     } // End of moveToFavoriteRegisterFragment
 
+    @OptIn(ExperimentalPagerApi::class)
     fun initComposeView() {
         CoroutineScope(Dispatchers.IO).launch {
             myPageFragmentViewModel.getFavoriteList()
@@ -241,96 +255,20 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
 
                 MaterialTheme {
                     Column(
-                        modifier = androidx.compose.ui.Modifier
+                        modifier = Modifier
                             .height(this.height.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        LazyColumn(
-                            Modifier.fillMaxWidth(0.9f)
-                        ) {
-                            // TODO Change items DTO List
-                            items(auroraFavoriteList) {
-                                val imageLoader = ImageLoader.Builder(LocalContext.current)
-                                    .componentRegistry {
-                                        add(SvgDecoder(LocalContext.current))
-                                    }
-                                    .build()
-
-                                Card(
-                                    shape = RoundedCornerShape(4.dp),
-                                    modifier = Modifier
-                                        .padding(8.dp)
-                                        .fillMaxWidth()
-                                        .height(100.dp),
-                                    colors = CardDefaults.cardColors(
-                                        containerColor = Color.Transparent,
-                                    )
-                                ) {
-                                    Column(
-                                        Modifier
-                                            .fillMaxWidth(1f)
-                                    ) {
-                                        Row(
-                                            modifier = Modifier.fillMaxHeight(0.95f),
-                                            verticalAlignment = Alignment.CenterVertically
-                                        ) {
-                                            CompositionLocalProvider(LocalImageLoader provides imageLoader) {
-                                                val painter =
-                                                    rememberImagePainter(
-                                                        it.stamp,
-                                                        builder = { }) // End of rememberImagePainter
-                                                Image(
-                                                    painter = painter,
-                                                    contentDescription = "SVG Image",
-                                                    modifier = Modifier
-                                                        .weight(2f),
-                                                    contentScale = ContentScale.FillWidth,
-                                                ) // End of Image
-                                            } // End of CompositionLocalProvider
-                                            Column(
-                                                modifier = Modifier
-                                                    .weight(7f),
-                                                verticalArrangement = Arrangement.Center,
-                                                horizontalAlignment = Alignment.CenterHorizontally
-                                            ) {
-                                                //TODO change text
-                                                Box(contentAlignment = Alignment.Center) {
-                                                    Text(
-                                                        text = it.placeName, fontSize = 20.sp,
-                                                        color = Color.White
-                                                    ) // End of Text
-                                                } // End of Box
-                                                Spacer(modifier = Modifier.height(4.dp))
-                                                Box(contentAlignment = Alignment.Center) {
-//                                                    TODO Active
-                                                    Text(
-                                                        text = it.description,
-                                                        fontSize = 12.sp,
-                                                        color = Color.White
-                                                    )
-                                                } // End of Box
-                                            } // End of Column
-                                            IconButton(onClick = {
-                                                myPageFragmentViewModel.deleteFavorite(it.interestId)
-                                            }) {
-                                                Icon(
-                                                    imageVector = Icons.Outlined.Close,
-                                                    contentDescription = "checked",
-                                                    tint = colorResource(id = R.color.light_dark_gray),
-                                                ) // End of Icon
-                                            } // End o f IconButton
-                                        } // End of Row
-                                        Spacer(modifier = Modifier.height(4.dp))
-                                        Divider(
-                                            modifier = Modifier
-                                                .fillMaxWidth(1f)
-                                                .height(2.dp),
-                                            color = colorResource(id = R.color.main_app_color),
-                                        ) // End of Divider
-                                    } // End of Column
-                                } // End of Card
-                            } //End of items
-                        } // End of LazyColum
+                        HorizontalPager(count = 2) {page ->
+                            when (page) {
+                                0 -> {
+                                    MyAuroraFavorite(auroraFavoriteList = auroraFavoriteList, myPageFragmentViewModel = myPageFragmentViewModel)
+                                }
+                                1 -> {
+                                    // Todo
+                                }
+                            }
+                        }
                     } // End of Column
                 } // End of MaterialTheme
             } // End of setContent

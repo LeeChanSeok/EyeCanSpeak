@@ -24,9 +24,6 @@ class LoginActivity : AppCompatActivity() {
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         val uri = intent?.data
-
-        Log.d("ssafy/sign_in/scheme", "${uri?.scheme}")
-
         // Oauth 로그인 인지 아닌지 확인
         when (uri?.scheme.toString()) {
             "aro-github" -> { // 깃허브

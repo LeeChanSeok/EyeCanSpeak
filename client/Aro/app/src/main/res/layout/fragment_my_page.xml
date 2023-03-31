@@ -13,6 +13,7 @@
         android:layout_height="@dimen/small_button_size"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:scaleType="fitXY"
         android:background="@android:color/transparent"
         android:src="@drawable/back_step_arrow_button_icon"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,9 +23,10 @@
         android:id="@+id/my_page_title_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/nanum_square_eb"
         android:text="@string/my_page_main_title_textview_text"
         android:textColor="@color/main_app_color"
-        android:textSize="20sp"
+        android:textSize="@dimen/fragment_title_textview_size"
         app:layout_constraintBottom_toBottomOf="@id/cancel_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,8 +34,8 @@
 
     <ImageView
         android:id="@+id/user_icon_imageview"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
+        android:layout_width="@dimen/small_button_size"
+        android:layout_height="@dimen/small_button_size"
         android:src="@drawable/menu_mypage_icon"
         app:layout_constraintBottom_toBottomOf="@id/user_email_textview"
         app:layout_constraintStart_toStartOf="@id/cancel_button"
@@ -44,7 +46,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:enabled="false"
+        android:fontFamily="@font/nanum_square_b"
+        android:paddingStart="0dp"
+        android:paddingBottom="10dp"
         android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -58,8 +64,8 @@
         android:id="@+id/user_email_textview"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:paddingStart="4dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/nanum_square_l"
         android:textColor="@color/white"
         android:textSize="14sp"
         app:layout_constraintEnd_toStartOf="@id/nickname_change_imagebutton"
@@ -92,8 +98,8 @@
 
     <ImageView
         android:id="@+id/favorite_icon_imageview"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
+        android:layout_width="@dimen/small_button_size"
+        android:layout_height="@dimen/small_button_size"
         android:src="@drawable/favorite_icon"
         app:layout_constraintBottom_toBottomOf="@id/my_favorite_description_textview"
         app:layout_constraintStart_toStartOf="@id/cancel_button"
@@ -105,7 +111,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
-        android:paddingStart="4dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/nanum_square_b"
+        android:paddingBottom="12dp"
         android:text="@string/my_favorite_textview_text"
         android:textColor="@color/white"
         android:textSize="20sp"
@@ -117,9 +125,9 @@
         android:id="@+id/my_favorite_description_textview"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
-        android:paddingStart="4dp"
+        android:fontFamily="@font/nanum_square_l"
         android:text="@string/my_page_my_favorite_inform_textview_text"
         android:textColor="@color/white"
         android:textSize="12sp"
@@ -167,6 +175,7 @@
             android:text="@string/my_page_not_select_service_title_textview_text"
             android:textColor="@color/main_app_color"
             android:textSize="16sp"
+            android:fontFamily="@font/nanum_square_b"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -178,6 +187,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:fontFamily="@font/nanum_square_l"
             android:text="@string/my_page_not_select_service_inform_textview_text"
             android:textColor="@color/main_app_color"
             android:textSize="12sp"
@@ -241,10 +251,24 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
+        android:indeterminateTint="@color/white"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.constraintlayout.widget.Group
         android:id="@+id/service_not_selected_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
+        tools:visibility="visible"
         app:constraint_referenced_ids="service_not_selected_layout" />
 
     <androidx.constraintlayout.widget.Group

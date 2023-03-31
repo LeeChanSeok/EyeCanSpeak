@@ -1,5 +1,6 @@
 package com.nassafy.aro.ui.view.login
 
+import android.graphics.Paint
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -26,13 +27,13 @@ class JoinServiceFragment : BaseFragment<FragmentAroServiceSelectBinding>(Fragme
         super.onResume()
         binding.auroraServiceCardview.setIsSelected(loginActivityViewModel.isAuroraServiceSelected)
         binding.meteorServiceCardview.setIsSelected(loginActivityViewModel.isMeteorServiceSelected)
-    }
+    } // End of joinSericeFragmentViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initObserve()
         initView()
-    }
+    } // End of onViewCreated
 
     private fun initObserve() {
 
@@ -54,7 +55,7 @@ class JoinServiceFragment : BaseFragment<FragmentAroServiceSelectBinding>(Fragme
             }
         }
 
-    }
+    } // End of initObserve
 
     private fun initView() {
         binding.nextButton.setOnClickListener {
@@ -67,20 +68,23 @@ class JoinServiceFragment : BaseFragment<FragmentAroServiceSelectBinding>(Fragme
         binding.cancelButton.setOnClickListener {
             findNavController().popBackStack()
         }
-        binding.serviceSelectSkipTextview.setOnClickListener {
-            loginActivityViewModel.apply {
-                joinSericeFragmentViewModel.join(UserTest(
-                    email = email,
-                    password = password,
-                    nickname = nickname,
-                    alarm = true,
-                    auroraService = false,
-                    auroraPlaces = emptyList(),
-                    meteorService = false,
-                    meteorPlaces = emptyList(),
-                ))
+        binding.serviceSelectSkipTextview.apply {
+            paintFlags = Paint.UNDERLINE_TEXT_FLAG
+            setOnClickListener {
+                loginActivityViewModel.apply {
+                    joinSericeFragmentViewModel.join(UserTest(
+                        email = email,
+                        password = password,
+                        nickname = nickname,
+                        alarm = true,
+                        auroraService = false,
+                        auroraPlaces = emptyList(),
+                        meteorService = false,
+                        meteorPlaces = emptyList(),
+                    ))
+                }
             }
         }
-    }
+    } // End of initView
 
-}
+} // End of JoinServiceFragment

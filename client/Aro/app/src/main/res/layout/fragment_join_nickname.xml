@@ -13,6 +13,7 @@
         android:layout_height="@dimen/small_button_size"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:scaleType="fitXY"
         android:background="@android:color/transparent"
         android:src="@drawable/back_step_arrow_button_icon"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,6 +44,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/nanum_square_r"
                 android:maxLength="10"
                 android:textColor="@color/white"
                 android:translationZ="0dp" />

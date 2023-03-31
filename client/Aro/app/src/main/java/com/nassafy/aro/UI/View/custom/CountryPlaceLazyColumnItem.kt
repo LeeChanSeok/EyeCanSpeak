@@ -17,6 +17,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.ImageLoader
@@ -46,10 +48,7 @@ fun CountryPlaceLazyColumnItem(
         .build()
 
     DisposableEffect(key1 =  place, key2 = selectedPlaceList.size) {
-        Log.d("ssafy_pcs/compose_item", selectedPlaceList.joinToString())
-
         isSelected = selectedPlaceList.any { it.placeName == place.placeName }
-        Log.d("ssafy_pcs/compose_item", "${selectedPlaceList.any { it.placeId == place.placeId }}")
         onDispose {
             isSelected = selectedPlaceList.any { it.placeId == place.placeId }
         }
@@ -112,7 +111,12 @@ fun CountryPlaceLazyColumnItem(
                     //TODO change text
                     Box(contentAlignment = Alignment.Center) {
                         Text(
-                            text = place.placeName, fontSize = 20.sp,
+                            text = place.placeName,
+                            style = TextStyle(
+                                fontFamily = NanumSqaureFont,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 20.sp
+                            ),
                             color = when (isSelected) {
                                 false -> colorResource(id = R.color.dark_gray)
                                 true -> Color.White
@@ -123,7 +127,11 @@ fun CountryPlaceLazyColumnItem(
                     Box(contentAlignment = Alignment.Center) {
                         Text(
                             text = place.description,
-                            fontSize = 12.sp,
+                            style = TextStyle(
+                                fontFamily = NanumSqaureFont,
+                                fontWeight = FontWeight.Normal,
+                                fontSize = 12.sp
+                            ),
                             color = when (isSelected) {
                                 false -> colorResource(id = R.color.dark_gray)
                                 true -> Color.White

@@ -86,7 +86,6 @@ class JoinCountryPlaceSelectFragment : BaseFragment<FragmentAroCountryPlaceSelec
                     meteorService = isMeteorServiceSelected,
                     meteorPlaces = selectedMeteorPlaces.value?.map { it.placeId } ?: emptyList(),
                 )
-                Log.d("ssafy_pcs", "$userT")
                 joinCountryPlaceServiceSelectFragmentViewModel.join(userT)
             }
         }
@@ -108,7 +107,6 @@ class JoinCountryPlaceSelectFragment : BaseFragment<FragmentAroCountryPlaceSelec
                     position: Int,
                     id: Long
                 ) {
-                    Log.d("ssafy_pcs", parent?.getItemAtPosition(position).toString())
                     binding.loadingLayout.isVisible = true
                     CoroutineScope(Dispatchers.Main).launch {
                         delay(200)
@@ -140,7 +138,6 @@ class JoinCountryPlaceSelectFragment : BaseFragment<FragmentAroCountryPlaceSelec
                     requireView().showSnackBarMessage("서버 통신 에러 발생")
                 }
                 is NetworkResult.Loading -> {
-                    //TODO Loading
                     binding.loadingLayout.isVisible = true
                     Log.d(
                         "ssafy_pcs", "로딩 중.."
@@ -160,7 +157,6 @@ class JoinCountryPlaceSelectFragment : BaseFragment<FragmentAroCountryPlaceSelec
                     requireView().showSnackBarMessage("서버 통신 에러 발생")
                 }
                 is NetworkResult.Loading -> {
-                    //TODO Loading
                     Log.d(
                         "ssafy_pcs", "로딩 중.."
                     )
@@ -183,7 +179,6 @@ class JoinCountryPlaceSelectFragment : BaseFragment<FragmentAroCountryPlaceSelec
                     requireView().showSnackBarMessage("서버 통신 에러 발생")
                 }
                 is NetworkResult.Loading<*> -> {
-                    //TODO Loading
                     Log.d(
                         "ssafy_pcs", "로딩 중.."
                     )
