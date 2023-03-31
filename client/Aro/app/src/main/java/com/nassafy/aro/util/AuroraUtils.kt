@@ -6,7 +6,7 @@ import com.google.android.gms.maps.model.PatternItem
 import com.nassafy.aro.R
 
 
-fun getKpPolylineOptions(kpIndex: Float) : PolylineOptions {
+fun getKpPolylineOptions(kpIndex: Double) : PolylineOptions {
     val polylineOptions = PolylineOptions()
     when {
       kpIndex >= 9 -> {
@@ -57,6 +57,9 @@ fun getKpPolylineOptions(kpIndex: Float) : PolylineOptions {
               .color(Color.HSVToColor(150, floatArrayOf(144F, 0.58564F, 0.7098F)))
           // Green
       } // End of kpIndex 5
+      kpIndex == -1.0 -> {
+
+      }
       else -> {
           polylineOptions.add(
                   LatLng(50.1, -80.0), LatLng(53.0,-60.0),

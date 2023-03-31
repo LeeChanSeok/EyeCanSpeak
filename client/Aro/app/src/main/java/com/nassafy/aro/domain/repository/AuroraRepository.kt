@@ -3,11 +3,13 @@ package com.nassafy.aro.domain.repository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.nassafy.aro.data.dto.KpResponse
 import com.nassafy.aro.data.dto.PlaceItem
 import com.nassafy.aro.domain.api.AuroraApi
 import com.nassafy.aro.util.NetworkResult
 import com.nassafy.aro.util.di.HeaderInterceptorApi
 import com.nassafy.aro.util.di.WithoutHeaderInterceptorApi
+import com.nassafy.aro.util.setNetworkResult
 import kotlinx.coroutines.*
 import javax.inject.Inject
 import kotlin.math.log
@@ -36,5 +38,14 @@ class AuroraRepository @Inject constructor(
             }
         }
     } // End of getPlaceItemList
+
+    private val _kpCurrentLiveData = MutableLiveData<NetworkResult<KpResponse>>()
+    val kpCurrentLiveData : LiveData<NetworkResult<KpResponse>>
+        get() = _kpCurrentLiveData
+
+    suspend fun getCurrentKpIndex(dateString: String, hour: Int) {
+        val response = headerAuroraApi.getCurrentKpIndex(dateString, hour)
+        _kpCurrentLiveData.setNetworkResult(response)
+    }
 
 }
