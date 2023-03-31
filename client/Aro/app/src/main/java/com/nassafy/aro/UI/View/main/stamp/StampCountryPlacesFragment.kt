@@ -12,7 +12,6 @@ import com.nassafy.aro.R
 import com.nassafy.aro.databinding.FragmentStampCountryPlacesBinding
 import com.nassafy.aro.ui.view.BaseFragment
 import com.nassafy.aro.util.NetworkResult
-import com.nassafy.aro.util.showSnackBarMessage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 
@@ -36,7 +35,6 @@ class StampCountryPlacesFragment :
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mContext = context
-        Log.d(TAG, "onAttach: 여기 다시 돌음?")
     } // End of onAttach
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -44,39 +42,31 @@ class StampCountryPlacesFragment :
 
         getUserPlaceDataGroupByCountryResponseLiveDataObserve()
 
-        if (stampHomeNavViewModel.selectedCountry != "") {
-            // View가져오기.
-            CoroutineScope(Dispatchers.IO).launch {
-                val def: Deferred<Int> = async {
+        // View가져오기.
+        CoroutineScope(Dispatchers.IO).launch {
+            val def: Deferred<Int> = async {
+                if (stampHomeNavViewModel.nowSelectedCountry != stampCountryPlaceViewModel.selectedCountry) {
                     initViewGetData()
-                    1
                 }
-
-                def.await()
-
-                initViewPagerAdapter()
-                initEventListeners()
+                1
             }
+
+            def.await()
         }
     } // End of onViewCreated
 
     private suspend fun initViewGetData() {
-        /*
-            stampHomeNavViewModel 에서 선택된 국가를 가져와서 통신
-         */
-        stampCountryPlaceViewModel.setSelectedCountry(stampCountryPlaceViewModel.selectedCountry)
+        stampCountryPlaceViewModel.setSelectedCountry(stampHomeNavViewModel.nowSelectedCountry)
 
         CoroutineScope(Dispatchers.IO).launch {
-            stampCountryPlaceViewModel.getUserPlaceDataGroupByCountry(stampHomeNavViewModel.selectedCountry)
+            stampCountryPlaceViewModel.getUserPlaceDataGroupByCountry(stampCountryPlaceViewModel.selectedCountry)
         }
     } // End of initViewGetData
 
-    private fun initEventListeners() {
-    } // End of initEventListeners
 
     private fun initViewPagerAdapter() {
         countryPlaceViewPager = CountryPlaceViewPagerAdapter(
-            stampHomeNavViewModel.selectedCountry, stampHomeNavViewModel.userCountryPlaceDataList
+            stampHomeNavViewModel.nowSelectedCountry, stampHomeNavViewModel.userCountryPlaceDataList
         )
         binding.stampCountryCustomViewpager2.apply {
             adapter = countryPlaceViewPager
@@ -95,9 +85,10 @@ class StampCountryPlacesFragment :
                     )
             }
 
-            // 검증 버튼 클릭 이벤트
+            // 인증하기 버튼 클릭 이벤트
             override fun validateButtonclick(position: Int) {
-                requireView().showSnackBarMessage("${stampHomeNavViewModel.selectedCountry}의  ${position + 1} 내용 검증 버튼 클릭됨")
+                stampHomeNavViewModel.setNowSelectedAttractionId(stampHomeNavViewModel.userCountryPlaceDataList[position].attractionId!!)
+
                 Navigation.findNavController(binding.stampCountryCustomViewpager2.findViewById(R.id.stamp_country_place_validate_button))
                     .navigate(R.id.action_stampCountryPlacesFragment_to_stampValidateFragment)
             } // End of validateButtonclick
@@ -107,20 +98,27 @@ class StampCountryPlacesFragment :
     private fun getUserPlaceDataGroupByCountryResponseLiveDataObserve() {
         stampCountryPlaceViewModel.getUserPlaceDataGroupByCountryResponseLiveData.observe(this.viewLifecycleOwner) {
             // 통신 성공시 ViewPagerAdapter 연결
-
             when (it) {
                 is NetworkResult.Success -> {
-                    if (stampHomeNavViewModel.userCountryPlaceDataList.isEmpty()) {
-                        stampHomeNavViewModel.setUserCountryPlaceDataList(it.data!!)
+                    stampHomeNavViewModel.setUserCountryPlaceDataList(it.data!!)
+
+                    CoroutineScope(Dispatchers.Main).launch {
+                        initViewPagerAdapter()
                     }
                 }
 
                 is NetworkResult.Error -> {
-
+                    Log.d(
+                        TAG,
+                        "getUserPlaceDataGroupByCountryResponseLiveDataObserve: ${it.message}"
+                    )
                 }
 
                 is NetworkResult.Loading -> {
-
+                    Log.d(
+                        TAG,
+                        "getUserPlaceDataGroupByCountryResponseLiveDataObserve: 로딩 중"
+                    )
                 }
             }
         }

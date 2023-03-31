@@ -1,6 +1,5 @@
 package com.nassafy.aro.domain.api
 
-import com.nassafy.aro.data.dto.MapStampItem
 import com.nassafy.aro.data.dto.StampHomeItem
 import com.nassafy.aro.data.dto.UserStampPlace
 import retrofit2.Response
@@ -29,4 +28,5 @@ interface StampApi {
     suspend fun getUserPlaceDataGroupByCountry(
         @Path("countryName") countryName: String
     ): Response<List<UserStampPlace>>
+
 } // End of StampApi

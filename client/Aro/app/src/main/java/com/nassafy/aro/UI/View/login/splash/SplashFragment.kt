@@ -39,10 +39,6 @@ class SplashFragment : BaseFragment<FragmentSplashBinding>(FragmentSplashBinding
         mContext = context
     } // End of onAttach
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    } // End of onCreate
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -68,7 +64,6 @@ class SplashFragment : BaseFragment<FragmentSplashBinding>(FragmentSplashBinding
             splashViewModel.postAccessTokenGetUserData()
         }
     } // End of onViewCreated
-
 
     /*
         토큰이 맞으면 화면을 전환함.

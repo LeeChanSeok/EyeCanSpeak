@@ -1,16 +1,13 @@
 package com.nassafy.aro.ui.view.main.stamp
 
-import android.app.Activity.*
+import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.view.Gravity
 import android.view.View
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -22,7 +19,10 @@ import com.nassafy.aro.R
 import com.nassafy.aro.data.dto.Diary
 import com.nassafy.aro.databinding.FragmentStampDiaryBinding
 import com.nassafy.aro.ui.view.BaseFragment
-import com.nassafy.aro.util.*
+import com.nassafy.aro.util.ChangeMultipartUtil
+import com.nassafy.aro.util.NetworkResult
+import com.nassafy.aro.util.showSnackBarMessage
+import com.nassafy.aro.util.showToastView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -190,7 +190,7 @@ class StampDiaryFragment() :
     private fun initViewGetData() {
         // 현재 선택되어있는 명소와 국가 데이터를 가져옴
         val selectedPlace = stampNavViewModel.selectedPlaceLiveData.value
-        val selectedCountry = stampNavViewModel.selectedCountry
+        val selectedCountry = stampNavViewModel.nowSelectedCountry
 
         binding.stampDiaryCountryNameTextview.text = selectedCountry
         binding.stampDiaryCountryPlaceNameTextview.text = selectedPlace!!.attractionName.toString()

@@ -1,5 +1,6 @@
 package com.nassafy.aro.domain.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.nassafy.aro.data.dto.StampHomeItem
@@ -50,6 +51,7 @@ class StampRepository @Inject constructor(
 
     suspend fun getUserStampDataGroupByCountry(countryName: String) {
         val response = stampHeaderApi.getUserStampDataGroupByCountry(countryName)
+        Log.d(TAG, "response : ${response.body()}")
 
         _getUserStampDataGroupByCountryResponseLiveData.postValue(NetworkResult.Loading())
 
@@ -78,7 +80,8 @@ class StampRepository @Inject constructor(
         get() = _getUserPlaceDataGroupByCountryResponseLiveData
 
     suspend fun getUserPlaceDataGroupByCountry(countryName: String) {
-        val response = stampHeaderApi.getUserPlaceDataGroupByCountry(countryName.toString())
+        val response = stampHeaderApi.getUserPlaceDataGroupByCountry(countryName)
+        Log.d(TAG, "getUserPlaceDataGroupByCountry: ${response.body()}")
 
         _getUserPlaceDataGroupByCountryResponseLiveData.postValue(NetworkResult.Loading())
 

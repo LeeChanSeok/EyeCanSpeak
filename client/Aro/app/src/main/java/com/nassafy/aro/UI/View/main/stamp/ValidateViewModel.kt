@@ -15,7 +15,7 @@ class ValidateViewModel @Inject constructor(
     private val validateRepository: ValidateRepository
 ) : ViewModel() {
 
-    // ============================================== 이미지 오로라 체크 ==============================================
+    // ======================================  이미지 오로라 여부 플라스크로 확인하기 ===================================
     val postImageValidateResponseLiveData: LiveData<NetworkResult<Int>>
         get() = validateRepository.postImageValidateResponseLiveData
 
@@ -24,4 +24,14 @@ class ValidateViewModel @Inject constructor(
             validateRepository.postImageValidate(validateImageFile)
         }
     } // End of imageValidate
+
+    // ====================================== Image Validate Success ===================================
+    val postImageValidateSuccessResponseLiveData: LiveData<NetworkResult<Int>>
+        get() = validateRepository.postImageValidateSuccessResponseLiveData
+
+    suspend fun postImageValidateSuccess(attractionId: Long) {
+        viewModelScope.launch {
+            validateRepository.postImageValidateSuccess(attractionId)
+        }
+    } // End of postImageValidateSuccess
 } // End of ValidateViewModel

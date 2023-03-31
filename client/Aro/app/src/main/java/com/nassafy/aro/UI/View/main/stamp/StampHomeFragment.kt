@@ -2,6 +2,7 @@ package com.nassafy.aro.ui.view.main.stamp
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.AdapterView
@@ -30,8 +31,10 @@ class StampHomeFragment :
     BaseFragment<FragmentStampHomeBinding>(FragmentStampHomeBinding::inflate) {
     private lateinit var mContext: Context
 
-    // viewModel
+    // ViewModel
     private val stampHomeViewModel: StampHomeViewModel by viewModels()
+
+    // Navigation ViewModel
     private val stampHomeNavViewModel: StampNavViewModel by navGraphViewModels(R.id.nav_stamp_diary)
 
     private var countryList: List<String> = ArrayList()
@@ -58,10 +61,15 @@ class StampHomeFragment :
         getUserStampDataGroupByCountryResponseLiveDataObserve()
 
         // 처음 데이터 가져오기.
-        initViewgetData()
 
-        // 이벤트 리스너들 등록
-        initEventListeners()
+        CoroutineScope(Dispatchers.IO).launch {
+            initViewGetData()
+
+            withContext(Dispatchers.Default) {
+                // 이벤트 리스너들 등록
+                initEventListeners()
+            }
+        }
 
         var moveX = 0f
         var moveY = 0f
@@ -90,8 +98,10 @@ class StampHomeFragment :
 
         // 국가별 명소 상세보기 버튼 클릭 이벤트
         binding.stampHomeDetailButtonTextview.setOnClickListener {
-            // 번들로 국가 넘겨줌.
-            //val bundle = bundleOf("selectedCountryName" to selectedCountry.toString())
+            // 선택되어 있는 국가 확인하기
+            if (stampHomeNavViewModel.nowSelectedCountry == "") {
+                stampHomeNavViewModel.setSelectedCountry(countryList[0])
+            }
 
             Navigation.findNavController(binding.stampHomeDetailButtonTextview)
                 .navigate(R.id.action_stampHomeFragment_to_stampCountryPlacesFragment)
@@ -107,11 +117,12 @@ class StampHomeFragment :
                     position: Int,
                     id: Long
                 ) {
-                    val countryName = countryList[position]
-                    stampHomeNavViewModel.setSelectedCountry(countryName)
+                    // 내가 지금 스피너를 통해서 선택한 국가
+                    stampHomeNavViewModel.setSelectedCountry(countryList[position])
 
                     CoroutineScope(Dispatchers.IO).launch {
-                        stampHomeViewModel.getUserStampDataGroupByCountry(countryName)
+                        Log.d(TAG, "onItemSelected : ${stampHomeNavViewModel.nowSelectedCountry} ")
+                        stampHomeViewModel.getUserStampDataGroupByCountry(stampHomeNavViewModel.nowSelectedCountry)
                     }
                 }
 
@@ -124,15 +135,17 @@ class StampHomeFragment :
     private fun initSpinner(countryList: List<String>) {
         arrayAdapter = CountrySpinnerAdapter(mContext, R.layout.item_country_spinner, countryList)
         binding.stampHomeSpinner.adapter = arrayAdapter
+
+        stampHomeNavViewModel.setSelectedCountry(countryList[0])
     } // End of initSpinner
 
-    private fun initViewgetData() {
+    private fun initViewGetData() {
         if (stampHomeNavViewModel.countryList.isEmpty()) {
             CoroutineScope(Dispatchers.IO).launch {
                 stampHomeViewModel.getAllNationList()
             }
         }
-    } // End of initViewgetData
+    } // End of initViewGetData
 
     private fun getUserStampDataGroupByCountryResponseLiveDataObserve() {
         stampHomeViewModel.getUserStampDataGroupByCountryResponseLiveData.observe(this.viewLifecycleOwner) {
@@ -140,7 +153,6 @@ class StampHomeFragment :
             binding.stampHomeProgressbar.isVisible = false
             binding.stampHomeConstlayout.visibility = View.VISIBLE
             binding.stampHomeConstlayout.isVisible = true
-
 
             when (it) {
                 is NetworkResult.Success -> {
@@ -180,15 +192,9 @@ class StampHomeFragment :
                             1
                         }
 
-
                         spinnerDef.await()
-
-                        withContext(Dispatchers.Default) {
-                            spinnerEventListener()
-                        }
+                        spinnerEventListener()
                     }
-
-
                 }
 
                 is NetworkResult.Error -> {

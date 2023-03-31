@@ -1,7 +1,7 @@
 package com.nassafy.aro.ui.view.main.stamp
 
 import android.app.Activity
-import android.app.Activity.*
+import android.app.Activity.RESULT_OK
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
@@ -19,6 +19,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.viewModels
+import androidx.navigation.navGraphViewModels
+import com.nassafy.aro.R
 import com.nassafy.aro.databinding.FragmentStampValidateBinding
 import com.nassafy.aro.ui.view.BaseFragment
 import com.nassafy.aro.ui.view.main.MainActivity
@@ -45,8 +47,8 @@ class StampValidateFragment :
     // ViewModel
     private val validateViewModel: ValidateViewModel by viewModels()
 
-    // 권한 체크
-    private var isReadPermissionGranted = false
+    // Navigation ViewModel
+    private val stampNavViewModel: StampNavViewModel by navGraphViewModels(R.id.nav_stamp_diary)
 
     // 갤러리 권한 목록
     var REQUIRED_PERMISSIONS = arrayOf(
@@ -63,10 +65,19 @@ class StampValidateFragment :
 
         postImageValidateResponseLiveDataObserve()
 
+        Log.d(TAG, "현재 선택한 명소 : ${stampNavViewModel.nowSelectedAttractionId}")
+
         // 사진 찍어서 가져오기
         binding.stampValidateCameraButton.setOnClickListener {
             if (isCameraServiceAvaliable()) {
                 openCam()
+
+                binding.stampValidateProgressbar.visibility = View.VISIBLE
+                binding.stampValidateProgressbar.isVisible = true
+                binding.validateConstraintLayout.visibility = View.GONE
+                binding.validateConstraintLayout.isVisible = false
+                binding.stampValidateProgressbarInformTextview.visibility = View.VISIBLE
+                binding.stampValidateProgressbarInformTextview.isVisible = true
             }
         }
 
@@ -98,15 +109,12 @@ class StampValidateFragment :
     // 갤러리 권한을 가지고 있는지 확인하는 메소드
     private fun isGalleryServiceAvaliable() {
         val hasMediaPermission = ContextCompat.checkSelfPermission(
-            mContext as Activity,
-            android.Manifest.permission.READ_MEDIA_IMAGES
+            mContext as Activity, android.Manifest.permission.READ_MEDIA_IMAGES
         )
 
         if (hasMediaPermission != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(
-                mContext as Activity,
-                REQUIRED_PERMISSIONS,
-                REQ_GALLERY
+                mContext as Activity, REQUIRED_PERMISSIONS, REQ_GALLERY
             )
         } else {
             val intent = Intent(Intent.ACTION_PICK)
@@ -149,8 +157,7 @@ class StampValidateFragment :
             )
             val exif = ExifInterface(file)
 
-            Picasso.get().load(imageUri).fit().centerCrop()
-                .into(binding.stampValidateImageview)
+            Picasso.get().load(imageUri).fit().centerCrop().into(binding.stampValidateImageview)
 
             Log.d(TAG, "exif : $exif")
 
@@ -162,8 +169,7 @@ class StampValidateFragment :
                 CoroutineScope(Dispatchers.IO).launch {
                     locationCarc(lat, lng)
                     withContext(Dispatchers.Main) {
-                        binding.imageLocationInformTextview.text =
-                            "Lat : ${lat}, Lon : ${lng}"
+                        binding.imageLocationInformTextview.text = "Lat : ${lat}, Lon : ${lng}"
                     }
                 }
             } else {
@@ -177,9 +183,7 @@ class StampValidateFragment :
     } // End of registerForActivityResult
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
+        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         Log.d(TAG, "onRequestPermissionsResult -> grantResults: $grantResults")
@@ -233,8 +237,7 @@ class StampValidateFragment :
 
 
                     val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
-                    val body =
-                        MultipartBody.Part.createFormData("image", file.name, requestFile)
+                    val body = MultipartBody.Part.createFormData("image", file.name, requestFile)
                     CoroutineScope(Dispatchers.IO).launch {
                         validateViewModel.imageValidate(body)
                     }
@@ -298,10 +301,13 @@ class StampValidateFragment :
 
     private fun postImageValidateResponseLiveDataObserve() {
         validateViewModel.postImageValidateResponseLiveData.observe(this.viewLifecycleOwner) {
-            binding.stampValidateProgressbar.visibility = View.INVISIBLE
+            binding.stampValidateProgressbar.visibility = View.GONE
             binding.stampValidateProgressbar.isVisible = false
             binding.validateConstraintLayout.visibility = View.VISIBLE
             binding.validateConstraintLayout.isVisible = true
+            binding.stampValidateProgressbarInformTextview.visibility = View.GONE
+            binding.stampValidateProgressbarInformTextview.isVisible = false
+
 
             when (it) {
                 is NetworkResult.Success -> {
@@ -310,6 +316,9 @@ class StampValidateFragment :
 
                         // 이미지 오로라 맞으면 서버에서 검증 성공 데이터 통신 해야됨
                         // TODO 오로라 검증 성공 데이터 통신부 구현
+                        CoroutineScope(Dispatchers.IO).launch {
+                            validateViewModel.postImageValidateSuccess(stampNavViewModel.nowSelectedAttractionId)
+                        }
 
                     }
                 }
@@ -321,8 +330,10 @@ class StampValidateFragment :
                 is NetworkResult.Loading -> {
                     binding.stampValidateProgressbar.visibility = View.VISIBLE
                     binding.stampValidateProgressbar.isVisible = true
-                    binding.validateConstraintLayout.visibility = View.INVISIBLE
+                    binding.validateConstraintLayout.visibility = View.GONE
                     binding.validateConstraintLayout.isVisible = false
+                    binding.stampValidateProgressbarInformTextview.visibility = View.VISIBLE
+                    binding.stampValidateProgressbarInformTextview.isVisible = true
                 }
             }
         }
