@@ -80,15 +80,16 @@ class SettingRepository @Inject constructor(private val settingApi: SettingApi) 
         val response = settingApi.deleteAccount(JsonObject().apply {
             addProperty("email", email)
         })
+        _deleteAccountNetworkResultLiveData.postValue(NetworkResult.Loading())
         try {
             when {
                 response.isSuccessful -> {
-                    _setAuroraDisplayOptionNetworkResultLiveData.postValue(
+                    _deleteAccountNetworkResultLiveData.postValue(
                         NetworkResult.Success(Unit)
                     ) // End of postValue
                 } // End of response.isSuccessful
                 response.errorBody() != null -> {
-                    _setAuroraDisplayOptionNetworkResultLiveData.postValue(NetworkResult.Error(response.errorBody()!!.string()))
+                    _deleteAccountNetworkResultLiveData.postValue(NetworkResult.Error(response.errorBody()!!.string()))
                 } // End of response.errorBody
             } // End of when
         } catch (e: java.lang.Exception) {

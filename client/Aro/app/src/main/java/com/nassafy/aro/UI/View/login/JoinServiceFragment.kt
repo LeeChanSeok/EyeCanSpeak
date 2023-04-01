@@ -5,6 +5,8 @@ import android.graphics.Paint
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -44,8 +46,9 @@ class JoinServiceFragment : BaseFragment<FragmentAroServiceSelectBinding>(Fragme
     private fun initObserve() {
 
         joinSericeFragmentViewModel.userJoinNetworkResultLiveData.observe(this.viewLifecycleOwner) {
-            when (loginActivityViewModel.placeListLiveData.value!!) {
-                is NetworkResult.Success<List<PlaceItem>> -> {
+            when (it) {
+                is NetworkResult.Success -> {
+                    binding.progressbar.isGone = true
                     requireView().showSnackBarMessage("회원가입 성공!")
                     Application.sharedPreferencesUtil.addUserAccessToken(it.data?.accessToken ?: "")
                     Application.sharedPreferencesUtil.addUserRefreshToken(it.data?.refreshToken ?: "")
@@ -54,11 +57,14 @@ class JoinServiceFragment : BaseFragment<FragmentAroServiceSelectBinding>(Fragme
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)
                 }
-                is NetworkResult.Error<*> -> {
+                is NetworkResult.Error -> {
+                    binding.progressbar.isGone = true
+                    binding.serviceSelectSkipTextview.isEnabled = true
                     requireView().showSnackBarMessage("서버 통신 에러 발생")
                 }
-                is NetworkResult.Loading<*> -> {
-                    //TODO Loading
+                is NetworkResult.Loading -> {
+                    binding.serviceSelectSkipTextview.isEnabled = false
+                    binding.progressbar.isVisible = true
                     Log.d(
                         "ssafy_pcs", "로딩 중.."
                     )
@@ -88,7 +94,6 @@ class JoinServiceFragment : BaseFragment<FragmentAroServiceSelectBinding>(Fragme
             findNavController().popBackStack()
         }
         binding.serviceSelectSkipTextview.apply {
-            val gson = GsonBuilder().create()
             paintFlags = Paint.UNDERLINE_TEXT_FLAG
             setOnClickListener {
                 join()

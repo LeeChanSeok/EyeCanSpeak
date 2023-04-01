@@ -88,8 +88,8 @@ class JoinCountryPlaceSelectFragment : BaseFragment<FragmentAroCountryPlaceSelec
                     addProperty("email", email)
                     addProperty("password", password)
                     addProperty("nickname", nickname)
-                    addProperty("auroraService", false)
-                    addProperty("meteorService", false)
+                    addProperty("auroraService", loginActivityViewModel.isAuroraServiceSelected)
+                    addProperty("meteorService", loginActivityViewModel.isMeteorServiceSelected)
                 }
                 user.add(
                     "auroraPlaces",
@@ -244,7 +244,7 @@ class JoinCountryPlaceSelectFragment : BaseFragment<FragmentAroCountryPlaceSelec
                         Divider(
                             modifier = Modifier
                                 .height(2.dp)
-                                .padding(horizontal = 24.dp),
+                                .padding(horizontal = 30.dp),
                             color = Color.White
                         ) // End of Divider
                         CountryPlaceLazyColumn(
