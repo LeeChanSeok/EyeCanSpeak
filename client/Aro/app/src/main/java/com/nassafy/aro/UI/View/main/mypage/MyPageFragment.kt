@@ -106,14 +106,11 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
                     myPageFragmentViewModel.favoriteAuroraPlaceList.addAll(
                         it.data?.attractionInterestOrNotDTOList ?: emptyList()
                     )
-                    CoroutineScope(Dispatchers.Main).launch {
-                        delay(800)
-                        binding.progressBar.isVisible = false
-                    }
+                    binding.progressBar.isVisible = false
 //                    myPageFragmentViewModel.favoriteMeteorPlaceList.addAll(it.data?.memteorInterestOrNotDTO!!)
                 }// End of NetworkResult.Success
                 is NetworkResult.Error -> {
-                    requireView().showSnackBarMessage("닉네임 재설정에 실패했습니다.")
+                    requireView().showSnackBarMessage("관심목록을 불러오는데 실패했습니다.")
                 } // End of NetworkResult.Error
                 is NetworkResult.Loading -> {
                     binding.progressBar.isVisible = true

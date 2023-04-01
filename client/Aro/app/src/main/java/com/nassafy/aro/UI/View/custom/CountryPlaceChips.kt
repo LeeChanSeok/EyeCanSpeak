@@ -27,7 +27,7 @@ fun CountryPlaceChips(selectedPlaceList: MutableList<PlaceItem>, viewModel: Serv
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .padding(8.dp)
-                    .height(40.dp)
+                    .height(32.dp)
             ) {
                 ChipHasCancelButton(it, viewModel)
             } // End of RowScope

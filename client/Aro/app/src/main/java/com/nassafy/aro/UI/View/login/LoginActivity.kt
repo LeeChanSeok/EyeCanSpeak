@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
+import com.nassafy.aro.R
 import com.nassafy.aro.databinding.ActivityLoginBinding
 import com.nassafy.aro.service.AroFCM
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,6 +25,11 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
+
+    } // End of onNewIntent
+
+    override fun onResume() {
+        super.onResume()
         val uri = intent?.data
         // Oauth 로그인 인지 아닌지 확인
         when (uri?.scheme.toString()) {
@@ -31,10 +38,10 @@ class LoginActivity : AppCompatActivity() {
                 // TODO Delete Log
                 Log.d("ssafy/auth/github/code", "$code")
                 //TODO Get Github AccessToken, To use Retrofit
+                binding.navHost.findNavController().navigate(R.id.action_splashFragment_to_LoginFragment)
             }
             else -> {}
         } // End of when
-
-    } // End of onNewIntent
+    } // End of onResume
 
 }

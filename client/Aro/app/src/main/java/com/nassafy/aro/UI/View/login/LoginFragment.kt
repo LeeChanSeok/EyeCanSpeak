@@ -3,15 +3,11 @@ package com.nassafy.aro.ui.view.login
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.google.gson.JsonObject
 import com.nassafy.aro.Application
 import com.nassafy.aro.BuildConfig.*
 import com.nassafy.aro.R
@@ -225,7 +221,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
     fun githubLogin() {
         startActivity(Intent(Intent.ACTION_VIEW, githubLoginUri).apply {
             addCategory(Intent.CATEGORY_BROWSABLE)
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
         })
     } // End of githubLogin
 }

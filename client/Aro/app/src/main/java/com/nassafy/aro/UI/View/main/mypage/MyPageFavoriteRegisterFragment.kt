@@ -246,7 +246,7 @@ class MyPageFavoriteRegisterFragment :
                         )
                         Divider(
                             modifier = Modifier
-                                .height(2.dp)
+                                .height(1.dp)
                                 .padding(horizontal = 30.dp),
                             color = Color.White
                         ) // End of Divider
