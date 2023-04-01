@@ -80,11 +80,9 @@ class UserAccessRepository @Inject constructor(private val userAccessApi: UserAc
             addProperty("email", email)
             addProperty("code", code)
         })
-        Log.d("ssafy", response.toString())
         try {
             when {
                 response.isSuccessful -> {
-                    Log.d("ssafy", "validate Code!")
                     _isEmailAuthCodeValidated.postValue(true)
                 }
                 response.errorBody() != null -> _isEmailAuthCodeValidated.postValue(false)
@@ -98,7 +96,6 @@ class UserAccessRepository @Inject constructor(private val userAccessApi: UserAc
         val response = userAccessApi.validateEmail(JsonObject().apply {
             addProperty("email", email)
         })
-        Log.d("ssafy_pcs/validate", response.toString())
         _isEmailValidated.postValue(NetworkResult.Loading())
         try {
             when {
@@ -145,16 +142,20 @@ class UserAccessRepository @Inject constructor(private val userAccessApi: UserAc
     }
 
     suspend fun join(user: JsonObject) {
-        Log.d("ssafy_pcs/join/request", user.toString())
         val response = userAccessApi.join(user)
-        Log.d("ssafy_pcs/join/response", response.toString())
         _userJoinNetworkResultLiveData.postValue(NetworkResult.Loading())
         try {
             when {
                 response.isSuccessful -> {
                     _userJoinNetworkResultLiveData.postValue(NetworkResult.Success(response.body()!!))
                 }
-                response.errorBody() != null -> _userJoinNetworkResultLiveData.postValue(NetworkResult.Error(response.errorBody().toString()))
+                response.errorBody() != null -> {
+                    _userJoinNetworkResultLiveData.postValue(
+                        NetworkResult.Error(
+                            response.errorBody().toString()
+                        )
+                    )
+                }
             }
         } catch (e: java.lang.Exception) {
             Log.e("ssafy", "getServerCallTest: ${e.message}")

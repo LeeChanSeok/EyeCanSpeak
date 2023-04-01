@@ -150,16 +150,7 @@ class MyPageFavoriteRegisterFragment :
             when(it) {
                 is NetworkResult.Success -> {
                     requireView().showSnackBarMessage(getString(R.string.my_page_my_favorite_modify_success_text))
-                    when(myPageFavoriteRegisterFragmentViewModel.isMeteorServiceSelected) {
-                        true -> {
-                            requireView().showSnackBarMessage("유성우 서비스는 준비 중입니다.!!")
-                            findNavController()
-                                .navigate(R.id.action_myPageFavoriteRegisterFragment_to_myPageFragment)
-                        }
-                        false -> {
-                            findNavController().navigate(R.id.action_myPageFavoriteRegisterFragment_to_myPageFragment)
-                        }
-                    }
+                    findNavController().navigate(R.id.action_myPageFavoriteRegisterFragment_to_myPageFragment)
                 } // End of Success
                 is NetworkResult.Error -> {
                     requireView().showSnackBarMessage("서버 통신 에러 발생")
@@ -256,7 +247,7 @@ class MyPageFavoriteRegisterFragment :
                         Divider(
                             modifier = Modifier
                                 .height(2.dp)
-                                .padding(horizontal = 24.dp),
+                                .padding(horizontal = 30.dp),
                             color = Color.White
                         ) // End of Divider
                         CountryPlaceLazyColumn(

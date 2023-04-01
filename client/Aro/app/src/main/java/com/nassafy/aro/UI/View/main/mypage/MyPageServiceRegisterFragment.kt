@@ -23,7 +23,6 @@ import kotlinx.coroutines.launch
 class MyPageServiceRegisterFragment :
     BaseFragment<FragmentAroServiceSelectBinding>(FragmentAroServiceSelectBinding::inflate) {
 
-    private var isNextButtonClicked = false
     private val myPageServiceRegisterFragementViewModel: MyPageServiceRegisterFragmentViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -39,7 +38,6 @@ class MyPageServiceRegisterFragment :
 
     override fun onResume() {
         super.onResume()
-        isNextButtonClicked = false
     }
 
     private fun initObserve() {
@@ -49,14 +47,7 @@ class MyPageServiceRegisterFragment :
             when (it) {
                 is NetworkResult.Success -> {
                     Log.d("ssafy", "success")
-                    when (isNextButtonClicked) {
-                        true -> {
-                            requireView().showSnackBarMessage(getString(R.string.service_modify_success_text))
-                        }
-                        false -> {
-                            requireView().showSnackBarMessage("메테오 관심 위치 선택은 추후 업데이트 됩니다!")
-                        }
-                    }
+                    requireView().showSnackBarMessage(getString(R.string.service_modify_success_text))
                     findNavController().navigate(R.id.action_myPageServiceRegisterFragment_to_myPageFragment)
                 }
                 is NetworkResult.Error -> {
@@ -79,53 +70,52 @@ class MyPageServiceRegisterFragment :
             findNavController().popBackStack()
         }
         binding.nextButton.setOnClickListener {
-            isNextButtonClicked = true
-            myPageServiceRegisterFragementViewModel.auroraService =
-                binding.auroraServiceCardview.getIsSelected()
-            myPageServiceRegisterFragementViewModel.meteorService =
-                binding.meteorServiceCardview.getIsSelected()
-            val setOnOkButtonClickListener =
-                object : OkCancelDialog.SetOnOkButtonClickListener {
-                    override fun onOkButtonClick() {
-                        val action =
-                            MyPageServiceRegisterFragmentDirections.actionMyPageServiceRegisterFragmentToMyPageFavoriteRegisterFragment(
-                                myPageServiceRegisterFragementViewModel.auroraService,
-                                myPageServiceRegisterFragementViewModel.meteorService,
-                            )
-                        when (myPageServiceRegisterFragementViewModel.auroraService) {
-                            true -> {
-                                findNavController().navigate(action)
-                            }
-                            false -> {
-                                when (myPageServiceRegisterFragementViewModel.meteorService) {
-                                    true -> {
-                                        isNextButtonClicked = false
-                                        CoroutineScope(Dispatchers.IO).launch {
-                                            myPageServiceRegisterFragementViewModel.selectService(
-                                                myPageServiceRegisterFragementViewModel.auroraService,
-                                                myPageServiceRegisterFragementViewModel.meteorService
-                                            ) // End of selectService
-                                        } // End of CoroutineScope
-                                    }
-                                    false -> {
-                                        CoroutineScope(Dispatchers.IO).launch {
-                                            myPageServiceRegisterFragementViewModel.selectService(
-                                                myPageServiceRegisterFragementViewModel.auroraService,
-                                                myPageServiceRegisterFragementViewModel.meteorService
-                                            ) // End of selectService
-                                        } // End of CoroutineScope
-                                    } // End of when
-                                } // End of when
-                            } // End of false
-                        } // End of when
-                    } // End of onOkButtonClick
-                } // End of SetOnOkButtonClickListener
             val okCancelDialog = OkCancelDialog(
                 getString(R.string.service_modify_no_have_service_dialog_title_textview_text),
                 getString(R.string.service_modify_no_have_service_dialog_inform_textview_text),
-                setOnOkButtonClickListener
+                object : OkCancelDialog.SetOnOkButtonClickListener {
+                    override fun onOkButtonClick() {
+                        serviceSelect()
+                    } // End of onOkButtonClick
+                } // End of SetOnOkButtonClickListener
             )
-            okCancelDialog.show(childFragmentManager, "OkCancelDialog")
+            // true -> false 있는 경우
+            when ((myPageServiceRegisterFragementViewModel.auroraService == true &&
+                    binding.auroraServiceCardview.getIsSelected() == false) ||
+                    (myPageServiceRegisterFragementViewModel.meteorService == true &&
+                            binding.meteorServiceCardview.getIsSelected() == false)) {
+                true -> {
+                    okCancelDialog.show(childFragmentManager, "OkCancelDialog")
+                }
+                false -> {
+                    serviceSelect()
+                }
+            }
         } // End of nextButton.setOnClickListener
     } // End of initView
+
+    fun serviceSelect() {
+        myPageServiceRegisterFragementViewModel.auroraService =
+            binding.auroraServiceCardview.getIsSelected()
+        myPageServiceRegisterFragementViewModel.meteorService =
+            binding.meteorServiceCardview.getIsSelected()
+        val action =
+            MyPageServiceRegisterFragmentDirections.actionMyPageServiceRegisterFragmentToMyPageFavoriteRegisterFragment(
+                myPageServiceRegisterFragementViewModel.auroraService,
+                myPageServiceRegisterFragementViewModel.meteorService,
+            )
+        when (myPageServiceRegisterFragementViewModel.auroraService) {
+            true -> {
+                findNavController().navigate(action)
+            }
+            false -> {
+                CoroutineScope(Dispatchers.IO).launch {
+                    myPageServiceRegisterFragementViewModel.selectService(
+                        myPageServiceRegisterFragementViewModel.auroraService,
+                        myPageServiceRegisterFragementViewModel.meteorService
+                    ) // End of selectService
+                } // End of CoroutineScope
+            } // End of false
+        } // End of when
+    }
 } // End of MyPageServiceRegisterFragment

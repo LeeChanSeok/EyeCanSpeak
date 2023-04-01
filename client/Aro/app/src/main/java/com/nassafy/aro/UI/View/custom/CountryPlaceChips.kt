@@ -17,6 +17,7 @@ fun CountryPlaceChips(selectedPlaceList: MutableList<PlaceItem>, viewModel: Serv
         Modifier
             .wrapContentHeight()
             .fillMaxWidth(1f)
+            .padding(horizontal = 30.dp)
             .height(80.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {

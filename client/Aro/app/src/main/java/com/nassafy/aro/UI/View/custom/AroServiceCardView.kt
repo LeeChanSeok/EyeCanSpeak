@@ -27,8 +27,12 @@ class AroServiceCardView @JvmOverloads constructor(
     interface OnSelectedChangeListener  {
         fun onSelectedChanged (isSelected: Boolean)
     }
+    interface OnClickListener {
+        fun onClick()
+    }
 
     private var onSelectedChangeListener: OnSelectedChangeListener? = null
+    var onClickListener: OnClickListener? = null
 
     init {
         val view = binding.root
@@ -70,6 +74,7 @@ class AroServiceCardView @JvmOverloads constructor(
         view.setOnClickListener {
             view.isSelected = !view.isSelected
             onSelectedChangeListener?.onSelectedChanged(view.isSelected)
+            onClickListener?.onClick()
         }
 
     } // End of Init
@@ -84,4 +89,5 @@ class AroServiceCardView @JvmOverloads constructor(
     fun setOnSelectedChangeListener(listener: OnSelectedChangeListener) {
         onSelectedChangeListener = listener
     }
+
 } // End of AroServiceCarView

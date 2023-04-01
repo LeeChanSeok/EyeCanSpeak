@@ -69,6 +69,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                                 val networkResult = userSnsLoginNetworkResultLiveData.value!!
                                 when (networkResult) {
                                     is NetworkResult.Success -> {
+                                        Log.d("ssafy/auth/naver2", "${networkResult.data}")
                                         when (networkResult.data!!.signup) {
                                             true -> {
                                                 loginByIdPassword(
@@ -85,6 +86,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                                         }
                                     }
                                     is NetworkResult.Error -> {
+                                        Log.d("ssafy/auth/naver2", "${networkResult.data}")
                                         requireView().showSnackBarMessage("네이버 로그인에 실패했습니다.")
                                     }
                                     is NetworkResult.Loading -> {
@@ -95,9 +97,21 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                         }
                         //TODO retrofit
 //                        email = result.profile?.email.toString()
-                    }
+                    } // End of onSuccess
 
                     override fun onError(errorCode: Int, message: String) {
+                        NidOAuthLogin().callDeleteTokenApi(requireContext(), object : OAuthLoginCallback {
+                            override fun onError(errorCode: Int, message: String) {
+                                onFailure(errorCode, message)
+                            }
+
+                            override fun onFailure(httpStatus: Int, message: String) {
+                            }
+
+                            override fun onSuccess() {
+                            }
+
+                        })
                         requireView().showSnackBarMessage("네이버 로그인에 실패했습니다.")
                     }
 
