@@ -33,7 +33,6 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding::inflate) {
-
     private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
     private val myPageFragmentViewModel: MyPageFragmentViewModel by viewModels()
 
@@ -224,7 +223,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
             setContent {
                 val auroraFavoriteList =
                     remember { myPageFragmentViewModel.favoriteAuroraPlaceList }
-                val memeorFavoriteList = mutableListOf<PlaceItem>()
+                val meteorFavoriteList = mutableListOf<PlaceItem>()
                 // In Compose world
 
                 LaunchedEffect(myPageFragmentViewModel.favoriteAuroraPlaceList) {

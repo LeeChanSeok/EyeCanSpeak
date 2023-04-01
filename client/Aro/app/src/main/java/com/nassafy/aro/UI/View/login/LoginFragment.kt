@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -16,6 +17,7 @@ import com.nassafy.aro.BuildConfig.*
 import com.nassafy.aro.R
 import com.nassafy.aro.databinding.FragmentLoginBinding
 import com.nassafy.aro.ui.view.BaseFragment
+import com.nassafy.aro.ui.view.dialog.OkCancelDialog
 import com.nassafy.aro.ui.view.main.MainActivity
 import com.nassafy.aro.ui.view.login.viewmodel.LoginActivityViewModel
 import com.nassafy.aro.ui.view.login.viewmodel.LoginFragmentViewModel
@@ -32,7 +34,6 @@ import kotlinx.coroutines.*
 
 @AndroidEntryPoint
 class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::inflate) {
-
     private val loginActivityViewModel: LoginActivityViewModel by activityViewModels()
     private val loginFragmentViewModel: LoginFragmentViewModel by viewModels()
     private var isTriedLoginState = false
@@ -42,12 +43,24 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
 
         initObserve()
         initView()
-    }
+    } // End of onViewCreated
 
     override fun onResume() {
         super.onResume()
         isTriedLoginState = false
-    }
+    } // End of onResume
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            val finishDialog = OkCancelDialog("Aro", "어플리케이션을 종료하시겠습니까?", object : OkCancelDialog.SetOnOkButtonClickListener {
+                override fun onOkButtonClick() {
+                    requireActivity().finish()
+                }
+            })
+            finishDialog.show(childFragmentManager, null)
+        }
+    } // End of onCreate
 
     private fun naverLogin() {
         val oAuthLoginCallback = object : OAuthLoginCallback {
