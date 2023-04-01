@@ -23,7 +23,7 @@ class MeteorShowerAdapter(var itemList: MutableList<MeteorShower>) :
     private fun createTransition(): Transition {
         val transitionSet = TransitionSet()
         val fade = Fade(Fade.MODE_OUT)
-        fade.duration = 150
+        fade.duration = 300
 
         val changeBounds = ChangeBounds()
         changeBounds.duration = 300
