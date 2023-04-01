@@ -24,11 +24,14 @@ fun getDateList(now : LocalDateTime): (ArrayList<String>) {
         i += 1L
     }
     // 마지막 날 추가
-    dateList.add(
-        LocalDate.of(endTime.year, endTime.month, endTime.dayOfMonth).format(
-            DateTimeFormatter.ofPattern("yy/MM/dd")
-        )
+    var lastDay = LocalDate.of(endTime.year, endTime.month, endTime.dayOfMonth).format(
+        DateTimeFormatter.ofPattern("yy/MM/dd")
     )
+
+    if (lastDay != dateList.last()) {
+        dateList.add(lastDay)
+    }
+
     return dateList
 } // End of getDateList
 
@@ -43,32 +46,36 @@ fun getHourList(dateList: ArrayList<String>, now: LocalDateTime): (ArrayList<Arr
     val startTime = LocalDateTime.of(now.year, now.month, now.dayOfMonth, now.hour, 0)
 
     // dateList의 각 요소마다 선택 가능한 시간을 추가
-    for (idx in 0 until dateList.size) {
-        var tempTimeList = arrayListOf<String>()
-        when (idx) {
-            0 -> for (h in startTime.hour until 24) {
-                when (h) {
-                    in 0 until 10 -> {
-                        tempTimeList.add("0$h:00")
-                    }
-                    else -> {
-                        tempTimeList.add("$h:00")
-                    }
-                }
-            }
-            dateList.size - 1 -> for (h in 0 until startTime.hour) {
-                when (h) {
-                    in 0 until 10 -> {
-                        tempTimeList.add("0$h:00")
-                    }
-                    else -> {
-                        tempTimeList.add("$h:00")
+    if (dateList.size == 3) {
+        hourList = arrayListOf(fullHours, fullHours, fullHours)
+    } else {
+        for (idx in 0 until dateList.size) {
+            var tempTimeList = arrayListOf<String>()
+            when (idx) {
+                0 -> for (h in startTime.hour until 24) {
+                    when (h) {
+                        in 0 until 10 -> {
+                            tempTimeList.add("0$h:00")
+                        }
+                        else -> {
+                            tempTimeList.add("$h:00")
+                        }
                     }
                 }
+                dateList.size - 1 -> for (h in 0 until startTime.hour) {
+                    when (h) {
+                        in 0 until 10 -> {
+                            tempTimeList.add("0$h:00")
+                        }
+                        else -> {
+                            tempTimeList.add("$h:00")
+                        }
+                    }
+                }
+                else -> tempTimeList = fullHours
             }
-            else -> tempTimeList = fullHours
+            hourList.add(tempTimeList)
         }
-        hourList.add(tempTimeList)
     }
     return hourList
 } // End of getHourList

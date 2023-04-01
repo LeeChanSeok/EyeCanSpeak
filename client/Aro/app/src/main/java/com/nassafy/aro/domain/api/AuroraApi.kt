@@ -1,7 +1,8 @@
 package com.nassafy.aro.domain.api
 
-import com.nassafy.aro.data.dto.KpResponse
+import com.nassafy.aro.data.dto.kp.KpResponse
 import com.nassafy.aro.data.dto.PlaceItem
+import com.nassafy.aro.data.dto.kp.KpWithProbs
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -17,5 +18,11 @@ interface AuroraApi {
         @Path("dateString") dateString: String,
         @Path("hour") hour: Int
     ) : Response<KpResponse>
+
+    @GET("api/forecast/interest/{dateString}/{hour}")
+    suspend fun getKpAndProbsLiveData(
+        @Path("dateString") dateString: String,
+        @Path("hour") hour: Int
+    ) : Response<KpWithProbs>
 
 }

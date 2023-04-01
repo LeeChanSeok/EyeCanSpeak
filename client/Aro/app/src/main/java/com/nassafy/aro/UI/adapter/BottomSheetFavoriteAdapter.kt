@@ -1,6 +1,5 @@
 package com.nassafy.aro.ui.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,8 +8,9 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.nassafy.aro.R
+import com.nassafy.aro.data.dto.kp.Probability
 
-class BottomSheetFavoriteAdapter(var itemList: MutableList<MutableList<String>>) :
+class BottomSheetFavoriteAdapter(var probs: List<Probability>) :
     RecyclerView.Adapter<BottomSheetFavoriteAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
@@ -24,27 +24,27 @@ class BottomSheetFavoriteAdapter(var itemList: MutableList<MutableList<String>>)
     } // End of onCreateViewHolder
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        var item = itemList[position]
+        var probability = probs[position]
         var mColor = R.color.over_70
         var mImage = R.drawable.over_triangle
         when {
-            item[1].toInt() >= 70 -> {
+            probability.prob >= 70 -> {
 
             }
-            item[1].toInt() >= 50 -> {
+            probability.prob >= 50 -> {
                 mColor = R.color.over_50
             }
-            item[1].toInt() < 20 -> {
+            probability.prob < 20 -> {
                 mColor = R.color.under_20
                 mImage = R.drawable.under_triangle
             }
-            item[1].toInt() < 50 -> {
+            probability.prob < 50 -> {
                 mColor = R.color.under_50
                 mImage = R.drawable.under_triangle
             }
         }
 
-        val weatherImage = when (item[2]) {
+        val weatherImage = when (probability.weather) {
             "Thunderstorm" -> R.drawable.weather_thunderstorm_icon
             "Drizzle" -> R.drawable.weather_drizzle_icon
             "Rain" -> R.drawable.weather_rain_icon
@@ -59,9 +59,9 @@ class BottomSheetFavoriteAdapter(var itemList: MutableList<MutableList<String>>)
         var updownImageView = holder.itemView.findViewById<ImageView>(R.id.bottom_sheet_item_updown_imageview)
         var weatherImageView = holder.itemView.findViewById<ImageView>(R.id.bottom_sheet_item_weather_imageview)
 
-        nameTextView.text = item[0]
+        nameTextView.text = probability.attractionName
         percentTextView.apply {
-            text = "${item[1]}%"
+            text = "${probability.prob}%"
             setTextColor(ContextCompat.getColor(holder.itemView.context, mColor))
         }
         updownImageView.apply {
@@ -73,5 +73,5 @@ class BottomSheetFavoriteAdapter(var itemList: MutableList<MutableList<String>>)
         }
     } // End of onBindViewHolder
 
-    override fun getItemCount() = itemList.size
+    override fun getItemCount() = probs.size
 } // End of BottomSheetFavoriteAdapter

@@ -1,18 +1,16 @@
 package com.nassafy.aro.domain.repository
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.nassafy.aro.data.dto.KpResponse
+import com.nassafy.aro.data.dto.kp.KpResponse
 import com.nassafy.aro.data.dto.PlaceItem
+import com.nassafy.aro.data.dto.kp.KpWithProbs
 import com.nassafy.aro.domain.api.AuroraApi
 import com.nassafy.aro.util.NetworkResult
 import com.nassafy.aro.util.di.HeaderInterceptorApi
 import com.nassafy.aro.util.di.WithoutHeaderInterceptorApi
 import com.nassafy.aro.util.setNetworkResult
-import kotlinx.coroutines.*
 import javax.inject.Inject
-import kotlin.math.log
 
 private const val TAG = "AuroraRepository_sdr"
 class AuroraRepository @Inject constructor(
@@ -46,6 +44,14 @@ class AuroraRepository @Inject constructor(
     suspend fun getCurrentKpIndex(dateString: String, hour: Int) {
         val response = headerAuroraApi.getCurrentKpIndex(dateString, hour)
         _kpCurrentLiveData.setNetworkResult(response)
-    }
+    } // End of getCurrentKpIndex
 
+    private val _kpAndProbsLiveData = MutableLiveData<NetworkResult<KpWithProbs>>()
+    val kpAndProbsLiveData : LiveData<NetworkResult<KpWithProbs>>
+        get() = _kpAndProbsLiveData
+
+    suspend fun getKpAndProbsLiveData(dateString: String, hour: Int) {
+        val response = headerAuroraApi.getKpAndProbsLiveData(dateString, hour)
+        _kpAndProbsLiveData.setNetworkResult(response)
+    }
 }
