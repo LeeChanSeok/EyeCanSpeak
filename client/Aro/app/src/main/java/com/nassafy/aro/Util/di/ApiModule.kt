@@ -7,6 +7,7 @@ import com.google.gson.GsonBuilder
 import com.nassafy.aro.Application
 import com.nassafy.aro.domain.api.*
 import com.nassafy.aro.util.SERVER_URL
+import com.nassafy.aro.util.githubBaseUrl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -319,5 +320,17 @@ object ApiModule {
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
             .create(SettingApi::class.java)
+    } // End of provideHeaderSplashApi
+
+
+    // ============================================= Setting =============================================
+    @Provides
+    fun provideGithubApi(@WithoutHeaderInterceptorOkHttpClient okHttpClient: OkHttpClient): GithubApi {
+        return Retrofit.Builder()
+            .client(okHttpClient)
+            .baseUrl(githubBaseUrl)
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .build()
+            .create(GithubApi::class.java)
     } // End of provideHeaderSplashApi
 } // End of ApiModule

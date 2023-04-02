@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.activity.addCallback
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -38,6 +39,17 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
         super.onViewCreated(view, savedInstanceState)
 
         initObserve()
+        when (loginActivityViewModel.isTriedGithubLogin) {
+            true -> {
+                loginActivityViewModel.isTriedGithubLogin = false
+                isTriedLoginState = true
+                Log.d("ssafy/github/code", loginActivityViewModel.githubCode)
+                CoroutineScope(Dispatchers.Main).launch {
+                    snsLogin("GITHUB", "")
+                }
+            }
+            false -> {}
+        }
         initView()
     } // End of onViewCreated
 
@@ -49,11 +61,14 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requireActivity().onBackPressedDispatcher.addCallback(this) {
-            val finishDialog = OkCancelDialog("Aro", "어플리케이션을 종료하시겠습니까?", object : OkCancelDialog.SetOnOkButtonClickListener {
-                override fun onOkButtonClick() {
-                    requireActivity().finish()
-                }
-            })
+            val finishDialog = OkCancelDialog(
+                "Aro",
+                "어플리케이션을 종료하시겠습니까?",
+                object : OkCancelDialog.SetOnOkButtonClickListener {
+                    override fun onOkButtonClick() {
+                        requireActivity().finish()
+                    }
+                })
             finishDialog.show(childFragmentManager, null)
         }
     } // End of onCreate
@@ -68,62 +83,24 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                         naverAccessToken ?: return
                         val providerType = "NAVER"
                         Log.d("ssafy/auth/naver", "naverAccessToken: $naverAccessToken")
-
-                        //todo Fix Naver 안깔린 경우 버그
-
-                        // 성공으로 AccessToken이 넘어왔을 때, 통신 시작.
-                        CoroutineScope(Dispatchers.IO).launch {
-                            loginFragmentViewModel.apply {
-                                snsLogin(providerType, naverAccessToken)
-                                val networkResult = userSnsLoginNetworkResultLiveData.value!!
-                                Log.d("ssafy/snslogin/networkResult", networkResult.data.toString())
-                                launch(Dispatchers.Main) {
-                                    when (networkResult) {
-                                        is NetworkResult.Success -> {
-                                            when (networkResult.data!!.signup) {
-                                                true -> {
-                                                    loginByIdPassword(
-                                                        networkResult.data!!.providerType,
-                                                        networkResult.data!!.email,
-                                                        null
-                                                    )
-                                                }
-                                                false -> {
-                                                    loginActivityViewModel.providerType =
-                                                        networkResult.data!!.providerType
-                                                    loginActivityViewModel.email =
-                                                        networkResult.data!!.email
-                                                    findNavController().navigate(R.id.action_loginFragment_to_joinNicknameFragment)
-                                                }
-                                            }
-                                        }
-                                        is NetworkResult.Error -> {
-                                            requireView().showSnackBarMessage("네이버 로그인에 실패했습니다.")
-                                        }
-                                        is NetworkResult.Loading -> {
-                                            // Todo loading progressBar
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        //TODO retrofit
-//                        email = result.profile?.email.toString()
+                        snsLogin(providerType, naverAccessToken)
                     } // End of onSuccess
 
                     override fun onError(errorCode: Int, message: String) {
-                        NidOAuthLogin().callDeleteTokenApi(requireContext(), object : OAuthLoginCallback {
-                            override fun onError(errorCode: Int, message: String) {
-                                onFailure(errorCode, message)
-                            }
+                        NidOAuthLogin().callDeleteTokenApi(
+                            requireContext(),
+                            object : OAuthLoginCallback {
+                                override fun onError(errorCode: Int, message: String) {
+                                    onFailure(errorCode, message)
+                                }
 
-                            override fun onFailure(httpStatus: Int, message: String) {
-                            }
+                                override fun onFailure(httpStatus: Int, message: String) {
+                                }
 
-                            override fun onSuccess() {
-                            }
+                                override fun onSuccess() {
+                                }
 
-                        })
+                            })
                         requireView().showSnackBarMessage("네이버 로그인에 실패했습니다.")
                     }
 
@@ -145,6 +122,60 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
         NaverIdLoginSDK.authenticate(requireContext(), oAuthLoginCallback)
     } // End of naverLogin
 
+    fun githubLogin() {
+        startActivity(Intent(Intent.ACTION_VIEW, githubLoginUri).apply {
+            addCategory(Intent.CATEGORY_BROWSABLE)
+            addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        })
+    } // End of githubLogin
+
+    private fun snsLogin(providerType: String, accessToken: String) {
+        binding.progressbar.isVisible = true
+        CoroutineScope(Dispatchers.IO).launch {
+            loginFragmentViewModel.apply {
+                when (providerType) {
+                    "NAVER" -> {
+                        snsLogin(providerType, accessToken)
+                    }
+                    "GITHUB" -> {
+                        snsLogin(providerType, loginFragmentViewModel.getAccessToken(loginActivityViewModel.githubCode))
+                    }
+                    else -> { return@launch}
+                }
+                val networkResult = userSnsLoginNetworkResultLiveData.value!!
+                Log.d("ssafy/snslogin/networkResult", networkResult.data.toString())
+                launch(Dispatchers.Main) {
+                    when (networkResult) {
+                        is NetworkResult.Success -> {
+                            when (networkResult.data!!.signup) {
+                                true -> {
+                                    loginByIdPassword(
+                                        networkResult.data!!.providerType,
+                                        networkResult.data!!.email,
+                                        null
+                                    )
+                                }
+                                false -> {
+                                    loginActivityViewModel.providerType =
+                                        networkResult.data!!.providerType
+                                    loginActivityViewModel.email =
+                                        networkResult.data!!.email
+                                    findNavController().navigate(R.id.action_loginFragment_to_joinNicknameFragment)
+                                }
+                            }
+                        }
+                        is NetworkResult.Error -> {
+                            requireView().showSnackBarMessage("$providerType 로그인에 실패했습니다.")
+                        }
+                        is NetworkResult.Loading -> {
+                            // Todo loading progressBar
+                        }
+                    } // End of when
+                }
+            }
+        }
+    }
+
     private fun initObserve() {
 
         loginFragmentViewModel.loginToken.observe(this.viewLifecycleOwner) {
@@ -160,13 +191,19 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                     when (isTriedLoginState) {
                         true -> {
                             requireView().showSnackBarMessage("로그인에 실패했습니다.")
+                            binding.progressbar.isVisible = false
                         }
                         false -> {}
                     }
 
                 }
                 is NetworkResult.Loading -> {
-                    // todo loading progressBar
+                    when (isTriedLoginState) {
+                        true -> {
+                            binding.progressbar.isVisible = true
+                        }
+                        false -> {}
+                    }
                 }
             }
             isTriedLoginState = false
@@ -221,10 +258,4 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
         }
     } // ENd of initView
 
-    fun githubLogin() {
-        startActivity(Intent(Intent.ACTION_VIEW, githubLoginUri).apply {
-            addCategory(Intent.CATEGORY_BROWSABLE)
-            addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-        })
-    } // End of githubLogin
 }

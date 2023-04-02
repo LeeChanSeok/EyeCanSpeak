@@ -18,6 +18,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -256,16 +257,15 @@ class MainActivity : AppCompatActivity() {
         mainActivityViewModel.logoutNetworkResultLiveData.observe(this) {
             when(it) {
                 is NetworkResult.Success -> {
-                    // TODO
-//                    val layout = layoutInflater.inflate(R.layout.custom_toast_delete_account, null)
-//                    requireContext().showToastView(layout)
-//                    binding.root.showSnackBarMessage("로그아웃 하였습니다!")
-//                    Application.sharedPreferencesUtil.addUserAccessToken("")
-//                    Application.sharedPreferencesUtil.addUserRefreshToken("")
-//                    val intent = Intent(this, LoginActivity::class.java)
-//                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-//                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//                    startActivity(intent)
+                    val layout = layoutInflater.inflate(R.layout.custom_toast_delete_account, null)
+                    this.showToastView(layout)
+                    binding.root.showSnackBarMessage("로그아웃 하였습니다!")
+                    Application.sharedPreferencesUtil.addUserAccessToken("")
+                    Application.sharedPreferencesUtil.addUserRefreshToken("")
+                    val intent = Intent(this, LoginActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(intent)
                 }
                 is NetworkResult.Error -> {
                     binding.root.showSnackBarMessage("로그아웃에 실패했습니다.")
@@ -303,18 +303,11 @@ class MainActivity : AppCompatActivity() {
                     closeDrawer()
                 }
                 logoutTextView.setOnClickListener {
-                    binding.root.showSnackBarMessage("로그아웃 하였습니다!")
-                    Application.sharedPreferencesUtil.addUserAccessToken("")
-                    Application.sharedPreferencesUtil.addUserRefreshToken("")
-                    val intent = Intent(this@MainActivity, LoginActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    startActivity(intent)
-//                    mainActivityViewModel.logout( // todo
-//                        "Bearer",
-//                        Application.sharedPreferencesUtil.getUserAccessToken(),
-//                        Application.sharedPreferencesUtil.getUserRefreshToken()
-//                    )
+                    mainActivityViewModel.logout( // todo
+                        "Bearer",
+                        Application.sharedPreferencesUtil.getUserAccessToken().substring(7),
+                        Application.sharedPreferencesUtil.getUserRefreshToken()
+                    )
                 }
             }
         }

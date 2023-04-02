@@ -11,4 +11,7 @@ val githubLoginUri = Uri.Builder().scheme("https").authority("github.com")
     .appendPath("oauth")
     .appendPath("authorize")
     .appendQueryParameter("client_id", BuildConfig.GITHUB_CLIENT_ID)
+//    .appendQueryParameter("scope", "user:email")
     .build()
+
+const val githubBaseUrl = "https://github.com/"

@@ -4,16 +4,18 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.JsonObject
-import com.nassafy.aro.data.dto.TokenResponse
-import com.nassafy.aro.data.dto.PlaceItem
-import com.nassafy.aro.data.dto.SnsLoginResposne
-import com.nassafy.aro.data.dto.UserTest
+import com.nassafy.aro.BuildConfig
+import com.nassafy.aro.data.dto.*
+import com.nassafy.aro.domain.api.GithubApi
 import com.nassafy.aro.domain.api.UserAccessApi
 import com.nassafy.aro.util.NetworkResult
 import com.nassafy.aro.util.setNetworkResult
 import javax.inject.Inject
 
-class UserAccessRepository @Inject constructor(private val userAccessApi: UserAccessApi) { // End of UserAccessRepository
+class UserAccessRepository @Inject constructor(
+    private val userAccessApi: UserAccessApi,
+    private val githubApi: GithubApi
+) { // End of UserAccessRepository
 
     private val _loginToken = MutableLiveData<NetworkResult<TokenResponse>>()
     val loginToken: LiveData<NetworkResult<TokenResponse>> get() = _loginToken
@@ -37,9 +39,10 @@ class UserAccessRepository @Inject constructor(private val userAccessApi: UserAc
     val selectedMeteorPlaceListLiveData get() = _selectedMeteorPlaceListLiveData
 
     private val _userJoinNetworkResultLiveData = MutableLiveData<NetworkResult<TokenResponse>>()
-    val userJoinNetworkResultLiveData:LiveData<NetworkResult<TokenResponse>> get() = _userJoinNetworkResultLiveData
+    val userJoinNetworkResultLiveData: LiveData<NetworkResult<TokenResponse>> get() = _userJoinNetworkResultLiveData
 
-    private val _userSnsLoginNetworkResultLiveData = MutableLiveData<NetworkResult<SnsLoginResposne>>()
+    private val _userSnsLoginNetworkResultLiveData =
+        MutableLiveData<NetworkResult<SnsLoginResposne>>()
     val userSnsLoginNetworkResultLiveData: LiveData<NetworkResult<SnsLoginResposne>> get() = _userSnsLoginNetworkResultLiveData
 
     init {
@@ -100,7 +103,11 @@ class UserAccessRepository @Inject constructor(private val userAccessApi: UserAc
         try {
             when {
                 response.isSuccessful -> _isEmailValidated.postValue(NetworkResult.Success(true))
-                response.errorBody() != null -> _isEmailValidated.postValue(NetworkResult.Error(response.errorBody().toString()))
+                response.errorBody() != null -> _isEmailValidated.postValue(
+                    NetworkResult.Error(
+                        response.errorBody().toString()
+                    )
+                )
             }
         } catch (e: java.lang.Exception) {
             Log.e("ssafy", "getServerCallTest: ${e.message}")
@@ -113,11 +120,17 @@ class UserAccessRepository @Inject constructor(private val userAccessApi: UserAc
         try {
             when {
                 response.isSuccessful -> {
-                    _countryListLiveData.postValue(NetworkResult.Success(
-                        response.body()!!
-                    ))
+                    _countryListLiveData.postValue(
+                        NetworkResult.Success(
+                            response.body()!!
+                        )
+                    )
                 }
-                response.errorBody() != null -> _countryListLiveData.postValue(NetworkResult.Error(response.errorBody().toString()))
+                response.errorBody() != null -> _countryListLiveData.postValue(
+                    NetworkResult.Error(
+                        response.errorBody().toString()
+                    )
+                )
             }
         } catch (e: java.lang.Exception) {
             Log.e("ssafy", "getServerCallTest: ${e.message}")
@@ -130,11 +143,17 @@ class UserAccessRepository @Inject constructor(private val userAccessApi: UserAc
         try {
             when {
                 response.isSuccessful -> {
-                    _placeListLiveData.postValue(NetworkResult.Success(
-                        response.body()!!
-                    ))
+                    _placeListLiveData.postValue(
+                        NetworkResult.Success(
+                            response.body()!!
+                        )
+                    )
                 }
-                response.errorBody() != null -> _countryListLiveData.postValue(NetworkResult.Error(response.errorBody().toString()))
+                response.errorBody() != null -> _countryListLiveData.postValue(
+                    NetworkResult.Error(
+                        response.errorBody().toString()
+                    )
+                )
             }
         } catch (e: java.lang.Exception) {
             Log.e("ssafy", "getServerCallTest: ${e.message}")
@@ -193,7 +212,32 @@ class UserAccessRepository @Inject constructor(private val userAccessApi: UserAc
             Log.d("ssafy/sns/request", this.toString())
         })
         Log.d("ssafy/sns/response", response.toString())
+        Log.d("ssafy/sns/response/body", response.body().toString())
         _userSnsLoginNetworkResultLiveData.setNetworkResult(response)
     }
 
-}
+    suspend fun getAccessToken(code: String): NetworkResult<GithubAccessTokenResponse> {
+        val response = githubApi.getAccessToken(
+            BuildConfig.GITHUB_CLIENT_ID,
+            BuildConfig.GITHUB_CLIENT_SECRET,
+            code
+        )
+        Log.d("ssafy/sns/response", response.toString())
+        try {
+            when {
+                response.isSuccessful -> {
+                    Log.d("ssafy/sns/response/body", response.body().toString())
+                    return NetworkResult.Success(response.body()!!)
+                }
+                response.errorBody() != null -> {
+                    return NetworkResult.Error(response.errorBody().toString())
+                }
+            }
+        } catch (e: java.lang.Exception) {
+            Log.e("ssafy", "getServerCallTest: ${e.message}")
+            return NetworkResult.Error(e.message)
+        } // End of try-catch
+        return NetworkResult.Error("")
+    }
+
+} // End of UserAccessRepository

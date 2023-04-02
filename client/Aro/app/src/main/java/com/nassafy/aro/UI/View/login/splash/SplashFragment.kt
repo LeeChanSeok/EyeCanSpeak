@@ -3,14 +3,17 @@ package com.nassafy.aro.ui.view.login.splash
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.nassafy.aro.R
 import com.nassafy.aro.databinding.FragmentSplashBinding
 import com.nassafy.aro.ui.view.BaseFragment
+import com.nassafy.aro.ui.view.login.viewmodel.LoginActivityViewModel
 import com.nassafy.aro.ui.view.main.MainActivity
 import com.nassafy.aro.util.NetworkResult
 import com.nassafy.aro.util.showSnackBarMessage
@@ -25,11 +28,12 @@ class SplashFragment : BaseFragment<FragmentSplashBinding>(FragmentSplashBinding
 
     // viewModel
     private val splashViewModel: SplashViewModel by viewModels()
-
+    private val loginActivityViewModel: LoginActivityViewModel by activityViewModels()
 
     // Animation
     private lateinit var splash_top: android.view.animation.Animation
     private lateinit var splash_bottom: android.view.animation.Animation
+
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -39,26 +43,34 @@ class SplashFragment : BaseFragment<FragmentSplashBinding>(FragmentSplashBinding
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         // JWT 토큰이 있는지 확인을 먼저하고,
         // 토큰이 있을 경우 서버에 보냄.
         postAccessTokenGetUserDataResponseLiveDataObserve()
 
-        // For Animation
-        splash_top = AnimationUtils.loadAnimation(mContext, R.anim.splash_top)
-        splash_bottom = AnimationUtils.loadAnimation(mContext, R.anim.splash_bottom)
-
-        CoroutineScope(Dispatchers.IO).launch {
-            binding.logoImageview.animation = splash_top
-            binding.splashLogoTextTextview.animation = splash_top
-            binding.splashLogoTextTextview.animation = splash_top
-            delay(2000)
-
-            withContext(Dispatchers.Main) {
-                binding.splashProgressbar.visibility = View.VISIBLE
-                binding.splashProgressbar.isVisible = true
+        Log.d("ssafy/login/github", loginActivityViewModel.isTriedGithubLogin.toString())
+        when (loginActivityViewModel.isTriedGithubLogin) {
+            true -> {
+                findNavController().navigate(R.id.action_splashFragment_to_LoginFragment)
             }
+            false -> {
+                // For Animation
+                splash_top = AnimationUtils.loadAnimation(mContext, R.anim.splash_top)
+                splash_bottom = AnimationUtils.loadAnimation(mContext, R.anim.splash_bottom)
 
-            splashViewModel.postAccessTokenGetUserData()
+                CoroutineScope(Dispatchers.IO).launch {
+                    binding.logoImageview.animation = splash_top
+                    binding.splashLogoTextTextview.animation = splash_top
+                    binding.splashLogoTextTextview.animation = splash_top
+                    delay(2000)
+
+                    withContext(Dispatchers.Main) {
+                        binding.splashProgressbar.visibility = View.VISIBLE
+                        binding.splashProgressbar.isVisible = true
+                    }
+
+                    splashViewModel.postAccessTokenGetUserData()
+                }}
         }
     } // End of onViewCreated
 

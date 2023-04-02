@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nassafy.aro.data.dto.GithubAccessTokenResponse
 import com.nassafy.aro.data.dto.TokenResponse
 import com.nassafy.aro.domain.repository.UserAccessRepository
 import com.nassafy.aro.util.NetworkResult
@@ -33,6 +34,23 @@ class LoginFragmentViewModel @Inject constructor(
         }
         Log.d("ssafy/coroutine", "2")
         job.join()
+    }
+
+    suspend fun getAccessToken(code: String): String {
+        var networkResult: NetworkResult<GithubAccessTokenResponse> = NetworkResult.Loading()
+        val job = viewModelScope.launch {
+            networkResult = userAccessRepository.getAccessToken(code)
+        }
+        job.join()
+        var accessToken = ""
+        when (networkResult) {
+            is NetworkResult.Success -> {
+                accessToken = networkResult.data!!.access_token
+            }
+            is NetworkResult.Error -> { }
+            is NetworkResult.Loading -> { }
+        }
+        return accessToken
     }
 
 }

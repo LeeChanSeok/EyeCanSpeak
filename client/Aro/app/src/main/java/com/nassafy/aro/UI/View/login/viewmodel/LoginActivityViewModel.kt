@@ -16,6 +16,9 @@ class LoginActivityViewModel @Inject constructor(
     private val userAccessRepository: UserAccessRepository
 ) : ServiceViewModel() {
 
+    var isTriedGithubLogin = false
+    var githubCode = ""
+
     var providerType: String = "LOCAL"
     var email: String = ""
     var password: String? = null
