@@ -10,8 +10,12 @@ import retrofit2.http.Path
 interface AuroraApi {
     // https://j8d106.p.ssafy.io/api/
 
-    @GET("/api/attractions/all")
-    suspend fun getAllPlaces() : Response<List<PlaceItem>>
+
+    @GET("api/attractions/probability/{dateString}/{hour}")
+    suspend fun getAllPlaces(
+        @Path("dateString") dateString: String,
+        @Path("hour") hour: Int
+    ) : Response<List<PlaceItem>>
 
     @GET("api/forecast/{dateString}/{hour}")
     suspend fun getCurrentKpIndex(

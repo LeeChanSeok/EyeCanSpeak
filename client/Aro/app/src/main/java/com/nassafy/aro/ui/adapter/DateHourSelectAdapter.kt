@@ -12,7 +12,7 @@ class DateHourSelectAdapter(var itemList: MutableList<String>) :
     RecyclerView.Adapter<DateHourSelectAdapter.DateHourSelectViewHolder>() {
 
     inner class DateHourSelectViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var itemTitle: TextView = itemView.findViewById(R.id.dialog_date_hour_item_textview)
+        var itemTitle: TextView = itemView.findViewById(R.id.dialog_country_item_textview)
 
         fun bindInfo(item: String) {
             itemTitle.text = item
@@ -21,7 +21,7 @@ class DateHourSelectAdapter(var itemList: MutableList<String>) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DateHourSelectViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.dialog_date_hour_item, parent, false)
+            .inflate(R.layout.dialog_country_item, parent, false)
 
         return DateHourSelectViewHolder(view)
     } // End of onCreateViewHolder

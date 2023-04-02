@@ -34,10 +34,9 @@ class AuroraViewModel @Inject constructor(
 
     val placeItemListLiveData: LiveData<NetworkResult<List<PlaceItem>>>
         get() = auroraRepository.placeItemListLiveData
-
-    fun getPlaceItemList() {
+    fun getPlaceItemList(dateString: String, hour: Int) {
         viewModelScope.launch {
-            auroraRepository.getPlaceItemList()
+            auroraRepository.getPlaceItemList(dateString, hour)
         }
     }
 

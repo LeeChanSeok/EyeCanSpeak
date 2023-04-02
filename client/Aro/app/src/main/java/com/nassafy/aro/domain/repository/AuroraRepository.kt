@@ -21,8 +21,8 @@ class AuroraRepository @Inject constructor(
     val placeItemListLiveData : LiveData<NetworkResult<List<PlaceItem>>>
         get () = _placeItemListLiveData
 
-    suspend fun getPlaceItemList() {
-        val response = headerAuroraApi.getAllPlaces()
+    suspend fun getPlaceItemList(dateString: String, hour: Int) {
+        val response = headerAuroraApi.getAllPlaces(dateString, hour)
         _placeItemListLiveData.postValue(NetworkResult.Loading())
         when {
             response.isSuccessful && response.body() != null -> {

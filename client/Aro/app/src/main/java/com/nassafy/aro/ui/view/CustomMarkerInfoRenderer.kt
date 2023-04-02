@@ -55,7 +55,7 @@ class CustomMarkerInfoRenderer(
 //                val currentWeatherLiveData = auroraViewModel.currentWeatherLiveData
                 val resultPicture: Deferred<Int> = async {
                     val picasso = Picasso.get()
-                        .load(placeItem.mapImage)
+                        .load(placeItem.image)
                         .resize(infoImageView!!.width, infoImageView.height)
                         .centerCrop()
                         .noFade()
@@ -63,26 +63,9 @@ class CustomMarkerInfoRenderer(
                             override fun onSuccess() {
                                 when {
                                     marker.isInfoWindowShown -> {
-                                                    infoTextView.text = "${marker.position}"
+                                                    infoTextView.text = "${placeItem.prob}%"
                                                      infoLinearLayout.visibility = View.VISIBLE
                                                     marker.showInfoWindow()
-//                                        currentWeatherLiveData.observeForever { result ->
-//                                            when (result) {
-//                                                is NetworkResult.Success -> {
-//                                                    val weatherResponse = result.data
-//                                                    infoTextView.text = weatherResponse?.weather?.get(0)?.main ?: "NULL"
-//                                                    infoProgressBar.visibility = View.INVISIBLE
-//                                                    infoLinearLayout.visibility = View.VISIBLE
-////                                                    infoImageView.visibility = View.VISIBLE
-////                                                    infoTextView.visibility = View.VISIBLE
-//                                                    marker.showInfoWindow()
-//                                                }
-//                                                is NetworkResult.Error -> {
-//                                                    Log.e(TAG, "Error")
-//                                                }
-//                                                is NetworkResult.Loading -> {}
-//                                            }
-//                                        }
                                     }
                                 }
                             }

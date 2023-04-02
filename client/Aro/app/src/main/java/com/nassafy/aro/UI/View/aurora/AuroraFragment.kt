@@ -130,7 +130,9 @@ class AuroraFragment : BaseFragment<FragmentAuroraBinding>(FragmentAuroraBinding
             when (it) {
                 is NetworkResult.Success -> {
                     if (mMap != null && it.data != null) {
+                        mClusterManager.clearItems()
                         mClusterManager.addItems(it.data)
+                        mClusterManager.cluster()
                         // set Start Location
                         mMap!!.animateCamera(
                             CameraUpdateFactory.newLatLngZoom(
@@ -153,7 +155,7 @@ class AuroraFragment : BaseFragment<FragmentAuroraBinding>(FragmentAuroraBinding
     private fun getData(dateString: String, hour: Int) {
         auroraViewModel.getCurrentKpIndex(dateString, hour)
         auroraViewModel.getKpAndProbsLiveData(dateString, hour)
-        auroraViewModel.getPlaceItemList()
+        auroraViewModel.getPlaceItemList(dateString, hour)
     }
 
     private fun initView() {
@@ -176,8 +178,6 @@ class AuroraFragment : BaseFragment<FragmentAuroraBinding>(FragmentAuroraBinding
             )
 
         binding.dateHourLinearlayout.setOnClickListener {
-            Log.d(TAG, "date: $dateList")
-            Log.d(TAG, "hour: $hourList")
             val dateHourSelectDialog = DateHourSelectDialog(dateList, hourList)
             closeBottomSheet()
             dateHourSelectDialog.show(
@@ -309,10 +309,6 @@ class AuroraFragment : BaseFragment<FragmentAuroraBinding>(FragmentAuroraBinding
         Log.d(TAG, "changeDateTime: $utcString, ${utcNow.hour}")
 
         getData(utcString, utcNow.hour)
-
-        initBottomSheetChart(getChartHourLabel(selectedDate, now), kpWithProbs.kps)
-        binding.bottomSheet.kpLinechart.notifyDataSetChanged()
-        binding.bottomSheet.kpLinechart.invalidate()
     } // End of setDateTimeLinearLayoutText
 
     private fun closeBottomSheet() {
@@ -387,15 +383,6 @@ class AuroraFragment : BaseFragment<FragmentAuroraBinding>(FragmentAuroraBinding
 //        auroraViewModel.getPlaceItemList()
     } // End of setClusterManager
 
-
-    private fun getCurrentWeather(lat: Float, lng: Float) {
-        CoroutineScope(Dispatchers.Main).launch {
-            withContext(Dispatchers.Main) {
-                auroraViewModel.getCurrentWeather(lat, lng)
-            }
-        }
-    }
-
     // override OnChartValueSelectedListener
     override fun onValueSelected(e: Entry?, h: Highlight?) {
     } // End of onValueSelected
@@ -405,14 +392,10 @@ class AuroraFragment : BaseFragment<FragmentAuroraBinding>(FragmentAuroraBinding
     } // End of onNothingSelected
 
     override fun onClusterItemClick(item: PlaceItem?): Boolean {
-        if (item != null) {
-            getCurrentWeather(item.longitude, item.longitude)
-        }
         return false
     } // End of onClusterItemClick
 
     override fun onInfoWindowClose(marker: Marker) {
-        Log.d(TAG, "onInfoWindowClose: ${marker.title}")
     }
 
     override fun onDestroyView() {
