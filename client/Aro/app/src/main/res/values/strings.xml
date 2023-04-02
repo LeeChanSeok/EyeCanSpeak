@@ -120,6 +120,7 @@
     <string name="country_name_russia_text">러시아</string>
     <string name="country_name_norway_text">노르웨이</string>
     <string name="country_name_sweden_text">스웨덴</string>
+    <string name="country">국가</string>
 
     <!-- Meteor Shower -->
     <string name="meteor_not_ready_text">준비 중입니다</string>

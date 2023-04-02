@@ -1,5 +1,6 @@
 package com.nassafy.aro.ui.adapter
 
+import android.content.Context
 import android.transition.*
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import com.nassafy.aro.R
 import com.nassafy.aro.data.dto.MeteorShower
@@ -14,8 +17,9 @@ import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.lang.Integer.max
 
-class MeteorShowerAdapter(var itemList: MutableList<MeteorShower>) :
+class MeteorShowerAdapter(var recyclerView: RecyclerView, var itemList: MutableList<MeteorShower>) :
     RecyclerView.Adapter<MeteorShowerAdapter.ViewHolder>() {
     private var expandedPosition = -1
     private var prevExpandedPosition = -1
@@ -91,9 +95,27 @@ class MeteorShowerAdapter(var itemList: MutableList<MeteorShower>) :
 
                 notifyItemChanged(adapterPos)
                 notifyItemChanged(prevExpandedPosition)
+
+                recyclerView.post {
+                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                    val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+                    val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+
+                    if (adapterPos <= firstVisibleItemPosition || adapterPos >= lastVisibleItemPosition) {
+                        val scrollToPosition = if (!isExpanded) {
+                            max(0, adapterPos - 1)
+                        } else {
+                            adapterPos
+                        }
+//                        layoutManager.scrollToPositionWithOffset(scrollToPosition, 0)
+                        layoutManager.scrollToPositionWithOffset(scrollToPosition, 0)
+
+                    }
+                }
             }
         }
     }
 
     override fun getItemCount(): Int = itemList.size
+
 }

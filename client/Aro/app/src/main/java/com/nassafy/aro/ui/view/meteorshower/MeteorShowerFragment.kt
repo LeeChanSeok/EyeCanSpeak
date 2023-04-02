@@ -9,14 +9,17 @@ import androidx.recyclerview.widget.SimpleItemAnimator
 import com.nassafy.aro.R
 import com.nassafy.aro.data.dto.MeteorShower
 import com.nassafy.aro.databinding.FragmentMeteorShowerBinding
+import com.nassafy.aro.ui.adapter.DateHourSelectAdapter
 import com.nassafy.aro.ui.adapter.MeteorShowerAdapter
 import com.nassafy.aro.ui.view.BaseFragment
+import com.nassafy.aro.ui.view.dialog.MeteorCountrySelectDialog
 import com.nassafy.aro.ui.view.main.MainActivity
 import com.nassafy.aro.util.showSnackBarMessage
 import com.nassafy.aro.util.showToastView
 
 class MeteorShowerFragment : BaseFragment<FragmentMeteorShowerBinding>(FragmentMeteorShowerBinding::inflate) {
     private lateinit var meteorShowerAdapter: MeteorShowerAdapter
+    private lateinit var countryAdapter: DateHourSelectAdapter
     private var country = "대한민국"
 
 
@@ -25,12 +28,17 @@ class MeteorShowerFragment : BaseFragment<FragmentMeteorShowerBinding>(FragmentM
 
         var mLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
-        meteorShowerAdapter = MeteorShowerAdapter(itemList)
+        meteorShowerAdapter = MeteorShowerAdapter(binding.meteorShowerRecyclerview, itemList)
 
         binding.meteorShowerCountryTextview.apply {
-            text = country
+            text = countryList[0]
             setOnClickListener {
-                it.showSnackBarMessage("this")
+                val meteorCountrySelectDialog = MeteorCountrySelectDialog(
+                    countryList
+                )
+                meteorCountrySelectDialog.show(
+                    childFragmentManager, "MeteorCountrySelectDialog"
+                )
             }
         }
 
@@ -46,6 +54,13 @@ class MeteorShowerFragment : BaseFragment<FragmentMeteorShowerBinding>(FragmentM
             addItemDecoration(DividerItemDecoration(requireContext(), RecyclerView.VERTICAL))
         }
     } // End of onViewCreated
+
+    fun changeCountry(country: String) {
+        binding.meteorShowerCountryTextview.text = country
+
+        // TODO : GET DATA and Change Adapter List
+    }
+
 
     companion object {
         var item1 = MeteorShower(
@@ -98,6 +113,7 @@ class MeteorShowerFragment : BaseFragment<FragmentMeteorShowerBinding>(FragmentM
             subImage = "https://i.pinimg.com/564x/40/26/93/402693100bf16bdc34c71ae7fb17ab21.jpg"
         )
         var itemList = arrayListOf<MeteorShower>(item1, item2, item3, item4, item5, item6, item7)
+        var countryList = arrayListOf<String>("대한민국", "아이슬란드", "가나", "일본", "중국", "미국", "영국", "프랑스")
     }
 
 }
