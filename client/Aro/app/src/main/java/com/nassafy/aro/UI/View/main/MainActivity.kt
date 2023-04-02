@@ -23,11 +23,14 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.nassafy.aro.Application
 import com.nassafy.aro.R
 import com.nassafy.aro.databinding.ActivityMainBinding
 import com.nassafy.aro.service.AroFCM
+import com.nassafy.aro.ui.view.login.LoginActivity
 import com.nassafy.aro.util.NetworkResult
 import com.nassafy.aro.util.showSnackBarMessage
+import com.nassafy.aro.util.showToastView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -250,6 +253,28 @@ class MainActivity : AppCompatActivity() {
             } // End of when
         } // End of getAuroraOptionNetworkResultLiveData.observe
 
+        mainActivityViewModel.logoutNetworkResultLiveData.observe(this) {
+            when(it) {
+                is NetworkResult.Success -> {
+                    // TODO
+//                    val layout = layoutInflater.inflate(R.layout.custom_toast_delete_account, null)
+//                    requireContext().showToastView(layout)
+//                    binding.root.showSnackBarMessage("로그아웃 하였습니다!")
+//                    Application.sharedPreferencesUtil.addUserAccessToken("")
+//                    Application.sharedPreferencesUtil.addUserRefreshToken("")
+//                    val intent = Intent(this, LoginActivity::class.java)
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//                    startActivity(intent)
+                }
+                is NetworkResult.Error -> {
+                    binding.root.showSnackBarMessage("로그아웃에 실패했습니다.")
+                }
+                is NetworkResult.Loading -> {
+                }
+            }
+        }
+
     }
 
     private fun initDrawer() {
@@ -269,13 +294,27 @@ class MainActivity : AppCompatActivity() {
                 val nickname: TextView = findViewById<View>(R.id.nickname_textview) as TextView
                 val email: TextView = findViewById<View>(R.id.email_textview) as TextView
                 val closeButton: ImageButton = findViewById(R.id.close_button)
-
+                val logoutTextView: TextView = findViewById(R.id.logout_textview)
                 // TODO : Add Nickname and Email from User Data
 //                nickname.text = user.nickname
 //                email.text = user.email
 
                 closeButton.setOnClickListener {
                     closeDrawer()
+                }
+                logoutTextView.setOnClickListener {
+                    binding.root.showSnackBarMessage("로그아웃 하였습니다!")
+                    Application.sharedPreferencesUtil.addUserAccessToken("")
+                    Application.sharedPreferencesUtil.addUserRefreshToken("")
+                    val intent = Intent(this@MainActivity, LoginActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(intent)
+//                    mainActivityViewModel.logout( // todo
+//                        "Bearer",
+//                        Application.sharedPreferencesUtil.getUserAccessToken(),
+//                        Application.sharedPreferencesUtil.getUserRefreshToken()
+//                    )
                 }
             }
         }

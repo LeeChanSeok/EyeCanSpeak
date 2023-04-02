@@ -189,7 +189,9 @@ class UserAccessRepository @Inject constructor(private val userAccessApi: UserAc
         val response = userAccessApi.snsLogin(JsonObject().apply {
             addProperty("providerType", providerType)
             addProperty("accessToken", accessToken)
+            Log.d("ssafy/sns/request", this.toString())
         })
+        Log.d("ssafy/sns/response", response.toString())
         _userSnsLoginNetworkResultLiveData.setNetworkResult(response)
     }
 

@@ -67,28 +67,33 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                             loginFragmentViewModel.apply {
                                 snsLogin(providerType, naverAccessToken)
                                 val networkResult = userSnsLoginNetworkResultLiveData.value!!
-                                when (networkResult) {
-                                    is NetworkResult.Success -> {
-                                        when (networkResult.data!!.signup) {
-                                            true -> {
-                                                loginByIdPassword(
-                                                    networkResult.data!!.providerType,
-                                                    networkResult.data!!.email,
-                                                    null
-                                                )
-                                            }
-                                            false -> {
-                                                loginActivityViewModel.email =
-                                                    networkResult.data!!.email
-                                                findNavController().navigate(R.id.action_loginFragment_to_joinEmailFragment)
+                                Log.d("ssafy/snslogin/networkResult", networkResult.data.toString())
+                                launch(Dispatchers.Main) {
+                                    when (networkResult) {
+                                        is NetworkResult.Success -> {
+                                            when (networkResult.data!!.signup) {
+                                                true -> {
+                                                    loginByIdPassword(
+                                                        networkResult.data!!.providerType,
+                                                        networkResult.data!!.email,
+                                                        null
+                                                    )
+                                                }
+                                                false -> {
+                                                    loginActivityViewModel.providerType =
+                                                        networkResult.data!!.providerType
+                                                    loginActivityViewModel.email =
+                                                        networkResult.data!!.email
+                                                    findNavController().navigate(R.id.action_loginFragment_to_joinNicknameFragment)
+                                                }
                                             }
                                         }
-                                    }
-                                    is NetworkResult.Error -> {
-                                        requireView().showSnackBarMessage("네이버 로그인에 실패했습니다.")
-                                    }
-                                    is NetworkResult.Loading -> {
-                                        // Todo loading progressBar
+                                        is NetworkResult.Error -> {
+                                            requireView().showSnackBarMessage("네이버 로그인에 실패했습니다.")
+                                        }
+                                        is NetworkResult.Loading -> {
+                                            // Todo loading progressBar
+                                        }
                                     }
                                 }
                             }

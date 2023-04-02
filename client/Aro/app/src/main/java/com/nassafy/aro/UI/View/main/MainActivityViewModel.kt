@@ -18,9 +18,16 @@ class MainActivityViewModel @Inject constructor(private val mainRepository: Main
     var alarmOption: Boolean = false
     var auroraDisplayOption: Boolean = false
 
+    val logoutNetworkResultLiveData get() = mainRepository.logoutNetworkResultLiveData
     val userInfo: LiveData<NetworkResult<UserTest>> get() = mainRepository.userInfo
     val getAlarmOptionNetworkResultLiveData get() = mainRepository.getAlarmOptionNetworkResultLiveData
     val getAuroraOptionNetworkResultLiveData get() = mainRepository.getAuroraDisplayOptionNetworkResultLiveData
+
+    fun logout(grantType: String, accessToken: String, refreshToken: String) {
+        viewModelScope.launch {
+            mainRepository.logout(grantType, accessToken, refreshToken)
+        }
+    }
 
     fun getUserInfo(fcmToken: String) {
         viewModelScope.launch {
