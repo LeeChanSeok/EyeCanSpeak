@@ -11,14 +11,47 @@ import javax.inject.Inject
 
 class MainRepository @Inject constructor(private val mainApi: MainApi) {
 
+    private val _logoutNetworkResultLiveData = MutableLiveData<NetworkResult<Unit>>()
+    val logoutNetworkResultLiveData: LiveData<NetworkResult<Unit>> = _logoutNetworkResultLiveData
+
     private val _userInfo = MutableLiveData<NetworkResult<UserTest>>()
     val userInfo: LiveData<NetworkResult<UserTest>> get() = _userInfo
 
     private val _getAlarmOptionNetworkResultLiveData = MutableLiveData<NetworkResult<Boolean>>()
     val getAlarmOptionNetworkResultLiveData: LiveData<NetworkResult<Boolean>> get() = _getAlarmOptionNetworkResultLiveData
 
-    private val _getAuroraDisplayOptionNetworkResultLiveData = MutableLiveData<NetworkResult<Boolean>>()
+    private val _getAuroraDisplayOptionNetworkResultLiveData =
+        MutableLiveData<NetworkResult<Boolean>>()
     val getAuroraDisplayOptionNetworkResultLiveData: LiveData<NetworkResult<Boolean>> get() = _getAuroraDisplayOptionNetworkResultLiveData
+
+    suspend fun logout(grantType: String, accessToken: String, refreshToken: String) {
+        val response = mainApi.logout(
+            JsonObject().apply {
+                addProperty("grantType", grantType)
+                addProperty("accessToken", accessToken)
+                addProperty("refreshToken", refreshToken)
+            }
+        )
+        _logoutNetworkResultLiveData.postValue(NetworkResult.Loading())
+        try {
+            when {
+                response.isSuccessful -> {
+                    _logoutNetworkResultLiveData.postValue(
+                        NetworkResult.Success(Unit)
+                    ) // End of postValue
+                } // End of response.isSuccessful
+                response.errorBody() != null -> {
+                    _logoutNetworkResultLiveData.postValue(
+                        NetworkResult.Error(
+                            response.errorBody()!!.string()
+                        )
+                    )
+                } // End of response.errorBody
+            } // End of when
+        } catch (e: java.lang.Exception) {
+            Log.e("ssafy", "getServerCallTest: ${e.message}")
+        }
+    }
 
     suspend fun getUserInfo(fcmToken: String) {
         Log.d("ssafy/getInfo", fcmToken)
@@ -57,7 +90,11 @@ class MainRepository @Inject constructor(private val mainApi: MainApi) {
                     ) // End of postValue
                 } // End of response.isSuccessful
                 response.errorBody() != null -> {
-                    _getAlarmOptionNetworkResultLiveData.postValue(NetworkResult.Error(response.errorBody()!!.string()))
+                    _getAlarmOptionNetworkResultLiveData.postValue(
+                        NetworkResult.Error(
+                            response.errorBody()!!.string()
+                        )
+                    )
                 } // End of response.errorBody
             } // End of when
         } catch (e: java.lang.Exception) {
@@ -77,7 +114,11 @@ class MainRepository @Inject constructor(private val mainApi: MainApi) {
                     ) // End of postValue
                 } // End of response.isSuccessful
                 response.errorBody() != null -> {
-                    _getAuroraDisplayOptionNetworkResultLiveData.postValue(NetworkResult.Error(response.errorBody()!!.string()))
+                    _getAuroraDisplayOptionNetworkResultLiveData.postValue(
+                        NetworkResult.Error(
+                            response.errorBody()!!.string()
+                        )
+                    )
                 } // End of response.errorBody
             } // End of when
         } catch (e: java.lang.Exception) {
