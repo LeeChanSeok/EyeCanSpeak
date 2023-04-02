@@ -23,6 +23,7 @@ import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
+import com.drew.imaging.ImageMetadataReader
 import com.nassafy.aro.R
 import com.nassafy.aro.databinding.FragmentStampValidateBinding
 import com.nassafy.aro.ui.view.BaseFragment
@@ -154,8 +155,18 @@ class StampValidateFragment :
             val file = File(
                 ChangeMultipartUtil().changeAbsoluteyPath(imageUri, requireActivity())
             )
-            val exif = ExifInterface(file)
 
+            Log.d(TAG, "file : ${file}")
+
+            val metadata = ImageMetadataReader.readMetadata(file)
+            for (directory in metadata.directories) {
+                for (tag in directory.tags) {
+                    Log.d(TAG, "${tag.tagName}: ${tag.description}")
+                }
+            }
+
+
+            val exif = ExifInterface(file)
             Picasso.get().load(imageUri).fit().centerCrop().into(binding.stampValidateImageview)
 
             // 위경도 좌표가 있을 때만,
@@ -180,7 +191,6 @@ class StampValidateFragment :
                 withContext(Dispatchers.Main) {
                     loadingViewOn()
                 }
-
                 sendValidateImage(body)
             }
         }
@@ -320,7 +330,6 @@ class StampValidateFragment :
                 is NetworkResult.Success -> {
                     if (it.data == 201) {
                         CoroutineScope(Dispatchers.IO).launch {
-                            Log.d(TAG, "선택된 명소ID : ${stampNavViewModel.nowSelectedAttractionId}")
                             validateViewModel.postImageValidateSuccess(stampNavViewModel.nowSelectedAttractionId)
                         }
                     }

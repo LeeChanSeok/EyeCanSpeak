@@ -36,7 +36,6 @@ class CountryPlaceViewPagerAdapter(
     // Animation
     private lateinit var stamp_anim: android.view.animation.Animation
 
-
     inner class CountryPlaceHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bindInfo(data: UserStampPlace) {
 //            binding.stampCountryNameTextview.text = data.countryName.toString()
@@ -77,7 +76,7 @@ class CountryPlaceViewPagerAdapter(
                     stamp_anim = AnimationUtils.loadAnimation(mContext, R.anim.stamp_anim)
                     holder.itemView.findViewById<ImageView>(R.id.stamp_country_place_stamp_imageview).animation =
                         stamp_anim
-                    
+
                     // 스탬프 아이콘 삽입
                     val imageLoader = ImageLoader.Builder(mContext).componentRegistry {
                         add(SvgDecoder(mContext))
