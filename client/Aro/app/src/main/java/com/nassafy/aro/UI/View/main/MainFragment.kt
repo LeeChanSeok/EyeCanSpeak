@@ -30,27 +30,8 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
         mContext = context
     }
 
-    private fun checkPermission() {
-        TedPermission.create()
-            .setPermissionListener(object : PermissionListener {
-                override fun onPermissionGranted() {
-                    Log.d(TAG, "onPermissionGranted: 권한이 허용됨")
-
-                }
-
-                override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {
-                    Log.d(TAG, "onPermissionDenied: 권한이 허용되지 않음")
-                }
-            })
-            .setDeniedMessage("갤러리 권한을 혀용해주세요")
-            .setPermissions(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            .setPermissions(android.Manifest.permission.READ_EXTERNAL_STORAGE)
-    } // End of checkPermission
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        //checkPermission()
 
         binding.viewpager.apply {
             adapter = ViewPagerAdapter(childFragmentManager, lifecycle)

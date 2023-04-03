@@ -23,7 +23,6 @@ data class Place constructor(
     }
 
     override fun getSnippet(): String {
-        // TODO: 확률이 들어가야하지 않나???
         return placeName
     }
 

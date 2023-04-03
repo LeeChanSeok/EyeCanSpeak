@@ -9,7 +9,6 @@ import com.google.maps.android.clustering.Cluster
 import com.google.maps.android.clustering.ClusterManager
 import com.google.maps.android.clustering.view.DefaultClusterRenderer
 import com.nassafy.aro.R
-import com.nassafy.aro.data.dto.Place
 import com.nassafy.aro.data.dto.PlaceItem
 import com.nassafy.aro.util.generateBitmapDescriptorFromRes
 
