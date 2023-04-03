@@ -108,7 +108,6 @@ fun CountryPlaceLazyColumnItem(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    //TODO change text
                     Box(contentAlignment = Alignment.Center) {
                         Text(
                             text = place.placeName,

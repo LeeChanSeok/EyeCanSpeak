@@ -8,17 +8,27 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
 import com.nassafy.aro.R
 import com.nassafy.aro.data.dto.PlaceItem
 import com.nassafy.aro.databinding.FragmentMyPageBinding
 import com.nassafy.aro.ui.view.BaseFragment
+import com.nassafy.aro.ui.view.custom.CountryPlaceChips
+import com.nassafy.aro.ui.view.custom.CountryPlaceLazyColumn
+import com.nassafy.aro.ui.view.custom.NanumSqaureFont
 import com.nassafy.aro.ui.view.dialog.OkDialog
 import com.nassafy.aro.ui.view.main.MainActivity
 import com.nassafy.aro.ui.view.main.MainActivityViewModel
@@ -209,6 +219,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
         findNavController().navigate(action)
     } // End of moveToFavoriteRegisterFragment
 
+    @OptIn(ExperimentalPagerApi::class)
     fun initComposeView() {
         CoroutineScope(Dispatchers.IO).launch {
             myPageFragmentViewModel.getFavoriteList()
@@ -229,16 +240,59 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
                 }
 
                 MaterialTheme {
-                    Column(
-                        modifier = Modifier
-                            .height(this.height.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        MyAuroraFavorite(
-                            auroraFavoriteList = auroraFavoriteList,
-                            myPageFragmentViewModel = myPageFragmentViewModel
-                        )
-                    } // End of Column
+                    HorizontalPager(count = 2, modifier = Modifier.height(this.height.dp)) { page ->
+                        when (page) {
+                            0 -> {
+                                when (myPageFragmentViewModel.auroraService) {
+                                    true -> {
+                                        MyAuroraFavorite(
+                                            auroraFavoriteList = auroraFavoriteList,
+                                            myPageFragmentViewModel = myPageFragmentViewModel
+                                        )
+                                    }
+                                    false -> {
+                                        Box(
+                                            contentAlignment = Alignment.Center
+                                        ) {
+                                            Text(
+                                                text = getString(R.string.service_aurora_not_selected_textview_text),
+                                                style = TextStyle(
+                                                    fontFamily = NanumSqaureFont,
+                                                    fontWeight = FontWeight.Bold,
+                                                    fontSize = 24.sp,
+                                                    textAlign = TextAlign.Center
+                                                ),
+                                                color = Color.White
+                                            ) // End of Text
+                                        }
+                                    }
+                                } // End of when
+                            } // End of when(page) : page -> 0
+                            1 -> {
+                                when (myPageFragmentViewModel.meteorService) {
+                                    true -> {
+                                        // TODO 유성우
+                                    }
+                                    false -> {
+                                        Box(
+                                            contentAlignment = Alignment.Center
+                                        ) {
+                                            Text(
+                                                text = getString(R.string.service_meteor_not_selected_textview_text),
+                                                style = TextStyle(
+                                                    fontFamily = NanumSqaureFont,
+                                                    fontWeight = FontWeight.Bold,
+                                                    fontSize = 24.sp,
+                                                    textAlign = TextAlign.Center
+                                                ),
+                                                color = Color.White
+                                            ) // End of Text
+                                        }
+                                    }
+                                } // End of when
+                            } // End of when(page) : page -> 1
+                        }
+                    } // End of HorizontalPager
                 } // End of MaterialTheme
             } // End of setContent
         } // ENd of binding.myFavoriteComposeview.apply
