@@ -157,26 +157,5 @@ class MainRepository @Inject constructor(private val mainApi: MainApi) {
         }
     } // End of getCloudDisplayOption
 
-    suspend fun getSelectedServiceList() {
-        val response = myPageApi.getSelectedService()
-        _getSelectedServiceNetworkResultLiveData.postValue(NetworkResult.Loading())
-        try {
-            when {
-                response.isSuccessful -> {
-                    _getSelectedServiceNetworkResultLiveData.postValue(
-                        NetworkResult.Success(
-                            response.body()!!
-                        )
-                    )
-                }
-                response.errorBody() != null -> {
-                    _getSelectedServiceNetworkResultLiveData.postValue(NetworkResult.Error(response.errorBody()!!.string()))
-                }
-            } // End of when
-        } catch (e: java.lang.Exception) {
-            Log.e("ssafy", "getServerCallTest: ${e.message}")
-        } // End of try-catch
-    } // End of getSelectedServiceList
-
 
 } // End of MainRepository class
