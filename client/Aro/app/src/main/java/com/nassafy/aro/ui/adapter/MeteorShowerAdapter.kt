@@ -70,6 +70,7 @@ class MeteorShowerAdapter(var recyclerView: RecyclerView, var itemList: MutableL
                     .fit().centerCrop()
                 subImagePicasso.into(holder.subImageView)
             }
+            prevExpandedPosition = holder.adapterPosition
         }
 
         holder.nameTextView.text = item.name
@@ -78,9 +79,7 @@ class MeteorShowerAdapter(var recyclerView: RecyclerView, var itemList: MutableL
 
         holder.subItemView.visibility = if (isExpanded) View.VISIBLE else View.GONE
         holder.itemView.isActivated = isExpanded
-
-        if (isExpanded) prevExpandedPosition = holder.adapterPosition
-
+        
         holder.itemView.setOnClickListener {
             val adapterPos = holder.adapterPosition
             if (adapterPos != RecyclerView.NO_POSITION) {
@@ -96,22 +95,6 @@ class MeteorShowerAdapter(var recyclerView: RecyclerView, var itemList: MutableL
                 notifyItemChanged(adapterPos)
                 notifyItemChanged(prevExpandedPosition)
 
-                recyclerView.post {
-                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-                    val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
-                    val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
-
-                    if (adapterPos <= firstVisibleItemPosition || adapterPos >= lastVisibleItemPosition) {
-                        val scrollToPosition = if (!isExpanded) {
-                            max(0, adapterPos - 1)
-                        } else {
-                            adapterPos
-                        }
-//                        layoutManager.scrollToPositionWithOffset(scrollToPosition, 0)
-                        layoutManager.scrollToPositionWithOffset(scrollToPosition, 0)
-
-                    }
-                }
             }
         }
     }

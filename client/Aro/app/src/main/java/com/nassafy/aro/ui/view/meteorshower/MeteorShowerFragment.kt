@@ -19,7 +19,6 @@ import com.nassafy.aro.util.showToastView
 
 class MeteorShowerFragment : BaseFragment<FragmentMeteorShowerBinding>(FragmentMeteorShowerBinding::inflate) {
     private lateinit var meteorShowerAdapter: MeteorShowerAdapter
-    private lateinit var countryAdapter: DateHourSelectAdapter
     private var country = "대한민국"
 
 

@@ -59,7 +59,6 @@ class MeteorCountrySelectDialog(
 
     override fun onResume() {
         super.onResume()
-
         val width = ((context?.resources?.displayMetrics?.widthPixels ?: 0) * 0.9).toInt()
         val height = WindowManager.LayoutParams.WRAP_CONTENT
         dialog?.window?.setLayout(width, height)
