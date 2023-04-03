@@ -1,6 +1,5 @@
 package com.nassafy.aro.ui.view.main.stamp
 
-import android.app.Activity
 import android.app.Activity.*
 import android.content.ContentValues
 import android.content.Context
@@ -23,7 +22,6 @@ import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
-import com.drew.imaging.ImageMetadataReader
 import com.nassafy.aro.R
 import com.nassafy.aro.databinding.FragmentStampValidateBinding
 import com.nassafy.aro.ui.view.BaseFragment
@@ -172,7 +170,6 @@ class StampValidateFragment :
 //                }
 //            }
 
-
             val exif = ExifInterface(file)
             Picasso.get().load(imageUri).fit().centerCrop().into(binding.stampValidateImageview)
 
@@ -288,6 +285,7 @@ class StampValidateFragment :
 
         job.join()
 
+
         val result = address!!.indexOf("Stockholm")
         if (result != -1) {
             // 지역이 일치한다는 조건.
@@ -322,8 +320,17 @@ class StampValidateFragment :
         Log.d(TAG, "locality: ${address.locality}") // 유력 후보
         // Murmansk // Reykjavík //
 
+        // 아이슬란드
+        /*
+            Reykjavík
+
+         */
+
+
+
         Log.d(TAG, "subAdminArea: ${address.subAdminArea}")
         Log.d(TAG, "maxAddressLineIndex: ${address.maxAddressLineIndex}")
+        // locality를 사용하자.
 
         return address
     } // End of getAddressByCoordinates

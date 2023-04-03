@@ -30,9 +30,22 @@ class SharedPreferencesUtil(context: Context) {
         return preferences.getString(ACCESS_TOKEN, "").toString()
     } // End of getUserAccessToken
 
+    fun addFcmToken(fcm_token : String) {
+        val editor = preferences.edit()
+        editor.putString(FCM_TOKEN, fcm_token)
+        editor.apply()
+    } // End of addFcmToken
+
+    fun getFcmToken(): String {
+        return preferences.getString(FCM_TOKEN, "").toString()
+    } // End of getUserRefreshToken
+
+
+
     companion object {
         const val SHARED_PREFERENCES_NAME = "aro_preference"
         const val ACCESS_TOKEN = "access_token"
         const val REFRESH_TOKEN = "refresh_token"
+        const val FCM_TOKEN = "fcm_token"
     }
 } // End of SharedPreferencesUtil class

@@ -10,7 +10,7 @@ import retrofit2.http.POST
 interface MainApi {
 
     @POST("api/members/logout")
-    suspend fun logout(@Body requestBody: JsonObject) : Response<Unit>
+    suspend fun logout(@Body requestBody: JsonObject): Response<Unit>
 
     @POST("api/members/memberInfo")
     suspend fun getUserInfo(
