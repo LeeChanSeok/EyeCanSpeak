@@ -5,37 +5,41 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.material3.Text
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.nassafy.aro.Application
 import com.nassafy.aro.R
 import com.nassafy.aro.data.dto.PlaceItem
-import com.nassafy.aro.data.dto.UserTest
 import com.nassafy.aro.databinding.FragmentAroCountryPlaceSelectBinding
 import com.nassafy.aro.ui.adapter.CountrySpinnerAdapter
 import com.nassafy.aro.ui.view.BaseFragment
 import com.nassafy.aro.ui.view.custom.CountryPlaceChips
 import com.nassafy.aro.ui.view.custom.CountryPlaceLazyColumn
+import com.nassafy.aro.ui.view.custom.NanumSqaureFont
 import com.nassafy.aro.ui.view.login.viewmodel.JoinCountryPlaceSelectFragmentViewModel
 import com.nassafy.aro.ui.view.login.viewmodel.LoginActivityViewModel
 import com.nassafy.aro.ui.view.main.MainActivity
@@ -43,7 +47,6 @@ import com.nassafy.aro.util.NetworkResult
 import com.nassafy.aro.util.showSnackBarMessage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
-import org.json.JSONArray
 
 @AndroidEntryPoint
 class JoinCountryPlaceSelectFragment : BaseFragment<FragmentAroCountryPlaceSelectBinding>(
@@ -65,20 +68,67 @@ class JoinCountryPlaceSelectFragment : BaseFragment<FragmentAroCountryPlaceSelec
                 R.drawable.sign_up_button
             )
         )
-        CoroutineScope(Dispatchers.IO).launch {
-            val result: Deferred<Int> = async {
-                loginActivityViewModel.getCountryList()
-                0
-            }
-            result.await()
-        }
 
-        initObserve()
+        when (loginActivityViewModel.isAuroraServiceSelected) {
+            true -> {
+                initAuroraCountryPlaceObserve()
+                CoroutineScope(Dispatchers.IO).launch {
+                    val result: Deferred<Int> = async {
+                        loginActivityViewModel.getCountryList()
+                        0
+                    }
+                    result.await()
+                }
+                initSpinner(spinnerList)
+            }
+            false -> {
+                binding.selectCountryPlaceSpinner.isInvisible = true
+            }
+        }
+        initEssentialObserve()
         initView()
     }
 
+    private fun initEssentialObserve() {
+        joinCountryPlaceServiceSelectFragmentViewModel.userJoinNetworkResultLiveData.observe(this.viewLifecycleOwner) {
+            when (it) {
+                is NetworkResult.Success -> {
+                    when (loginActivityViewModel.placeListLiveData.value!!) {
+                        is NetworkResult.Success<List<PlaceItem>> -> {
+                            requireView().showSnackBarMessage("회원가입 성공!")
+                            Log.d("ssafy_pcs/it", it.toString())
+                            Log.d("ssafy_pcs/it.data", it.data.toString())
+                            Application.sharedPreferencesUtil.addUserAccessToken(
+                                it.data?.accessToken ?: ""
+                            )
+                            Application.sharedPreferencesUtil.addUserRefreshToken(
+                                it.data?.refreshToken ?: ""
+                            )
+                            val intent = Intent(requireContext(), MainActivity::class.java)
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            startActivity(intent)
+                        }
+                        is NetworkResult.Error<*> -> {
+                            requireView().showSnackBarMessage("서버 통신 에러 발생")
+                        }
+                        is NetworkResult.Loading<*> -> {
+                            Log.d("ssafy_pcs", "로딩 중..")
+                        }
+                    }
+                }
+                is NetworkResult.Error -> {
+                    requireView().showSnackBarMessage("서버 통신 에러 발생")
+                }
+                is NetworkResult.Loading -> {
+                    Log.d("ssafy_pcs", "로딩 중..")
+                }
+            }
+        } // End of userJoinNetworkResultLiveData.observe
+    }
+
+
     private fun initView() {
-        initSpinner(spinnerList)
         binding.nextButton.setOnClickListener {
 
             loginActivityViewModel.apply {
@@ -98,7 +148,8 @@ class JoinCountryPlaceSelectFragment : BaseFragment<FragmentAroCountryPlaceSelec
                 )
                 user.add(
                     "meteorPlaces",
-                    gson.toJsonTree(selectedMeteorPlaces.value?.map { it.placeId } ?: emptyList<PlaceItem>())
+                    gson.toJsonTree(selectedMeteorPlaces.value?.map { it.placeId }
+                        ?: emptyList<PlaceItem>())
                         .getAsJsonArray()
                 )
                 joinCountryPlaceServiceSelectFragmentViewModel.join(user)
@@ -136,7 +187,7 @@ class JoinCountryPlaceSelectFragment : BaseFragment<FragmentAroCountryPlaceSelec
             }// End of onItemSelectedListener
     } // End of initSpinner
 
-    private fun initObserve() {
+    private fun initAuroraCountryPlaceObserve() {
         loginActivityViewModel.countryListLiveData.observe(this.viewLifecycleOwner) {
             when (it) {
                 is NetworkResult.Success -> {
@@ -184,45 +235,11 @@ class JoinCountryPlaceSelectFragment : BaseFragment<FragmentAroCountryPlaceSelec
             loginActivityViewModel.selectedAuroraPlaceList.addAll(selectedAuroraPlaces)
         }
 
-        joinCountryPlaceServiceSelectFragmentViewModel.userJoinNetworkResultLiveData.observe(this.viewLifecycleOwner) {
-            when (it) {
-                is NetworkResult.Success -> {
-                    when (loginActivityViewModel.placeListLiveData.value!!) {
-                        is NetworkResult.Success<List<PlaceItem>> -> {
-                            requireView().showSnackBarMessage("회원가입 성공!")
-                            Log.d("ssafy_pcs/it", it.toString())
-                            Log.d("ssafy_pcs/it.data", it.data.toString())
-                            Application.sharedPreferencesUtil.addUserAccessToken(
-                                it.data?.accessToken ?: ""
-                            )
-                            Application.sharedPreferencesUtil.addUserRefreshToken(
-                                it.data?.refreshToken ?: ""
-                            )
-                            val intent = Intent(requireContext(), MainActivity::class.java)
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                            startActivity(intent)
-                        }
-                        is NetworkResult.Error<*> -> {
-                            requireView().showSnackBarMessage("서버 통신 에러 발생")
-                        }
-                        is NetworkResult.Loading<*> -> {
-                            Log.d("ssafy_pcs", "로딩 중..")
-                        }
-                    }
-                }
-                is NetworkResult.Error -> {
-                    requireView().showSnackBarMessage("서버 통신 에러 발생")
-                }
-                is NetworkResult.Loading -> {
-                    Log.d("ssafy_pcs", "로딩 중..")
-                }
-            }
-        } // End of userJoinNetworkResultLiveData.observe
 
     }
 
 
+    @OptIn(ExperimentalPagerApi::class)
     private fun initComposeView() {
         binding.countryPlaceComposeview.apply {
             // Dispose of the Composition when the view's LifecycleOwner
@@ -235,24 +252,75 @@ class JoinCountryPlaceSelectFragment : BaseFragment<FragmentAroCountryPlaceSelec
                     remember { loginActivityViewModel.selectedAuroraPlaceList }
                 // In Compose world
                 MaterialTheme {
-                    Column(
-                        modifier = Modifier
-                            .height(this.height.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        CountryPlaceChips(selectedAuroraPlaceList, loginActivityViewModel)
-                        Divider(
-                            modifier = Modifier
-                                .height(1.dp)
-                                .padding(horizontal = 30.dp),
-                            color = Color.White
-                        ) // End of Divider
-                        CountryPlaceLazyColumn(
-                            placeList,
-                            selectedAuroraPlaceList,
-                            loginActivityViewModel
-                        )
-                    } // End of Column
+                    HorizontalPager(count = 2, Modifier.height(this.height.dp)) { page ->
+                        when (page) {
+                            0 -> {
+                                when (loginActivityViewModel.isAuroraServiceSelected) {
+                                    true -> {
+                                        Column(
+                                            modifier = Modifier.fillMaxHeight(),
+                                            horizontalAlignment = Alignment.CenterHorizontally
+                                        ) {
+                                            CountryPlaceChips(
+                                                selectedAuroraPlaceList,
+                                                loginActivityViewModel
+                                            )
+                                            Divider(
+                                                modifier = Modifier
+                                                    .height(1.dp)
+                                                    .padding(horizontal = 30.dp),
+                                                color = Color.White
+                                            ) // End of Divider
+                                            CountryPlaceLazyColumn(
+                                                placeList,
+                                                selectedAuroraPlaceList,
+                                                loginActivityViewModel
+                                            )
+                                        } // End of Column
+                                    }
+                                    false -> {
+                                        Box(
+                                            contentAlignment = Alignment.Center
+                                        ) {
+                                            Text(
+                                                text = stringResource(R.string.service_aurora_not_selected_textview_text),
+                                                style = TextStyle(
+                                                    fontFamily = NanumSqaureFont,
+                                                    fontWeight = FontWeight.Bold,
+                                                    fontSize = 24.sp,
+                                                    textAlign = TextAlign.Center
+                                                ),
+                                                color = Color.White
+                                            ) // End of Text
+                                        }
+                                    }
+                                }
+                            }
+                            1 -> {
+                                when (loginActivityViewModel.isMeteorServiceSelected) {
+                                    true -> {
+//                                        TODO 유성우
+                                    }
+                                    false -> {
+                                        Box(
+                                            contentAlignment = Alignment.Center
+                                        ) {
+                                            Text(
+                                                text = stringResource(R.string.service_meteor_not_selected_textview_text),
+                                                style = TextStyle(
+                                                    fontFamily = NanumSqaureFont,
+                                                    fontWeight = FontWeight.Bold,
+                                                    fontSize = 24.sp,
+                                                    textAlign = TextAlign.Center
+                                                ),
+                                                color = Color.White
+                                            ) // End of Text
+                                        }
+                                    }
+                                }
+                            }
+                        } // End of when
+                    } // End of HorizontalPager
                 }
             }
         }

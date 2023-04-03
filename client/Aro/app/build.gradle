@@ -165,6 +165,10 @@ dependencies {
     // Optional - Integration with RxJava
     implementation 'androidx.compose.runtime:runtime-rxjava2'
 
+    //compose viewpager
+    implementation "com.google.accompanist:accompanist-pager:0.20.1"
+    implementation "com.google.accompanist:accompanist-pager-indicators:0.20.1"
+
     //naver
     implementation 'com.navercorp.nid:oauth-jdk8:5.4.0' // jdk 8
 

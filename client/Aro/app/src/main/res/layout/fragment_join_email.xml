@@ -75,6 +75,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
+                    android:maxLines="1"
                     android:fontFamily="@font/nanum_square_r"
                     android:translationZ="0dp" />
 
@@ -118,6 +119,7 @@
                 android:fontFamily="@font/nanum_square_r"
                 android:inputType="text"
                 android:maxLength="6"
+                android:maxLines="1"
                 android:translationZ="0dp" />
 
         </com.google.android.material.textfield.TextInputLayout>

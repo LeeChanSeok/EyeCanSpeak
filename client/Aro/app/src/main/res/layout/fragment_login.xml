@@ -36,6 +36,7 @@
             android:backgroundTint="@color/main_app_color"
             android:fontFamily="@font/nanum_square_b"
             android:hint="@string/login_edittext_email_hint_text"
+            android:maxLines="1"
             android:inputType="textEmailSubject"
             android:textColor="@color/white"
             android:textColorHint="@color/white" />
@@ -47,6 +48,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/main_app_color"
             android:hint="@string/login_edittext_pw_hint_text"
+            android:maxLines="1"
             android:inputType="textPassword"
             android:textColor="@color/white"
             android:textColorHint="@color/white" />

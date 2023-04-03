@@ -4,33 +4,41 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.material3.Text
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
 import com.google.gson.*
 import com.nassafy.aro.R
-import com.nassafy.aro.data.dto.PlaceItem
-import com.nassafy.aro.data.dto.UserTest
 import com.nassafy.aro.databinding.FragmentAroCountryPlaceSelectBinding
 import com.nassafy.aro.ui.adapter.CountrySpinnerAdapter
 import com.nassafy.aro.ui.view.BaseFragment
 import com.nassafy.aro.ui.view.custom.CountryPlaceChips
 import com.nassafy.aro.ui.view.custom.CountryPlaceLazyColumn
+import com.nassafy.aro.ui.view.custom.NanumSqaureFont
 import com.nassafy.aro.ui.view.main.mypage.viewmodel.MyPageFavoriteRegisterFragmentViewModel
 import com.nassafy.aro.util.NetworkResult
 import com.nassafy.aro.util.showSnackBarMessage
@@ -52,14 +60,71 @@ class MyPageFavoriteRegisterFragment :
         myPageFavoriteRegisterFragmentViewModel.isAuroraServiceSelected = args.auroraService
         myPageFavoriteRegisterFragmentViewModel.isMeteorServiceSelected = args.meteorService
 
-        initObserve()
-        CoroutineScope(Dispatchers.IO).launch {
-            myPageFavoriteRegisterFragmentViewModel.getCountryList()
-        } // End of CoroutineScope
+        when (myPageFavoriteRegisterFragmentViewModel.isAuroraServiceSelected) {
+            true -> {
+                initAuroraFavoriteObserve()
+                CoroutineScope(Dispatchers.IO).launch {
+                    val result: Deferred<Int> = async {
+                        myPageFavoriteRegisterFragmentViewModel.getCountryList()
+                        0
+                    }
+                    result.await()
+                } // End of CoroutineScope
+                initSpinner(spinnerList)
+            }
+            false -> {
+                binding.selectCountryPlaceSpinner.isInvisible = true
+            }
+        }
+        initEssentialObserve()
         initView()
     } // End of onVIewCreated
 
-    private fun initObserve() {
+    private fun initEssentialObserve() {
+        myPageFavoriteRegisterFragmentViewModel.setSelectServiceNetworkResultLiveData.observe(this.viewLifecycleOwner) {
+            when (it) {
+                is NetworkResult.Success -> {
+                    val gson = GsonBuilder().create()
+                    val requestBody = JsonObject()
+                    CoroutineScope(Dispatchers.IO).launch {
+                        myPageFavoriteRegisterFragmentViewModel.apply {
+                            requestBody.add(
+                                "attractionIds",
+                                gson.toJsonTree(favoriteAuroraPlaceList.map { it.placeId })
+                                    .getAsJsonArray()
+                            )
+                            postFavoriteList(requestBody)
+                        } // End of viewModel.apply
+                    } // End of CoroutineScope
+                } // End of Success
+                is NetworkResult.Error -> {
+                    requireView().showSnackBarMessage("서버 통신 에러 발생")
+                } // End of Error
+                is NetworkResult.Loading -> {
+                    Log.d(
+                        "ssafy_pcs", "로딩 중.."
+                    )
+                } // End of Loading
+            } // End of when
+        } // End of setSelectServiceNetworkResultLiveData.observe
+
+        myPageFavoriteRegisterFragmentViewModel.postFavoriteListNetworkResultLiveData.observe(this.viewLifecycleOwner) {
+            when (it) {
+                is NetworkResult.Success -> {
+                    requireView().showSnackBarMessage(getString(R.string.my_page_my_favorite_modify_success_text))
+                    findNavController().navigate(R.id.action_myPageFavoriteRegisterFragment_to_myPageFragment)
+                } // End of Success
+                is NetworkResult.Error -> {
+                    requireView().showSnackBarMessage("서버 통신 에러 발생")
+                } // End of Error
+                is NetworkResult.Loading -> {
+                    Log.d("ssafy_pcs", "로딩 중..")
+                } // End of Loading
+            } // End of when
+        } // End of postFavoriteListNetworkResultLiveData.observe
+    }
+
+    private fun initAuroraFavoriteObserve() {
         myPageFavoriteRegisterFragmentViewModel.countryListNetworkResultLiveData.observe(this.viewLifecycleOwner) {
             when (it) {
                 is NetworkResult.Success -> {
@@ -93,7 +158,7 @@ class MyPageFavoriteRegisterFragment :
                     ) // myPageFavoriteRegisterFragmentViewModel.favoriteAuroraPlaceList.addAll(it.data?.memteorInterestOrNotDTO!!)
                 }// End of NetworkResult.Success
                 is NetworkResult.Error -> {
-                    requireView().showSnackBarMessage("닉네임 재설정에 실패했습니다.")
+                    requireView().showSnackBarMessage("관심목록을 불러오는 것에 실패했습니다.")
                 } // End of NetworkResult.Error
                 is NetworkResult.Loading -> {
 
@@ -119,52 +184,10 @@ class MyPageFavoriteRegisterFragment :
             } // End of when
         } // End of .placeListLiveData.observe(this.viewLifecycleOwner)
 
-        myPageFavoriteRegisterFragmentViewModel.setSelectServiceNetworkResultLiveData.observe(this.viewLifecycleOwner) {
-            when (it) {
-                is NetworkResult.Success -> {
-                    val gson = GsonBuilder().create()
-                    val requestBody = JsonObject()
-                    CoroutineScope(Dispatchers.IO).launch {
-                        myPageFavoriteRegisterFragmentViewModel.apply {
-                            requestBody.add(
-                                "attractionIds",
-                                gson.toJsonTree(favoriteAuroraPlaceList.map { it.placeId })
-                                    .getAsJsonArray()
-                            )
-                            postFavoriteList(requestBody)
-                        } // End of viewModel.apply
-                    } // End of CoroutineScope
-                } // End of Success
-                is NetworkResult.Error -> {
-                    requireView().showSnackBarMessage("서버 통신 에러 발생")
-                } // End of Error
-                is NetworkResult.Loading -> {
-                    Log.d(
-                        "ssafy_pcs", "로딩 중.."
-                    )
-                } // End of Loading
-            } // End of when
-        } // End of setSelectServiceNetworkResultLiveData.observe
-
-        myPageFavoriteRegisterFragmentViewModel.postFavoriteListNetworkResultLiveData.observe(this.viewLifecycleOwner) {
-            when(it) {
-                is NetworkResult.Success -> {
-                    requireView().showSnackBarMessage(getString(R.string.my_page_my_favorite_modify_success_text))
-                    findNavController().navigate(R.id.action_myPageFavoriteRegisterFragment_to_myPageFragment)
-                } // End of Success
-                is NetworkResult.Error -> {
-                    requireView().showSnackBarMessage("서버 통신 에러 발생")
-                } // End of Error
-                is NetworkResult.Loading -> {
-                    Log.d("ssafy_pcs", "로딩 중..")
-                } // End of Loading
-            } // End of when
-        } // End of postFavoriteListNetworkResultLiveData.observe
     } // End of initObserve
 
 
     private fun initView() {
-        initSpinner(spinnerList)
         binding.cancelButton.setOnClickListener {
             findNavController().popBackStack()
         } // End of cancelButton.setOnClickListener
@@ -177,8 +200,6 @@ class MyPageFavoriteRegisterFragment :
             ) // End of setImageDrawable
             setOnClickListener {
                 myPageFavoriteRegisterFragmentViewModel.apply {
-
-                    // TODO ACTIVE
                     CoroutineScope(Dispatchers.IO).launch {
                         myPageFavoriteRegisterFragmentViewModel.selectService(
                             myPageFavoriteRegisterFragmentViewModel.isAuroraServiceSelected,
@@ -193,7 +214,11 @@ class MyPageFavoriteRegisterFragment :
 
     fun initSpinner(countryList: ArrayList<String>) {
         adapter =
-            CountrySpinnerAdapter(requireContext(), R.layout.item_country_spinner, countryList)
+            CountrySpinnerAdapter(
+                requireContext(),
+                R.layout.item_country_spinner,
+                countryList
+            )
         binding.selectCountryPlaceSpinner.adapter = adapter
         binding.selectCountryPlaceSpinner.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
@@ -214,11 +239,11 @@ class MyPageFavoriteRegisterFragment :
                         binding.loadingLayout.isGone = true
                     }
                 }
-
                 override fun onNothingSelected(p0: AdapterView<*>?) {}
             }// End of onItemSelectedListener
     } // End of initSpinner
 
+    @OptIn(ExperimentalPagerApi::class)
     private fun initComposeView() {
         CoroutineScope(Dispatchers.IO).launch {
             myPageFavoriteRegisterFragmentViewModel.getFavoriteList()
@@ -232,30 +257,109 @@ class MyPageFavoriteRegisterFragment :
                 val placeList = remember { myPageFavoriteRegisterFragmentViewModel.placeList }
                 val selectedAuroraPlaceList =
                     remember { myPageFavoriteRegisterFragmentViewModel.favoriteAuroraPlaceList }
+                val pagerState = rememberPagerState()
+
+                LaunchedEffect(pagerState) {
+                    // Collect from the a snapshotFlow reading the currentPage
+                    snapshotFlow { pagerState.currentPage }.collect { page ->
+                        // Do something with each page change, for example:
+                        // viewModel.sendPageSelectedEvent(page)
+                        Log.d("Page change", "Page changed to $page")
+                        when (page == 1) {
+                            true -> {
+                                binding.selectCountryPlaceSpinner.isInvisible = true
+                            }
+                            false -> {
+                                when (myPageFavoriteRegisterFragmentViewModel.isAuroraServiceSelected) {
+                                    true -> {
+                                        binding.selectCountryPlaceSpinner.isVisible = true
+                                    }
+                                    false -> {
+                                        binding.selectCountryPlaceSpinner.isInvisible = true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
 
                 // In Compose world
                 MaterialTheme {
-                    Column(
-                        modifier = Modifier
-                            .height(this.height.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        CountryPlaceChips(
-                            selectedAuroraPlaceList,
-                            myPageFavoriteRegisterFragmentViewModel
-                        )
-                        Divider(
-                            modifier = Modifier
-                                .height(1.dp)
-                                .padding(horizontal = 30.dp),
-                            color = Color.White
-                        ) // End of Divider
-                        CountryPlaceLazyColumn(
-                            placeList,
-                            selectedAuroraPlaceList,
-                            myPageFavoriteRegisterFragmentViewModel
-                        )
-                    } // End of Column
+
+
+                    HorizontalPager(count = 2,
+                        Modifier.height(this.height.dp),
+                        state = pagerState
+                    ) { page ->
+                        when (page) {
+                            0 -> {
+                                when (myPageFavoriteRegisterFragmentViewModel.isAuroraServiceSelected) {
+                                    true -> {
+                                        Column(
+                                            modifier = Modifier.fillMaxHeight(),
+                                            horizontalAlignment = Alignment.CenterHorizontally,
+                                        ) {
+                                            CountryPlaceChips(
+                                                selectedAuroraPlaceList,
+                                                myPageFavoriteRegisterFragmentViewModel
+                                            )
+                                            Divider(
+                                                modifier = Modifier
+                                                    .height(1.dp)
+                                                    .padding(horizontal = 30.dp),
+                                                color = Color.White
+                                            ) // End of Divider
+                                            CountryPlaceLazyColumn(
+                                                placeList,
+                                                selectedAuroraPlaceList,
+                                                myPageFavoriteRegisterFragmentViewModel
+                                            )
+                                        } // End of Column
+                                    }
+                                    false -> {
+                                        Box(
+                                            contentAlignment = Alignment.Center
+                                        ) {
+                                            Text(
+                                                text = getString(R.string.service_aurora_not_selected_textview_text),
+                                                style = TextStyle(
+                                                    fontFamily = NanumSqaureFont,
+                                                    fontWeight = FontWeight.Bold,
+                                                    fontSize = 24.sp,
+                                                    textAlign = TextAlign.Center
+                                                ),
+                                                color = Color.White
+                                            ) // End of Text
+                                        }
+                                    }
+                                }
+                            } // End of page -> 0
+                            1 -> {
+                                // Todo MeteorShower Country Select
+                                when (myPageFavoriteRegisterFragmentViewModel.isMeteorServiceSelected) {
+                                    true -> {
+//                                        TODO 유성우
+                                    } // End of when (myPageFavoriteRegisterFragmentViewModel.isAuroraServiceSelected) -> true
+                                    false -> {
+                                        Box(
+                                            contentAlignment = Alignment.Center
+                                        ) {
+                                            Text(
+                                                text = getString(R.string.service_meteor_not_selected_textview_text),
+                                                style = TextStyle(
+                                                    fontFamily = NanumSqaureFont,
+                                                    fontWeight = FontWeight.Bold,
+                                                    fontSize = 24.sp,
+                                                    textAlign = TextAlign.Center
+                                                ),
+                                                color = Color.White
+                                            ) // End of Text
+                                        } // End of Box
+                                    } // End of myPageFavoriteRegisterFragmentViewModel.isAuroraServiceSelected -> false
+                                } // End of when (myPageFavoriteRegisterFragmentViewModel.isAuroraServiceSelected)
+                            } // End of page -> 1
+                        } // End of when (page)
+                    } // End of HorizontalPager
                 } // End of MaterialTheme
             } // End of setContent
         } // End of countryPlaceComposeview.apply

@@ -257,8 +257,6 @@ class MainActivity : AppCompatActivity() {
         mainActivityViewModel.logoutNetworkResultLiveData.observe(this) {
             when (it) {
                 is NetworkResult.Success -> {
-                    val layout = layoutInflater.inflate(R.layout.custom_toast_delete_account, null)
-                    this.showToastView(layout)
                     binding.root.showSnackBarMessage("로그아웃 하였습니다!")
                     Application.sharedPreferencesUtil.addUserAccessToken("")
                     Application.sharedPreferencesUtil.addUserRefreshToken("")

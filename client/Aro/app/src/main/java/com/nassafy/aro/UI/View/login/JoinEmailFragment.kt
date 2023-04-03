@@ -6,6 +6,7 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import androidx.core.view.isGone
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
@@ -66,7 +67,7 @@ class JoinEmailFragment :
                         false -> {
                             binding.joinEmailIdTextfield.error =
                                 getString(R.string.join_already_exist_email_text)
-                            binding.verificationEmailCodeTextfield.isVisible = false
+                            binding.verificationEmailCodeTextfield.isInvisible = true
                         }
                     }
                 }

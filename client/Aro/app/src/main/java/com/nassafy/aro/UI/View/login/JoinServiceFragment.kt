@@ -79,7 +79,7 @@ class JoinServiceFragment : BaseFragment<FragmentAroServiceSelectBinding>(Fragme
             loginActivityViewModel.apply {
                 isAuroraServiceSelected = binding.auroraServiceCardview.getIsSelected()
                 isMeteorServiceSelected = binding.meteorServiceCardview.getIsSelected()
-                when(isAuroraServiceSelected) {
+                when(isAuroraServiceSelected || isMeteorServiceSelected) {
                     true -> {
                         findNavController().navigate(R.id.action_joinServiceFragment_to_joinCountryPlaceSelectFragment)
                     }

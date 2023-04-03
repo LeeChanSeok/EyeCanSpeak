@@ -43,7 +43,6 @@ class MyPageServiceRegisterFragment :
     private fun initObserve() {
 
         myPageServiceRegisterFragementViewModel.setSelectServiceNetworkResultLiveData.observe(this.viewLifecycleOwner) {
-
             when (it) {
                 is NetworkResult.Success -> {
                     Log.d("ssafy", "success")
@@ -104,7 +103,7 @@ class MyPageServiceRegisterFragment :
                 myPageServiceRegisterFragementViewModel.auroraService,
                 myPageServiceRegisterFragementViewModel.meteorService,
             )
-        when (myPageServiceRegisterFragementViewModel.auroraService) {
+        when (myPageServiceRegisterFragementViewModel.auroraService || myPageServiceRegisterFragementViewModel.meteorService) {
             true -> {
                 findNavController().navigate(action)
             }

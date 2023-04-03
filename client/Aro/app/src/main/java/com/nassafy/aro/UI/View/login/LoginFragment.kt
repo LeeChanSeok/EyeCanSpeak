@@ -142,8 +142,8 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                     }
                     else -> { return@launch}
                 }
-                val networkResult = userSnsLoginNetworkResultLiveData.value!!
-                Log.d("ssafy/snslogin/networkResult", networkResult.data.toString())
+                val networkResult = userSnsLoginNetworkResultLiveData.value
+                Log.d("ssafy/snslogin/networkResult", networkResult?.data.toString())
                 launch(Dispatchers.Main) {
                     when (networkResult) {
                         is NetworkResult.Success -> {
@@ -169,6 +169,9 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                         }
                         is NetworkResult.Loading -> {
                             // Todo loading progressBar
+                        }
+                        else -> {
+                            requireView().showSnackBarMessage("$providerType 로그인에 실패했습니다.")
                         }
                     } // End of when
                 }
