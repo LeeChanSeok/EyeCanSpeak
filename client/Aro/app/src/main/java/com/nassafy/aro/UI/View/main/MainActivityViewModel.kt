@@ -22,6 +22,8 @@ class MainActivityViewModel @Inject constructor(private val mainRepository: Main
     var alarmOption: Boolean = false
     var auroraDisplayOption: Boolean = false
     var cloudDisplayOption: Boolean = false
+    var auroraServiceEnabled: Boolean = true
+    var meteorShowerServiceEnabled: Boolean = true
 
     val logoutNetworkResultLiveData get() = mainRepository.logoutNetworkResultLiveData
     val userInfo: LiveData<NetworkResult<UserTest>> get() = mainRepository.userInfo

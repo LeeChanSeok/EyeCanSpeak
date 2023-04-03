@@ -212,6 +212,9 @@ class MainActivity : AppCompatActivity() {
                 is NetworkResult.Success -> {
                     mainActivityViewModel.email = it.data!!.email
                     mainActivityViewModel.nickname = it.data!!.nickname
+                    // TODO : Aurora, Meteor Service Enable SDR
+//                    mainActivityViewModel.auroraServiceEnabled = it.data!!.???
+//                    mainActivityViewModel.meteorShowerServiceEnabled = it.data!!.???
 
                     binding.mainNavigation.getHeaderView(0).apply {
                         findViewById<TextView>(R.id.nickname_textview).text =
@@ -254,6 +257,7 @@ class MainActivity : AppCompatActivity() {
             } // End of when
         } // End of getAuroraOptionNetworkResultLiveData.observe
 
+        // TODO : Cloud SDR
         mainActivityViewModel.getCloudOptionNetworkResultLiveData.observe(this) {
             when (it) {
                 is NetworkResult.Success -> {

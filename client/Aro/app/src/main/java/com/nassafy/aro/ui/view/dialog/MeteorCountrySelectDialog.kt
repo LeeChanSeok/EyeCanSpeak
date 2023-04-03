@@ -42,19 +42,20 @@ class MeteorCountrySelectDialog(
 
         countryAdapter = DateHourSelectAdapter(countryList)
 
-        binding.countryRecyclerview.apply {
-            adapter = countryAdapter
-            setAlpha(true)
-            setIntervalRatio(0.8f)
-            setOrientation(RecyclerView.VERTICAL)
-        }
+//        binding.countryRecyclerview.apply {
+//            adapter = countryAdapter
+//            setAlpha(true)
+//            setIntervalRatio(0.8f)
+//            setOrientation(RecyclerView.VERTICAL)
+//        }
 
-        binding.okButton.setOnClickListener {
-            var countryIdx = binding.countryRecyclerview.getSelectedPosition()
-            val meteorShowerFragment = parentFragment as MeteorShowerFragment
-            meteorShowerFragment.changeCountry(countryList[countryIdx])
-            dismiss()
-        }
+        // TODO : 이제는 필요 없는듯
+//        binding.okButton.setOnClickListener {
+//            var countryIdx = binding.countryRecyclerview.getSelectedPosition()
+//            val meteorShowerFragment = parentFragment as MeteorShowerFragment
+////            meteorShowerFragment.changeCountry(countryList[countryIdx])
+//            dismiss()
+//        }
     }
 
     override fun onResume() {
@@ -62,5 +63,5 @@ class MeteorCountrySelectDialog(
         val width = ((context?.resources?.displayMetrics?.widthPixels ?: 0) * 0.9).toInt()
         val height = WindowManager.LayoutParams.WRAP_CONTENT
         dialog?.window?.setLayout(width, height)
-    }
+    } // End of onResume
 }
