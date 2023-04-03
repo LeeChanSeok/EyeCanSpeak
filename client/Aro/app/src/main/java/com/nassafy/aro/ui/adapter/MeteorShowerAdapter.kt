@@ -1,5 +1,6 @@
 package com.nassafy.aro.ui.adapter
 
+import android.content.Context
 import android.transition.*
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import com.nassafy.aro.R
 import com.nassafy.aro.data.dto.MeteorShower
@@ -14,8 +17,9 @@ import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.lang.Integer.max
 
-class MeteorShowerAdapter(var itemList: MutableList<MeteorShower>) :
+class MeteorShowerAdapter(var recyclerView: RecyclerView, var itemList: MutableList<MeteorShower>) :
     RecyclerView.Adapter<MeteorShowerAdapter.ViewHolder>() {
     private var expandedPosition = -1
     private var prevExpandedPosition = -1
@@ -23,7 +27,7 @@ class MeteorShowerAdapter(var itemList: MutableList<MeteorShower>) :
     private fun createTransition(): Transition {
         val transitionSet = TransitionSet()
         val fade = Fade(Fade.MODE_OUT)
-        fade.duration = 150
+        fade.duration = 300
 
         val changeBounds = ChangeBounds()
         changeBounds.duration = 300
@@ -66,6 +70,7 @@ class MeteorShowerAdapter(var itemList: MutableList<MeteorShower>) :
                     .fit().centerCrop()
                 subImagePicasso.into(holder.subImageView)
             }
+            prevExpandedPosition = holder.adapterPosition
         }
 
         holder.nameTextView.text = item.name
@@ -74,9 +79,7 @@ class MeteorShowerAdapter(var itemList: MutableList<MeteorShower>) :
 
         holder.subItemView.visibility = if (isExpanded) View.VISIBLE else View.GONE
         holder.itemView.isActivated = isExpanded
-
-        if (isExpanded) prevExpandedPosition = holder.adapterPosition
-
+        
         holder.itemView.setOnClickListener {
             val adapterPos = holder.adapterPosition
             if (adapterPos != RecyclerView.NO_POSITION) {
@@ -91,9 +94,11 @@ class MeteorShowerAdapter(var itemList: MutableList<MeteorShower>) :
 
                 notifyItemChanged(adapterPos)
                 notifyItemChanged(prevExpandedPosition)
+
             }
         }
     }
 
     override fun getItemCount(): Int = itemList.size
+
 }

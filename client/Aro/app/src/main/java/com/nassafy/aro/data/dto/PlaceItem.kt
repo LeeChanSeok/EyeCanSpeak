@@ -14,10 +14,12 @@ data class PlaceItem(
     @SerializedName("description") val description: String,
     @SerializedName("stamp") val stamp: String,
     @SerializedName("mapImage") val mapImage : String,
+    @SerializedName("image") val image: String,
     @SerializedName("latitude") val latitude : Float,
     @SerializedName("longitude") val longitude : Float,
     val interest: Boolean = false,
-    val interestId: Long = 0
+    val interestId: Long = 0,
+    val prob: Int = 0
 ) : ClusterItem, Parcelable {
     override fun getPosition(): LatLng {
         return LatLng(latitude.toDouble(), longitude.toDouble())
