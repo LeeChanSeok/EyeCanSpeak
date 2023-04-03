@@ -4,14 +4,12 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshotFlow
+import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,17 +31,18 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.google.gson.*
 import com.nassafy.aro.R
+import com.nassafy.aro.data.dto.MeteorCountry
 import com.nassafy.aro.databinding.FragmentAroCountryPlaceSelectBinding
 import com.nassafy.aro.ui.adapter.CountrySpinnerAdapter
 import com.nassafy.aro.ui.view.BaseFragment
-import com.nassafy.aro.ui.view.custom.CountryPlaceChips
-import com.nassafy.aro.ui.view.custom.CountryPlaceLazyColumn
-import com.nassafy.aro.ui.view.custom.NanumSqaureFont
+import com.nassafy.aro.ui.view.custom.*
 import com.nassafy.aro.ui.view.main.mypage.viewmodel.MyPageFavoriteRegisterFragmentViewModel
 import com.nassafy.aro.util.NetworkResult
 import com.nassafy.aro.util.showSnackBarMessage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
+
+private const val TAG = "ssafy_pcs"
 
 @AndroidEntryPoint
 class MyPageFavoriteRegisterFragment :
@@ -76,9 +75,42 @@ class MyPageFavoriteRegisterFragment :
                 binding.selectCountryPlaceSpinner.isInvisible = true
             }
         }
+        when (myPageFavoriteRegisterFragmentViewModel.isMeteorServiceSelected) {
+            true -> {
+                initMeteorFavoriteObserve()
+                CoroutineScope(Dispatchers.IO).launch {
+//                    myPageFavoriteRegisterFragmentViewModel.getMeteorCountryList() // todo Activate
+                } // End of CoroutineScope
+            }
+            false -> { }
+        }
         initEssentialObserve()
         initView()
     } // End of onVIewCreated
+
+    private fun initMeteorFavoriteObserve() {
+        myPageFavoriteRegisterFragmentViewModel.meteorCountryListNetworkResultLiveData.observe(this.viewLifecycleOwner) {
+            when (it) {
+                is NetworkResult.Success -> {
+                    it.data?.let {
+                        myPageFavoriteRegisterFragmentViewModel.meteorCountryList.clear()
+                        myPageFavoriteRegisterFragmentViewModel.meteorCountryList.addAll(it)
+                        it.firstOrNull { it.interest == true }?.let {selectedMeteorCountry ->
+                            myPageFavoriteRegisterFragmentViewModel.selectMeteorCountry(selectedMeteorCountry)
+                        }
+                    }
+                } // End of Success
+                is NetworkResult.Error -> {
+                    requireView().showSnackBarMessage("서버 통신 에러 발생")
+                } // End of Error
+                is NetworkResult.Loading -> {
+                    Log.d(
+                        "ssafy_pcs", "로딩 중.."
+                    )
+                } // End of Loading
+            }
+        }
+    }
 
     private fun initEssentialObserve() {
         myPageFavoriteRegisterFragmentViewModel.setSelectServiceNetworkResultLiveData.observe(this.viewLifecycleOwner) {
@@ -239,6 +271,7 @@ class MyPageFavoriteRegisterFragment :
                         binding.loadingLayout.isGone = true
                     }
                 }
+
                 override fun onNothingSelected(p0: AdapterView<*>?) {}
             }// End of onItemSelectedListener
     } // End of initSpinner
@@ -255,8 +288,12 @@ class MyPageFavoriteRegisterFragment :
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 val placeList = remember { myPageFavoriteRegisterFragmentViewModel.placeList }
+                val meteorCountryList = remember { myPageFavoriteRegisterFragmentViewModel.meteorCountryList }
                 val selectedAuroraPlaceList =
                     remember { myPageFavoriteRegisterFragmentViewModel.favoriteAuroraPlaceList }
+                val selectedCountry: MeteorCountry? by myPageFavoriteRegisterFragmentViewModel.favoriteMeteorCountry.observeAsState(
+                    null
+                )
                 val pagerState = rememberPagerState()
 
                 LaunchedEffect(pagerState) {
@@ -264,7 +301,6 @@ class MyPageFavoriteRegisterFragment :
                     snapshotFlow { pagerState.currentPage }.collect { page ->
                         // Do something with each page change, for example:
                         // viewModel.sendPageSelectedEvent(page)
-                        Log.d("Page change", "Page changed to $page")
                         when (page == 1) {
                             true -> {
                                 binding.selectCountryPlaceSpinner.isInvisible = true
@@ -287,7 +323,8 @@ class MyPageFavoriteRegisterFragment :
                 MaterialTheme {
 
 
-                    HorizontalPager(count = 2,
+                    HorizontalPager(
+                        count = 2,
                         Modifier.height(this.height.dp),
                         state = pagerState
                     ) { page ->
@@ -339,6 +376,48 @@ class MyPageFavoriteRegisterFragment :
                                 when (myPageFavoriteRegisterFragmentViewModel.isMeteorServiceSelected) {
                                     true -> {
 //                                        TODO 유성우
+                                        MeteorCountryLazyColumn(
+//                                            meteorCountryList = meteorCountryList, //todo Active
+                                            meteorCountryList = mutableListOf(
+                                                MeteorCountry(
+                                                    1,
+                                                    "\uD83C\uDDF0\uD83C\uDDF7",
+                                                    "대한민국"
+                                                ),
+                                                MeteorCountry(
+                                                    1,
+                                                    "\uD83C\uDDF0\uD83C\uDDF7",
+                                                    "대한민국1"
+                                                ),
+                                                MeteorCountry(
+                                                    1,
+                                                    "\uD83C\uDDF0\uD83C\uDDF7",
+                                                    "대한민국2"
+                                                ),
+                                                MeteorCountry(
+                                                    1,
+                                                    "\uD83C\uDDF0\uD83C\uDDF7",
+                                                    "대한민국3"
+                                                ),
+                                                MeteorCountry(
+                                                    1,
+                                                    "\uD83C\uDDF0\uD83C\uDDF7",
+                                                    "대한민국4"
+                                                ),
+                                                MeteorCountry(
+                                                    1,
+                                                    "\uD83C\uDDF0\uD83C\uDDF7",
+                                                    "대한민국5"
+                                                ),
+                                                MeteorCountry(
+                                                    1,
+                                                    "\uD83C\uDDF0\uD83C\uDDF7",
+                                                    "대한민국6"
+                                                ),
+                                            ),
+                                            selectedCountry = selectedCountry,
+                                            viewModel = myPageFavoriteRegisterFragmentViewModel
+                                        )
                                     } // End of when (myPageFavoriteRegisterFragmentViewModel.isAuroraServiceSelected) -> true
                                     false -> {
                                         Box(

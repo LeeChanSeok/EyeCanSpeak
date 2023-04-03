@@ -32,11 +32,14 @@ class UserAccessRepository @Inject constructor(
     private val _placeListLiveData = MutableLiveData<NetworkResult<List<PlaceItem>>>()
     val placeListLiveData get() = _placeListLiveData
 
+    private val _meteorCountryListNetworkResultLiveData = MutableLiveData<NetworkResult<List<MeteorCountry>>>()
+    val meteorCountryListNetworkResultLiveData: LiveData<NetworkResult<List<MeteorCountry>>> get() = _meteorCountryListNetworkResultLiveData
+
     private val _selectedAuraraPlaceListLiveData = MutableLiveData<MutableList<PlaceItem>>()
     val selectedAuraraPlaceListLiveData get() = _selectedAuraraPlaceListLiveData
 
-    private val _selectedMeteorPlaceListLiveData = MutableLiveData<MutableList<PlaceItem>>()
-    val selectedMeteorPlaceListLiveData get() = _selectedMeteorPlaceListLiveData
+    private val _selectedMeteorCountryLiveData = MutableLiveData<MeteorCountry?>(null)
+    val selectedMeteorCountryLiveData get() = _selectedMeteorCountryLiveData
 
     private val _userJoinNetworkResultLiveData = MutableLiveData<NetworkResult<TokenResponse>>()
     val userJoinNetworkResultLiveData: LiveData<NetworkResult<TokenResponse>> get() = _userJoinNetworkResultLiveData
@@ -48,7 +51,6 @@ class UserAccessRepository @Inject constructor(
     init {
         _placeListLiveData.value = NetworkResult.Loading()
         _selectedAuraraPlaceListLiveData.value = mutableListOf()
-        _selectedMeteorPlaceListLiveData.value = mutableListOf()
     }
 
     suspend fun loginByIdPassword(providerType: String, email: String, password: String?) {
@@ -160,6 +162,11 @@ class UserAccessRepository @Inject constructor(
         } // End of try-catch
     }
 
+    suspend fun getMeteorCountryList() {
+        val response = userAccessApi.getMeteorCountryList()
+        _meteorCountryListNetworkResultLiveData.setNetworkResult(response)
+    }
+
     suspend fun join(user: JsonObject) {
         val response = userAccessApi.join(user)
         _userJoinNetworkResultLiveData.postValue(NetworkResult.Loading())
@@ -181,7 +188,7 @@ class UserAccessRepository @Inject constructor(
         } // End of try-catch
     }
 
-    suspend fun selectAuroraPlace(place: PlaceItem) {
+    fun selectAuroraPlace(place: PlaceItem) {
         val temp = mutableListOf<PlaceItem>()
         temp.addAll(_selectedAuraraPlaceListLiveData.value!!)
         temp.add(place)
@@ -195,14 +202,21 @@ class UserAccessRepository @Inject constructor(
         _selectedAuraraPlaceListLiveData.value = temp
     }
 
+    fun selectMeteorCountry(country: MeteorCountry) {
+        _selectedMeteorCountryLiveData.value = country
+    }
+
+    fun unSelectMeteorCountry() {
+        _selectedMeteorCountryLiveData.value = null
+    }
+
     fun clearSelectedAuroraPlaceList() {
         val temp = mutableListOf<PlaceItem>()
         _selectedAuraraPlaceListLiveData.value = temp
     }
 
     fun clearSelectedMeteorPlaceList() {
-        val temp = mutableListOf<PlaceItem>()
-        _selectedMeteorPlaceListLiveData.value = temp
+        _selectedMeteorCountryLiveData.value = null
     }
 
     suspend fun snsLogin(providerType: String, accessToken: String) {

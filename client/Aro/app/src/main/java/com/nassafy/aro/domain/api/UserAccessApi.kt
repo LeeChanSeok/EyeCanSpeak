@@ -1,10 +1,7 @@
 package com.nassafy.aro.domain.api
 
 import com.google.gson.JsonObject
-import com.nassafy.aro.data.dto.TokenResponse
-import com.nassafy.aro.data.dto.PlaceItem
-import com.nassafy.aro.data.dto.SnsLoginResposne
-import com.nassafy.aro.data.dto.UserTest
+import com.nassafy.aro.data.dto.*
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -32,6 +29,9 @@ interface UserAccessApi {
     suspend fun getPlaceList(
         @Path("nation") nation: String
     ): Response<List<PlaceItem>>
+
+    @GET("api/") // todo
+    suspend fun getMeteorCountryList(): Response<List<MeteorCountry>>
 
     @POST("api/members/signup")
     suspend fun join(

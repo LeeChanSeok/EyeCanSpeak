@@ -15,9 +15,26 @@ import javax.inject.Inject
 @HiltViewModel
 class JoinCountryPlaceSelectFragmentViewModel @Inject constructor(
     private val userAccessRepository: UserAccessRepository
-): ViewModel(){
+) : ViewModel() {
+
+    val countryListLiveData: LiveData<NetworkResult<List<String>>>
+        get() = userAccessRepository.countryListLiveData
+    val meteorCountryListNetworkResultLiveData
+        get() = userAccessRepository.meteorCountryListNetworkResultLiveData
     val userJoinNetworkResultLiveData: LiveData<NetworkResult<TokenResponse>>
         get() = userAccessRepository.userJoinNetworkResultLiveData
+
+    fun getCountryList() {
+        viewModelScope.launch {
+            userAccessRepository.getCountryList()
+        }
+    }
+
+    fun getMeteorCountryList() {
+        viewModelScope.launch {
+            userAccessRepository.getMeteorCountryList()
+        }
+    }
 
     fun join(user: JsonObject) {
         viewModelScope.launch {

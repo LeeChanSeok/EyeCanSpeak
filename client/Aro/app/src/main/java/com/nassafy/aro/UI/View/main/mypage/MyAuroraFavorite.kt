@@ -38,7 +38,6 @@ fun MyAuroraFavorite(
     auroraFavoriteList: MutableList<PlaceItem>,
     myPageFragmentViewModel: MyPageFragmentViewModel
 ) {
-
     when (auroraFavoriteList.size > 0) {
         true -> {
             LazyColumn(

@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.JsonObject
 import com.nassafy.aro.data.dto.FavoriteList
+import com.nassafy.aro.data.dto.MeteorCountry
 import com.nassafy.aro.data.dto.PlaceItem
 import com.nassafy.aro.data.dto.UserTest
 import com.nassafy.aro.domain.api.MyPageApi
@@ -38,6 +39,9 @@ class MyPageRepository @Inject constructor(private val myPageApi: MyPageApi, pri
 
     private val _deleteFavoriteNetworkResultLiveData = MutableLiveData<NetworkResult<Long>>()
     val deleteFavoriteNetworkResultLiveData: LiveData<NetworkResult<Long>> get() = _deleteFavoriteNetworkResultLiveData
+
+    private val _meteorCountryListNetworkResultLiveData = MutableLiveData<NetworkResult<List<MeteorCountry>>>()
+    val meteorCountryListNetworkResultLiveData: LiveData<NetworkResult<List<MeteorCountry>>> get() = _meteorCountryListNetworkResultLiveData
 
 
     suspend fun changeNickname(nickname: String) {
@@ -135,6 +139,11 @@ class MyPageRepository @Inject constructor(private val myPageApi: MyPageApi, pri
         val response = withoutHeaderMyPageApi.getPlaceList(nation)
         _placeListNetworkResultLiveData.setNetworkResult(response)
     } // End of getPlaceList
+
+    suspend fun getMeteorCountryList() {
+        val response = myPageApi.getMeteorCountryList()
+        _meteorCountryListNetworkResultLiveData.setNetworkResult(response)
+    }
 
     suspend fun postFavoriteList(requestBody: JsonObject) {
         val response = myPageApi.postFavoriteList(requestBody)

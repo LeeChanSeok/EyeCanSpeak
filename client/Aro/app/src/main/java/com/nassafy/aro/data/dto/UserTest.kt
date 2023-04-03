@@ -4,7 +4,7 @@ data class UserTest(
     val auroraPlaces: List<Int>,
     val auroraService: Boolean,
     val email: String,
-    val meteorPlaces: List<Int>,
+    val countryId: Long,
     val meteorService: Boolean,
     val nickname: String,
     val password: String?,

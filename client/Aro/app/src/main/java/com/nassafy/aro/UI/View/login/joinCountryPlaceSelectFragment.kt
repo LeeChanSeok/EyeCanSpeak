@@ -9,7 +9,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,16 +33,19 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.nassafy.aro.Application
 import com.nassafy.aro.R
+import com.nassafy.aro.data.dto.MeteorCountry
 import com.nassafy.aro.data.dto.PlaceItem
 import com.nassafy.aro.databinding.FragmentAroCountryPlaceSelectBinding
 import com.nassafy.aro.ui.adapter.CountrySpinnerAdapter
 import com.nassafy.aro.ui.view.BaseFragment
 import com.nassafy.aro.ui.view.custom.CountryPlaceChips
 import com.nassafy.aro.ui.view.custom.CountryPlaceLazyColumn
+import com.nassafy.aro.ui.view.custom.MeteorCountryLazyColumn
 import com.nassafy.aro.ui.view.custom.NanumSqaureFont
 import com.nassafy.aro.ui.view.login.viewmodel.JoinCountryPlaceSelectFragmentViewModel
 import com.nassafy.aro.ui.view.login.viewmodel.LoginActivityViewModel
@@ -48,16 +55,16 @@ import com.nassafy.aro.util.showSnackBarMessage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 
+private const val TAG = "ssafy_pcs"
 @AndroidEntryPoint
 class JoinCountryPlaceSelectFragment : BaseFragment<FragmentAroCountryPlaceSelectBinding>(
     FragmentAroCountryPlaceSelectBinding::inflate
 ) {
 
-
-    private val loginActivityViewModel: LoginActivityViewModel by activityViewModels()
-    private val joinCountryPlaceServiceSelectFragmentViewModel: JoinCountryPlaceSelectFragmentViewModel by viewModels()
     private var spinnerList = arrayListOf<String>()
     private lateinit var adapter: CountrySpinnerAdapter
+    private val loginActivityViewModel: LoginActivityViewModel by activityViewModels()
+    private val joinCountryPlaceServiceSelectFragmentViewModel: JoinCountryPlaceSelectFragmentViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -74,7 +81,7 @@ class JoinCountryPlaceSelectFragment : BaseFragment<FragmentAroCountryPlaceSelec
                 initAuroraCountryPlaceObserve()
                 CoroutineScope(Dispatchers.IO).launch {
                     val result: Deferred<Int> = async {
-                        loginActivityViewModel.getCountryList()
+                        joinCountryPlaceServiceSelectFragmentViewModel.getCountryList()
                         0
                     }
                     result.await()
@@ -85,9 +92,36 @@ class JoinCountryPlaceSelectFragment : BaseFragment<FragmentAroCountryPlaceSelec
                 binding.selectCountryPlaceSpinner.isInvisible = true
             }
         }
+
+        when (loginActivityViewModel.isMeteorServiceSelected) {
+            true -> {
+                initMeteorCountryObserve()
+                CoroutineScope(Dispatchers.IO).launch {
+                        joinCountryPlaceServiceSelectFragmentViewModel.getMeteorCountryList()
+                }
+            }
+            false -> {}
+        }
         initEssentialObserve()
         initView()
     }
+
+    private fun initMeteorCountryObserve() {
+        joinCountryPlaceServiceSelectFragmentViewModel.meteorCountryListNetworkResultLiveData.observe(this.viewLifecycleOwner) {
+            when (it) {
+                is NetworkResult.Success -> {
+                    loginActivityViewModel.meteorCountryList.clear()
+                    loginActivityViewModel.meteorCountryList.addAll(it.data!!)
+                }
+                is NetworkResult.Error -> {
+                    requireView().showSnackBarMessage("서버 통신 에러 발생")
+                }
+                is NetworkResult.Loading -> {
+                    Log.d("ssafy_pcs", "로딩 중..")
+                }
+            }
+        }
+    } // End of initMeteorCountryObserve
 
     private fun initEssentialObserve() {
         joinCountryPlaceServiceSelectFragmentViewModel.userJoinNetworkResultLiveData.observe(this.viewLifecycleOwner) {
@@ -125,7 +159,7 @@ class JoinCountryPlaceSelectFragment : BaseFragment<FragmentAroCountryPlaceSelec
                 }
             }
         } // End of userJoinNetworkResultLiveData.observe
-    }
+    } // End of initEssentialObserve
 
 
     private fun initView() {
@@ -140,28 +174,27 @@ class JoinCountryPlaceSelectFragment : BaseFragment<FragmentAroCountryPlaceSelec
                     addProperty("nickname", nickname)
                     addProperty("auroraService", loginActivityViewModel.isAuroraServiceSelected)
                     addProperty("meteorService", loginActivityViewModel.isMeteorServiceSelected)
+                    addProperty("countryId", loginActivityViewModel.selectedCountryId.value?.countryId)
                 }
                 user.add(
                     "auroraPlaces",
                     gson.toJsonTree(selectedAuroraPlaceList.map { it.placeId })
                         .getAsJsonArray()
                 )
-                user.add(
-                    "meteorPlaces",
-                    gson.toJsonTree(selectedMeteorPlaces.value?.map { it.placeId }
-                        ?: emptyList<PlaceItem>())
-                        .getAsJsonArray()
-                )
-                joinCountryPlaceServiceSelectFragmentViewModel.join(user)
+                Log.d(TAG, "initView: ${loginActivityViewModel.selectedCountryId.value?.countryId}")
+//                joinCountryPlaceServiceSelectFragmentViewModel.join(user) todo Activate
             }
         }
         binding.cancelButton.setOnClickListener {
+            loginActivityViewModel.isAuroraServiceSelected = false
+            loginActivityViewModel.isMeteorServiceSelected = false
+            loginActivityViewModel.clearSelectedAuroraPlaceList()
             findNavController().popBackStack()
         }
         initComposeView()
-    }
+    } // End of initView
 
-    fun initSpinner(countryList: ArrayList<String>) {
+    private fun initSpinner(countryList: ArrayList<String>) {
         adapter =
             CountrySpinnerAdapter(requireContext(), R.layout.item_country_spinner, countryList)
         binding.selectCountryPlaceSpinner.adapter = adapter
@@ -188,7 +221,7 @@ class JoinCountryPlaceSelectFragment : BaseFragment<FragmentAroCountryPlaceSelec
     } // End of initSpinner
 
     private fun initAuroraCountryPlaceObserve() {
-        loginActivityViewModel.countryListLiveData.observe(this.viewLifecycleOwner) {
+        joinCountryPlaceServiceSelectFragmentViewModel.countryListLiveData.observe(this.viewLifecycleOwner) {
             when (it) {
                 is NetworkResult.Success -> {
                     CoroutineScope(Dispatchers.Main).launch {
@@ -236,7 +269,7 @@ class JoinCountryPlaceSelectFragment : BaseFragment<FragmentAroCountryPlaceSelec
         }
 
 
-    }
+    } // End of countryPlaceComposeview.apply
 
 
     @OptIn(ExperimentalPagerApi::class)
@@ -248,11 +281,38 @@ class JoinCountryPlaceSelectFragment : BaseFragment<FragmentAroCountryPlaceSelec
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 val placeList = remember { loginActivityViewModel.placeListData }
+                val meteorCountryList = remember { loginActivityViewModel.meteorCountryList }
                 val selectedAuroraPlaceList =
                     remember { loginActivityViewModel.selectedAuroraPlaceList }
+                val selectedCountry:MeteorCountry? by loginActivityViewModel.selectedCountryId.observeAsState(null)
+                val pagerState = rememberPagerState()
+
+                LaunchedEffect(pagerState) {
+                    // Collect from the a snapshotFlow reading the currentPage
+                    snapshotFlow { pagerState.currentPage }.collect { page ->
+                        when (page == 1) {
+                            true -> {
+                                binding.selectCountryPlaceSpinner.isInvisible = true
+                            }
+                            false -> {
+                                when (loginActivityViewModel.isAuroraServiceSelected) {
+                                    true -> {
+                                        binding.selectCountryPlaceSpinner.isVisible = true
+                                    }
+                                    false -> {
+                                        binding.selectCountryPlaceSpinner.isInvisible = true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
                 // In Compose world
                 MaterialTheme {
-                    HorizontalPager(count = 2, Modifier.height(this.height.dp)) { page ->
+                    HorizontalPager(
+                        count = 2, Modifier.height(this.height.dp),
+                        state = pagerState
+                    ) { page ->
                         when (page) {
                             0 -> {
                                 when (loginActivityViewModel.isAuroraServiceSelected) {
@@ -299,7 +359,20 @@ class JoinCountryPlaceSelectFragment : BaseFragment<FragmentAroCountryPlaceSelec
                             1 -> {
                                 when (loginActivityViewModel.isMeteorServiceSelected) {
                                     true -> {
-//                                        TODO 유성우
+                                        MeteorCountryLazyColumn(
+//                                            contryList = meteorCountryList // todo activate
+                                            meteorCountryList = mutableListOf( // todo delete
+                                                MeteorCountry(1, "\uD83C\uDDF0\uD83C\uDDF7", "대한민국"),
+                                                MeteorCountry(2, "\uD83C\uDDF0\uD83C\uDDF7", "대한민국1"),
+                                                MeteorCountry(3, "\uD83C\uDDF0\uD83C\uDDF7", "대한민국2"),
+                                                MeteorCountry(4, "\uD83C\uDDF0\uD83C\uDDF7", "대한민국3"),
+                                                MeteorCountry(5, "\uD83C\uDDF0\uD83C\uDDF7", "대한민국4"),
+                                                MeteorCountry(6, "\uD83C\uDDF0\uD83C\uDDF7", "대한민국5"),
+                                                MeteorCountry(7, "\uD83C\uDDF0\uD83C\uDDF7", "대한민국6"),
+                                            ),
+                                            selectedCountry = selectedCountry,
+                                            viewModel = loginActivityViewModel
+                                        )
                                     }
                                     false -> {
                                         Box(
@@ -323,12 +396,6 @@ class JoinCountryPlaceSelectFragment : BaseFragment<FragmentAroCountryPlaceSelec
                     } // End of HorizontalPager
                 }
             }
-        }
-        binding.cancelButton.setOnClickListener {
-            loginActivityViewModel.isAuroraServiceSelected = false
-            loginActivityViewModel.isMeteorServiceSelected = false
-            loginActivityViewModel.clearSelectedAuroraPlaceList()
-            findNavController().popBackStack()
-        }
-    } // End of initView
+        } // End of countryPlaceComposeview.apply
+    } // End of initComposeView
 }
