@@ -161,15 +161,6 @@ class StampValidateFragment :
                 ChangeMultipartUtil().changeAbsoluteyPath(imageUri, requireActivity())
             )
 
-            Log.d(TAG, "file : ${file}")
-
-//            val metadata = ImageMetadataReader.readMetadata(file)
-//            for (directory in metadata.directories) {
-//                for (tag in directory.tags) {
-//                    Log.d(TAG, "${tag.tagName}: ${tag.description}")
-//                }
-//            }
-
             val exif = ExifInterface(file)
             Picasso.get().load(imageUri).fit().centerCrop().into(binding.stampValidateImageview)
 
@@ -180,9 +171,6 @@ class StampValidateFragment :
 
                 CoroutineScope(Dispatchers.IO).launch {
                     locationCarc(lat, lng)
-                    withContext(Dispatchers.Main) {
-                        binding.imageLocationInformTextview.text = "Lat : ${lat}, Lon : ${lng}"
-                    }
                 }
             } else {
                 requireView().showSnackBarMessage("해당 이미지의 좌표를 찾을 수 없습니다 다른 이미지를 선택해주세요")
@@ -249,10 +237,6 @@ class StampValidateFragment :
 
                         CoroutineScope(Dispatchers.IO).launch {
                             locationCarc(lat, lng)
-                            withContext(Dispatchers.Main) {
-                                binding.imageLocationInformTextview.text =
-                                    "Lat : ${lat}, Lon : ${lng}"
-                            }
                         }
                     } else {
                         requireView().showSnackBarMessage("해당 이미지의 좌표를 찾을 수 없습니다 다른 이미지를 선택해주세요")
@@ -276,7 +260,7 @@ class StampValidateFragment :
 
     private suspend fun locationCarc(nowLat: Double, nowLng: Double) {
         var address: String? = null
-        val job = CoroutineScope(Dispatchers.Default).async {
+        val job = CoroutineScope(Dispatchers.IO).async {
             val getAdd = getAddressByCoordinates(nowLat, nowLng)
             if (getAdd != null) {
                 address = getAdd.getAddressLine(0)
@@ -285,6 +269,8 @@ class StampValidateFragment :
 
         job.join()
 
+        Log.d(TAG, "locationCarc: ${address}")
+        Log.d(TAG, "locationCarc: ${address}")
 
         val result = address!!.indexOf("Stockholm")
         if (result != -1) {
@@ -292,7 +278,7 @@ class StampValidateFragment :
         }
     } // End of getAddress
 
-    private fun getAddressByCoordinates(latitude: Double, longitude: Double): Address? {
+    private suspend fun getAddressByCoordinates(latitude: Double, longitude: Double): Address? {
         val geocoder = Geocoder(mContext, Locale.KOREA)
 
         val addresses: List<Address>?
@@ -318,15 +304,32 @@ class StampValidateFragment :
         Log.d(TAG, "featureName: ${address.featureName}")
         Log.d(TAG, "extras: ${address.extras}")
         Log.d(TAG, "locality: ${address.locality}") // 유력 후보
+        Log.d(TAG, "getAddressByCoordinates: ${address}")
+        Log.d(TAG, "addresses: ${addresses}")
         // Murmansk // Reykjavík //
+
+        withContext(Dispatchers.Main) {
+            binding.imageLocationInformTextview.text =
+                "locallty : ${address.locality} , featureName : ${address.featureName}"
+        }
+
+        // 로직 : address의 locallty나 featureName 둘 중에 하나라도 조건에 부합하는 값일 경우, 해당 지역에 있다고 인정해줌.
+
 
         // 아이슬란드
         /*
-            Reykjavík
+
+            레이캬비크 : Reykjavík
+            아퀴레이리 : Akureyri
+            요쿨살론 : Jökulsárlón
 
          */
 
 
+        // 캐나다
+        /*
+
+         */
 
         Log.d(TAG, "subAdminArea: ${address.subAdminArea}")
         Log.d(TAG, "maxAddressLineIndex: ${address.maxAddressLineIndex}")
