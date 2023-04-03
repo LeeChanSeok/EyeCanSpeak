@@ -28,9 +28,6 @@ class MainRepository @Inject constructor(private val mainApi: MainApi) {
         MutableLiveData<NetworkResult<Boolean>>()
     val getCloudDisplayOptionNetworkResultLiveData: LiveData<NetworkResult<Boolean>> get() = _getCloudDisplayOptionNetworkResultLiveData
 
-    private val _getSelectedServiceNetworkResultLiveData = MutableLiveData<NetworkResult<UserTest>>()
-    val getSelectedServiceNetworkResultLiveData get() = _getSelectedServiceNetworkResultLiveData
-
     suspend fun logout(grantType: String, accessToken: String, refreshToken: String) {
         val response = mainApi.logout(
             JsonObject().apply {

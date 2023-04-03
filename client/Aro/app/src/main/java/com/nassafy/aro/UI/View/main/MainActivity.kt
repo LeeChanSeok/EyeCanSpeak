@@ -254,6 +254,19 @@ class MainActivity : AppCompatActivity() {
             } // End of when
         } // End of getAuroraOptionNetworkResultLiveData.observe
 
+        mainActivityViewModel.getCloudOptionNetworkResultLiveData.observe(this) {
+            when (it) {
+                is NetworkResult.Success -> {
+                    mainActivityViewModel.cloudDisplayOption = it.data!!
+                }
+                is NetworkResult.Error -> {
+                    binding.root.showSnackBarMessage("유저 정보를 불러오는데 실패했습니다.")
+                }
+                is NetworkResult.Loading -> {
+                }
+            } // End of when
+        } // End of getCloudOptionNetworkResultLiveData.observe
+
         mainActivityViewModel.logoutNetworkResultLiveData.observe(this) {
             when (it) {
                 is NetworkResult.Success -> {
@@ -331,6 +344,7 @@ class MainActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             mainActivityViewModel.getAlarmOption()
             mainActivityViewModel.getAuroraDisplayOption()
+            mainActivityViewModel.getCloudDisplayOption()
         }
     } // End of initOption
 
