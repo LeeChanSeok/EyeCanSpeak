@@ -18,7 +18,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -27,7 +26,6 @@ import androidx.navigation.ui.setupWithNavController
 import com.nassafy.aro.Application
 import com.nassafy.aro.R
 import com.nassafy.aro.databinding.ActivityMainBinding
-import com.nassafy.aro.service.AroFCM
 import com.nassafy.aro.ui.view.login.LoginActivity
 import com.nassafy.aro.util.NetworkResult
 import com.nassafy.aro.util.showSnackBarMessage
@@ -63,7 +61,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         checkPermission()
 
         val navHostFragment =
@@ -77,7 +74,8 @@ class MainActivity : AppCompatActivity() {
         initOption()
 
         CoroutineScope(Dispatchers.IO).launch {
-            mainActivityViewModel.getUserInfo(callFcmToken())
+            Log.d(TAG, "FCM 토큰 제대로 넘어가니???? : ${Application.sharedPreferencesUtil.getFcmToken()} ")
+            mainActivityViewModel.getUserInfo(Application.sharedPreferencesUtil.getFcmToken())
         }
     } // End of onCreate
 
@@ -203,9 +201,9 @@ class MainActivity : AppCompatActivity() {
     } // End of showDialogForLocationServiceSetting
 
 
-    private fun callFcmToken(): String {
-        return AroFCM().getFirebaseToken()
-    } // End of callFcmToken
+//    private fun callFcmToken(): String {
+//        return MyFirebaseMessagingService().getFirebaseToken()
+//    } // End of callFcmToken
 
 
     private fun initObserver() {
@@ -216,8 +214,10 @@ class MainActivity : AppCompatActivity() {
                     mainActivityViewModel.nickname = it.data!!.nickname
 
                     binding.mainNavigation.getHeaderView(0).apply {
-                        findViewById<TextView>(R.id.nickname_textview).text = mainActivityViewModel.nickname
-                        findViewById<TextView>(R.id.email_textview).text = mainActivityViewModel.email
+                        findViewById<TextView>(R.id.nickname_textview).text =
+                            mainActivityViewModel.nickname
+                        findViewById<TextView>(R.id.email_textview).text =
+                            mainActivityViewModel.email
                     }
                 }
                 is NetworkResult.Error -> {
@@ -255,7 +255,7 @@ class MainActivity : AppCompatActivity() {
         } // End of getAuroraOptionNetworkResultLiveData.observe
 
         mainActivityViewModel.logoutNetworkResultLiveData.observe(this) {
-            when(it) {
+            when (it) {
                 is NetworkResult.Success -> {
                     val layout = layoutInflater.inflate(R.layout.custom_toast_delete_account, null)
                     this.showToastView(layout)

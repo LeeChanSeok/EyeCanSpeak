@@ -8,25 +8,27 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Build
+import android.util.Log
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.*
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.nassafy.aro.Application
 import com.nassafy.aro.R
 import com.nassafy.aro.ui.view.main.MainActivity
 
-private const val TAG = "AroFCM_싸피"
 
-class AroFCM : FirebaseMessagingService() {
+private const val TAG = "MyFirebaseMessagingService_싸피"
+
+class MyFirebaseMessagingService : FirebaseMessagingService() {
     lateinit var notificationManager: NotificationManager
     lateinit var notificationChannel: NotificationChannel
     lateinit var builder: Notification.Builder
 
-
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-    } // End of onNewToken
+        Application.sharedPreferencesUtil.addFcmToken(token.toString())
+    }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
@@ -87,6 +89,8 @@ class AroFCM : FirebaseMessagingService() {
         FirebaseMessaging.getInstance().token.addOnSuccessListener {
             token = it.toString()
         }
+
+        Log.d(TAG, "getFirebaseToken: ${token}")
 
         return token
     } // End of getFirebaseToken

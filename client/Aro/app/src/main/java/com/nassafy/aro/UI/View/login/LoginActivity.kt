@@ -6,9 +6,12 @@ import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.nassafy.aro.databinding.ActivityLoginBinding
-import com.nassafy.aro.service.AroFCM
 import com.nassafy.aro.ui.view.login.viewmodel.LoginActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
+
+
+private const val TAG = "LoginActivity_싸피"
+
 
 @AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
@@ -21,7 +24,6 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        AroFCM().getFirebaseToken()
         val uri = intent?.data
         // Oauth 로그인 인지 아닌지 확인
         when (uri?.scheme.toString()) {
