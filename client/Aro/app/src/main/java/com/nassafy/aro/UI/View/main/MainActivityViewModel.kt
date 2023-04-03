@@ -21,11 +21,13 @@ class MainActivityViewModel @Inject constructor(private val mainRepository: Main
     var email: String = ""
     var alarmOption: Boolean = false
     var auroraDisplayOption: Boolean = false
+    var cloudDisplayOption: Boolean = false
 
     val logoutNetworkResultLiveData get() = mainRepository.logoutNetworkResultLiveData
     val userInfo: LiveData<NetworkResult<UserTest>> get() = mainRepository.userInfo
     val getAlarmOptionNetworkResultLiveData get() = mainRepository.getAlarmOptionNetworkResultLiveData
     val getAuroraOptionNetworkResultLiveData get() = mainRepository.getAuroraDisplayOptionNetworkResultLiveData
+    val getCloudOptionNetworkResultLiveData get() = mainRepository.getCloudDisplayOptionNetworkResultLiveData
 
     fun logout(grantType: String, accessToken: String, refreshToken: String) {
         viewModelScope.launch {
@@ -48,6 +50,12 @@ class MainActivityViewModel @Inject constructor(private val mainRepository: Main
     fun getAuroraDisplayOption() {
         viewModelScope.launch {
             mainRepository.getAuroraDisplayOption()
+        }
+    } // End of getAuroraDisplayOption
+
+    fun getCloudDisplayOption() {
+        viewModelScope.launch {
+            mainRepository.getCloudDisplayOption()
         }
     } // End of getAuroraDisplayOption
 

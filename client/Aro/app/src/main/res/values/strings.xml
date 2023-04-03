@@ -85,6 +85,9 @@
     <string name="settings_fragment_map_on_aurora_set_title_textview_text">지도 오로라 표시</string>
     <string name="settings_fragment_map_on_aurora_set_inform_textview_text">지도에 오로라를 표시할지 설정합니다.</string>
 
+    <string name="settings_fragment_map_on_cloud_set_title_textview_text">지도 구름 표시</string>
+    <string name="settings_fragment_map_on_cloud_set_inform_textview_text">지도에 구름을 표시할지 설정합니다.</string>
+
     <string name="settings_fragment_delete_account_title_textview_text">회원탈퇴</string>
     <string name="settings_fragment_delete_account_inform_textview_text">회원을 탈퇴하여 더 이상 서비스를 이용하지 않습니다.</string>
 

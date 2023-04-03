@@ -25,4 +25,12 @@ interface SettingApi {
     @POST("api/members/auroraDisplay")
     suspend fun setAuroraDisplayOption(): Response<Unit>
 
+    @GET("api/members/cloudDisplay")
+    suspend fun getCloudDisplayOption(): Response<Boolean>
+
+    @POST("api/members/cloudDisplay")
+    suspend fun setCloudDisplayOption(): Response<Unit>
+
+
+
 }

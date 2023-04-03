@@ -62,7 +62,7 @@ class AuroraFragment : BaseFragment<FragmentAuroraBinding>(FragmentAuroraBinding
     private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
 
     private var mMap: GoogleMap? = null
-    private lateinit var cloudTileOverlay: TileOverlay
+    private var cloudTileOverlay: TileOverlay? = null
     private lateinit var favoriteAdapter: BottomSheetFavoriteAdapter
     private var now = LocalDateTime.now()
     private var utcNow = LocalDateTime.now(ZoneOffset.UTC)
@@ -79,21 +79,32 @@ class AuroraFragment : BaseFragment<FragmentAuroraBinding>(FragmentAuroraBinding
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initObserve()
+        //서비스선택안함
+        if (true) {
+            binding.mapView.visibility = View.GONE
+            binding.bottomSheet.root.visibility = View.GONE
+            binding.dateHourLinearlayout.visibility = View.GONE
+            binding.drawerImagebutton.setOnClickListener {
+                val mainActivity = activity as MainActivity
+                mainActivity.openDrawer()
+            }
+        } else {
+            initObserve()
 
-        Log.d(TAG, "onViewCreated: $utcString, ${utcNow.hour}")
-        getData(utcString, utcNow.hour)
+            Log.d(TAG, "onViewCreated: $utcString, ${utcNow.hour}")
+            getData(utcString, utcNow.hour)
 
-        initView()
+            initView()
 
-        initBottomSheetChart(chartHourLabel, kpWithProbs.kps)
+            initBottomSheetChart(chartHourLabel, kpWithProbs.kps)
 
-        initBottomSheetRecyclerView()
+            initBottomSheetRecyclerView()
 
-        val mapFragment: SupportMapFragment =
-            childFragmentManager.findFragmentById(R.id.map_view) as SupportMapFragment
+            val mapFragment: SupportMapFragment =
+                childFragmentManager.findFragmentById(R.id.map_view) as SupportMapFragment
 
-        OnMapAndViewReadyListener(mapFragment, this)
+            OnMapAndViewReadyListener(mapFragment, this)
+        }
     } // End of onViewCreated
 
     override fun onMapReady(googleMap: GoogleMap?) {
@@ -101,7 +112,16 @@ class AuroraFragment : BaseFragment<FragmentAuroraBinding>(FragmentAuroraBinding
         mMap!!.uiSettings.isMapToolbarEnabled = false
         setCustomMapStyle()
 
-//        setCloudTileOverlay()
+        // TODO: setCloudTileOverlay
+//        when {
+//            mainActivityViewModel.cloudDisplayOption -> {
+//                setCloudTileOverlay()
+//            }
+//            mainActivityViewModel.cloudDisplayOption == false && cloudTileOverlay != null -> {
+//                cloudTileOverlay!!.remove()
+//            }
+//            else -> {}
+//        }
 
         // setPolyLine
         Log.d(TAG, "onMapReady: ${mainActivityViewModel.auroraDisplayOption}")
@@ -112,9 +132,7 @@ class AuroraFragment : BaseFragment<FragmentAuroraBinding>(FragmentAuroraBinding
             mainActivityViewModel.auroraDisplayOption == false && mPolyline != null -> {
                 mPolyline!!.remove()
             }
-            else -> {
-
-            }
+            else -> {}
         }
 
         // set ClusterManager
@@ -414,8 +432,10 @@ class AuroraFragment : BaseFragment<FragmentAuroraBinding>(FragmentAuroraBinding
 
     override fun onDestroyView() {
         super.onDestroyView()
-        mClusterManager.clearItems()
-        mClusterManager.cluster()
-        mMap = null
+        if (::mClusterManager.isInitialized) {
+            mClusterManager.clearItems()
+            mClusterManager.cluster()
+            mMap = null
+        }
     }
 }

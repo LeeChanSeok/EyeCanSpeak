@@ -23,4 +23,7 @@ interface MainApi {
     @GET("api/members/auroraDisplay")
     suspend fun getAuroraDisplayOption(): Response<Boolean>
 
+    @GET("api/members/cloudDisplay")
+    suspend fun getCloudDisplayOption(): Response<Boolean>
+
 } // End of MainApi interface

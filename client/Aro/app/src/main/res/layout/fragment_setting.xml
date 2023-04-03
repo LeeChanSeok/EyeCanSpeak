@@ -115,6 +115,45 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/settings_fragment_map_on_aurora_set_title_textview" />
 
+    <TextView
+        android:id="@+id/settings_fragment_map_on_cloud_set_title_textview"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/setting_interval_margin_size"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/nanum_square_b"
+        android:text="@string/settings_fragment_map_on_cloud_set_title_textview_text"
+        android:textColor="@color/white"
+        android:textSize="@dimen/setting_title_textview_text_size"
+        app:layout_constraintEnd_toStartOf="@id/settings_fragment_notification_set_toogle_imgaeButton"
+        app:layout_constraintStart_toStartOf="@id/settings_fragment_notification_set_title_textview"
+        app:layout_constraintTop_toBottomOf="@id/settings_fragment_map_on_aurora_set_inform_textview" />
+
+    <TextView
+        android:id="@+id/settings_fragment_map_on_cloud_set_inform_textview"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/nanum_square_l"
+        android:text="@string/settings_fragment_map_on_cloud_set_inform_textview_text"
+        android:textColor="@color/white"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toStartOf="@id/settings_fragment_map_on_aurora_set_toogle_imgaeButton"
+        app:layout_constraintStart_toStartOf="@id/settings_fragment_notification_set_title_textview"
+        app:layout_constraintTop_toBottomOf="@id/settings_fragment_map_on_cloud_set_title_textview" />
+
+    <ImageButton
+        android:id="@+id/settings_fragment_map_on_cloud_set_toogle_imgaeButton"
+        android:layout_width="40dp"
+        android:layout_height="17dp"
+        android:layout_marginEnd="32dp"
+        android:background="@android:color/transparent"
+        android:scaleType="fitCenter"
+        android:src="@drawable/setting_toggle_selector"
+        app:layout_constraintBottom_toBottomOf="@id/settings_fragment_map_on_cloud_set_inform_textview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/settings_fragment_map_on_cloud_set_title_textview" />
 
     <TextView
         android:id="@+id/settings_fragment_delete_account_title_textview"
@@ -127,8 +166,9 @@
         android:textColor="@color/white"
         android:textSize="@dimen/setting_title_textview_text_size"
         app:layout_constraintEnd_toStartOf="@id/settings_fragment_delete_account_imgaeButton"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@id/settings_fragment_notification_set_title_textview"
-        app:layout_constraintTop_toBottomOf="@id/settings_fragment_map_on_aurora_set_inform_textview" />
+        app:layout_constraintTop_toBottomOf="@+id/settings_fragment_map_on_cloud_set_inform_textview" />
 
     <TextView
         android:id="@+id/settings_fragment_delete_account_inform_textview"

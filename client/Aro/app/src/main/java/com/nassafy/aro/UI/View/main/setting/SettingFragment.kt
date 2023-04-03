@@ -99,6 +99,34 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(FragmentSettingBind
                 is NetworkResult.Loading -> {}
             }
         } // End of setAuroraOptionNetworkResultLiveData observe
+
+        settingFragmentViewModel.getCloudOptionNetworkResultLiveData.observe(this.viewLifecycleOwner) {
+            when (it) {
+                is NetworkResult.Success -> {
+                    activityViewModel.cloudDisplayOption = it.data!!
+                    binding.settingsFragmentMapOnAuroraSetToogleImgaeButton.isSelected =
+                        activityViewModel.cloudDisplayOption
+                }
+                is NetworkResult.Error -> {
+                    requireView().showSnackBarMessage("네트워크 통신 에러")
+                }
+                is NetworkResult.Loading -> {}
+            }
+        } // End of getCloudOptionNetworkResultLiveData observe
+        settingFragmentViewModel.setCloudOptionNetworkResultLiveData.observe(this.viewLifecycleOwner) {
+            when (it) {
+                is NetworkResult.Success -> {
+                    activityViewModel.cloudDisplayOption = !activityViewModel.cloudDisplayOption
+                    binding.settingsFragmentMapOnCloudSetToogleImgaeButton.isSelected =
+                        activityViewModel.cloudDisplayOption
+                }
+                is NetworkResult.Error -> {
+                    requireView().showSnackBarMessage("네트워크 통신 에러")
+                }
+                is NetworkResult.Loading -> {}
+            }
+        } // End of setCloudOptionNetworkResultLiveData observe
+
         settingFragmentViewModel.deleteAccountNetworkResultLiveData.observe(this.viewLifecycleOwner) {
             when (it) {
                 is NetworkResult.Success -> {
@@ -123,6 +151,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(FragmentSettingBind
             settingFragmentViewModel.apply {
                 getAlarmOption()
                 getAuroraDisplayOption()
+                // getCloudDisplayOption()
             }
         }
 
@@ -132,6 +161,10 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(FragmentSettingBind
 
         binding.settingsFragmentMapOnAuroraSetToogleImgaeButton.setOnClickListener {
             settingFragmentViewModel.setAuroraDisplayOption()
+        }
+
+        binding.settingsFragmentMapOnCloudSetToogleImgaeButton.setOnClickListener {
+            settingFragmentViewModel.setCloudDisplayOption()
         }
 
         binding.settingsFragmentDeleteAccountImgaeButton.setOnClickListener {

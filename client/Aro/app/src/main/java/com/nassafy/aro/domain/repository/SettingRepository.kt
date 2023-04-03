@@ -23,6 +23,12 @@ class SettingRepository @Inject constructor(private val settingApi: SettingApi) 
     private val _setAuroraDisplayOptionNetworkResultLiveData = MutableLiveData<NetworkResult<Unit>>()
     val setAuroraDisplayOptionNetworkResultLiveData: LiveData<NetworkResult<Unit>> get() = _setAuroraDisplayOptionNetworkResultLiveData
 
+    private val _getCloudDisplayOptionNetworkResultLiveData = MutableLiveData<NetworkResult<Boolean>>()
+    val getCloudDisplayOptionNetworkResultLiveData: LiveData<NetworkResult<Boolean>> get() = _getCloudDisplayOptionNetworkResultLiveData
+
+    private val _setCloudDisplayOptionNetworkResultLiveData = MutableLiveData<NetworkResult<Unit>>()
+    val setCloudDisplayOptionNetworkResultLiveData: LiveData<NetworkResult<Unit>> get() = _setCloudDisplayOptionNetworkResultLiveData
+
     private val _deleteAccountNetworkResultLiveData = MutableLiveData<NetworkResult<Unit>>()
     val deleteAccountNetworkResultLiveData: LiveData<NetworkResult<Unit>> get() = _deleteAccountNetworkResultLiveData
 
@@ -75,6 +81,31 @@ class SettingRepository @Inject constructor(private val settingApi: SettingApi) 
             Log.e("ssafy", "getServerCallTest: ${e.message}")
         }
     } // End of setAuroraDisplayOption
+
+    suspend fun getCloudDisplayOption() {
+        val response = settingApi.getCloudDisplayOption()
+        _getCloudDisplayOptionNetworkResultLiveData.setNetworkResult(response)
+    } // End of getAuroraDisplayOption
+
+    suspend fun setCloudDisplayOption() {
+        val response = settingApi.setCloudDisplayOption()
+        _setCloudDisplayOptionNetworkResultLiveData.postValue(NetworkResult.Loading())
+
+        try {
+            when {
+                response.isSuccessful -> {
+                    _setCloudDisplayOptionNetworkResultLiveData.postValue(
+                        NetworkResult.Success(Unit)
+                    ) // End of postValue
+                } // End of response.isSuccessful
+                response.errorBody() != null -> {
+                    _setCloudDisplayOptionNetworkResultLiveData.postValue(NetworkResult.Error(response.errorBody()!!.string()))
+                } // End of response.errorBody
+            } // End of when
+        } catch (e: java.lang.Exception) {
+            Log.e("ssafy", "getServerCallTest: ${e.message}")
+        }
+    } // End of setCloudDisplayOption
 
     suspend fun deleteAccount(email: String) {
         val response = settingApi.deleteAccount(JsonObject().apply {

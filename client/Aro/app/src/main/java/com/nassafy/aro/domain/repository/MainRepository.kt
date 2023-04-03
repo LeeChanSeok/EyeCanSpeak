@@ -24,6 +24,13 @@ class MainRepository @Inject constructor(private val mainApi: MainApi) {
         MutableLiveData<NetworkResult<Boolean>>()
     val getAuroraDisplayOptionNetworkResultLiveData: LiveData<NetworkResult<Boolean>> get() = _getAuroraDisplayOptionNetworkResultLiveData
 
+    private val _getCloudDisplayOptionNetworkResultLiveData =
+        MutableLiveData<NetworkResult<Boolean>>()
+    val getCloudDisplayOptionNetworkResultLiveData: LiveData<NetworkResult<Boolean>> get() = _getCloudDisplayOptionNetworkResultLiveData
+
+    private val _getSelectedServiceNetworkResultLiveData = MutableLiveData<NetworkResult<UserTest>>()
+    val getSelectedServiceNetworkResultLiveData get() = _getSelectedServiceNetworkResultLiveData
+
     suspend fun logout(grantType: String, accessToken: String, refreshToken: String) {
         val response = mainApi.logout(
             JsonObject().apply {
@@ -125,5 +132,51 @@ class MainRepository @Inject constructor(private val mainApi: MainApi) {
             Log.e("ssafy", "getServerCallTest: ${e.message}")
         }
     } // End of getAuroraDisplayOption
+
+    suspend fun getCloudDisplayOption() {
+        val response = mainApi.getCloudDisplayOption()
+        _getCloudDisplayOptionNetworkResultLiveData.postValue(NetworkResult.Loading())
+
+        try {
+            when {
+                response.isSuccessful -> {
+                    _getCloudDisplayOptionNetworkResultLiveData.postValue(
+                        NetworkResult.Success(response.body()!!)
+                    ) // End of postValue
+                } // End of response.isSuccessful
+                response.errorBody() != null -> {
+                    _getCloudDisplayOptionNetworkResultLiveData.postValue(
+                        NetworkResult.Error(
+                            response.errorBody()!!.string()
+                        )
+                    )
+                } // End of response.errorBody
+            } // End of when
+        } catch (e: java.lang.Exception) {
+            Log.e("ssafy", "getServerCallTest: ${e.message}")
+        }
+    } // End of getCloudDisplayOption
+
+    suspend fun getSelectedServiceList() {
+        val response = myPageApi.getSelectedService()
+        _getSelectedServiceNetworkResultLiveData.postValue(NetworkResult.Loading())
+        try {
+            when {
+                response.isSuccessful -> {
+                    _getSelectedServiceNetworkResultLiveData.postValue(
+                        NetworkResult.Success(
+                            response.body()!!
+                        )
+                    )
+                }
+                response.errorBody() != null -> {
+                    _getSelectedServiceNetworkResultLiveData.postValue(NetworkResult.Error(response.errorBody()!!.string()))
+                }
+            } // End of when
+        } catch (e: java.lang.Exception) {
+            Log.e("ssafy", "getServerCallTest: ${e.message}")
+        } // End of try-catch
+    } // End of getSelectedServiceList
+
 
 } // End of MainRepository class

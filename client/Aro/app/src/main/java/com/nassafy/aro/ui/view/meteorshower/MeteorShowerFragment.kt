@@ -25,33 +25,48 @@ class MeteorShowerFragment : BaseFragment<FragmentMeteorShowerBinding>(FragmentM
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        var mLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        // 서비스 선택 안함
+        if (true) {
 
-        meteorShowerAdapter = MeteorShowerAdapter(binding.meteorShowerRecyclerview, itemList)
+            binding.meteorShowerCountryTextview.visibility = View.GONE
+            binding.meteorShowerRecyclerview.visibility = View.GONE
 
-        binding.meteorShowerCountryTextview.apply {
-            text = countryList[0]
-            setOnClickListener {
-                val meteorCountrySelectDialog = MeteorCountrySelectDialog(
-                    countryList
-                )
-                meteorCountrySelectDialog.show(
-                    childFragmentManager, "MeteorCountrySelectDialog"
-                )
+            binding.drawerImagebutton.setOnClickListener {
+                val mainActivity = activity as MainActivity
+                mainActivity.openDrawer()
+            }
+
+
+        } else {
+            var mLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+
+            meteorShowerAdapter = MeteorShowerAdapter(binding.meteorShowerRecyclerview, itemList)
+
+            binding.meteorShowerCountryTextview.apply {
+                text = countryList[0]
+                setOnClickListener {
+                    val meteorCountrySelectDialog = MeteorCountrySelectDialog(
+                        countryList
+                    )
+                    meteorCountrySelectDialog.show(
+                        childFragmentManager, "MeteorCountrySelectDialog"
+                    )
+                }
+            }
+
+            binding.drawerImagebutton.setOnClickListener {
+                val mainActivity = activity as MainActivity
+                mainActivity.openDrawer()
+            }
+
+            binding.meteorShowerRecyclerview.apply {
+                adapter = meteorShowerAdapter
+                layoutManager = mLayoutManager
+                (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+                addItemDecoration(DividerItemDecoration(requireContext(), RecyclerView.VERTICAL))
             }
         }
 
-        binding.drawerImagebutton.setOnClickListener {
-            val mainActivity = activity as MainActivity
-            mainActivity.openDrawer()
-        }
-
-        binding.meteorShowerRecyclerview.apply {
-            adapter = meteorShowerAdapter
-            layoutManager = mLayoutManager
-            (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
-            addItemDecoration(DividerItemDecoration(requireContext(), RecyclerView.VERTICAL))
-        }
     } // End of onViewCreated
 
     fun changeCountry(country: String) {

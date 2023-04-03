@@ -15,6 +15,8 @@ class SettingFragmentViewModel @Inject constructor(private val settingRepository
     val setAlarmOptionNetworkResultLiveData get() = settingRepository.setAlarmOptionNetworkResultLiveData
     val getAuroraOptionNetworkResultLiveData get() = settingRepository.getAuroraDisplayOptionNetworkResultLiveData
     val setAuroraOptionNetworkResultLiveData get() = settingRepository.setAuroraDisplayOptionNetworkResultLiveData
+    val getCloudOptionNetworkResultLiveData get() = settingRepository.getCloudDisplayOptionNetworkResultLiveData
+    val setCloudOptionNetworkResultLiveData get() = settingRepository.setCloudDisplayOptionNetworkResultLiveData
     val deleteAccountNetworkResultLiveData get() = settingRepository.deleteAccountNetworkResultLiveData
 
     suspend fun getAlarmOption() {
@@ -44,6 +46,23 @@ class SettingFragmentViewModel @Inject constructor(private val settingRepository
             result.await()
         }
     }
+
+    suspend fun getCloudDisplayOption() {
+        viewModelScope.launch {
+            settingRepository.getCloudDisplayOption()
+        }
+    }
+
+    fun setCloudDisplayOption() {
+        viewModelScope.launch {
+            var result : Deferred<Int> = async {
+                settingRepository.setCloudDisplayOption()
+                1
+            }
+            result.await()
+        }
+    }
+
     fun deleteAccount(email: String) {
         viewModelScope.launch {
             settingRepository.deleteAccount(email)
