@@ -90,7 +90,6 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
         override fun createFragment(position: Int): Fragment {
             return when (position) {
                 0 -> AuroraFragment()
-                // TODO: Meteor Shower Fragment
                 else -> MeteorShowerFragment()
             }
         }

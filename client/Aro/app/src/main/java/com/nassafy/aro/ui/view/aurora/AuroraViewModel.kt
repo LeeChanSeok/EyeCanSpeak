@@ -35,19 +35,13 @@ class AuroraViewModel @Inject constructor(
     val placeItemListLiveData: LiveData<NetworkResult<List<PlaceItem>>>
         get() = auroraRepository.placeItemListLiveData
     fun getPlaceItemList(dateString: String, hour: Int) {
+        Log.d(TAG, "getPlaceItemList: Go")
         viewModelScope.launch {
             auroraRepository.getPlaceItemList(dateString, hour)
         }
+        Log.d(TAG, "getPlaceItemList: End")
     }
-
-    val currentWeatherLiveData: LiveData<NetworkResult<WeatherResponse>>
-        get() = weatherRepository.weatherCurrentLiveData
-    fun getCurrentWeather(lat: Float, lng: Float) {
-        viewModelScope.launch {
-            weatherRepository.getCurrentWeather(lat.toString(), lng.toString())
-        }
-    }
-
+    
     val currentKpIndexLiveData: LiveData<NetworkResult<KpResponse>>
         get() = auroraRepository.kpCurrentLiveData
     fun getCurrentKpIndex(dateString: String, hour: Int) {
@@ -60,9 +54,7 @@ class AuroraViewModel @Inject constructor(
         get() = auroraRepository.kpAndProbsLiveData
     fun getKpAndProbsLiveData(dateString: String, hour: Int) {
         viewModelScope.launch {
-            Log.d(TAG, "vm: GO")
             auroraRepository.getKpAndProbsLiveData(dateString, hour)
-            Log.d(TAG, "vm: END")
         }
     }
 

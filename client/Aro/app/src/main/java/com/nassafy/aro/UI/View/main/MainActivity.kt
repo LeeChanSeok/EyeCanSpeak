@@ -37,7 +37,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-private const val TAG = "MainActivity_싸피"
+private const val TAG = "MainActivity_SDR"
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -291,13 +291,8 @@ class MainActivity : AppCompatActivity() {
 
             override fun onDrawerOpened(drawerView: View) {
                 super.onDrawerOpened(drawerView)
-                val nickname: TextView = findViewById<View>(R.id.nickname_textview) as TextView
-                val email: TextView = findViewById<View>(R.id.email_textview) as TextView
                 val closeButton: ImageButton = findViewById(R.id.close_button)
                 val logoutTextView: TextView = findViewById(R.id.logout_textview)
-                // TODO : Add Nickname and Email from User Data
-//                nickname.text = user.nickname
-//                email.text = user.email
 
                 closeButton.setOnClickListener {
                     closeDrawer()

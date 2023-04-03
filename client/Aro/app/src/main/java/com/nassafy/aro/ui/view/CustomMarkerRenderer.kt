@@ -19,7 +19,6 @@ class CustomMarkerRenderer(
 
     private val customMarker = generateBitmapDescriptorFromRes(context, R.drawable.map_marker)
 
-
     override fun onBeforeClusterItemRendered(item: PlaceItem, markerOptions: MarkerOptions) {
         markerOptions
             .position(item.position)

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -34,6 +35,7 @@ import com.nassafy.aro.ui.adapter.BottomSheetFavoriteAdapter
 import com.nassafy.aro.ui.view.*
 import com.nassafy.aro.ui.view.dialog.DateHourSelectDialog
 import com.nassafy.aro.ui.view.main.MainActivity
+import com.nassafy.aro.ui.view.main.MainActivityViewModel
 import com.nassafy.aro.util.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
@@ -57,6 +59,7 @@ class AuroraFragment : BaseFragment<FragmentAuroraBinding>(FragmentAuroraBinding
     ClusterManager.OnClusterItemClickListener<PlaceItem>,
     GoogleMap.OnInfoWindowCloseListener { // End of AuroraFragment
     private val auroraViewModel: AuroraViewModel by viewModels()
+    private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
 
     private var mMap: GoogleMap? = null
     private lateinit var cloudTileOverlay: TileOverlay
@@ -69,6 +72,7 @@ class AuroraFragment : BaseFragment<FragmentAuroraBinding>(FragmentAuroraBinding
     private var chartHourLabel = getChartHourLabel(now, now)
     private var kpIndex = 0.0
     private var kpWithProbs = KpWithProbs()
+    private var mPolyline : Polyline? = null
 
     private lateinit var mClusterManager: ClusterManager<PlaceItem>
 
@@ -100,7 +104,18 @@ class AuroraFragment : BaseFragment<FragmentAuroraBinding>(FragmentAuroraBinding
 //        setCloudTileOverlay()
 
         // setPolyLine
-        setPolyLine()
+        Log.d(TAG, "onMapReady: ${mainActivityViewModel.auroraDisplayOption}")
+        when {
+            mainActivityViewModel.auroraDisplayOption -> {
+                setPolyLine()
+            }
+            mainActivityViewModel.auroraDisplayOption == false && mPolyline != null -> {
+                mPolyline!!.remove()
+            }
+            else -> {
+
+            }
+        }
 
         // set ClusterManager
         setClusterManager()
@@ -159,7 +174,6 @@ class AuroraFragment : BaseFragment<FragmentAuroraBinding>(FragmentAuroraBinding
     }
 
     private fun initView() {
-        Log.d(TAG, "initView: $now")
         dateList = getDateList(now)
         hourList = getHourList(dateList, now)
 
@@ -356,13 +370,13 @@ class AuroraFragment : BaseFragment<FragmentAuroraBinding>(FragmentAuroraBinding
 
     private fun setPolyLine() {
         val polylineOptions = getKpPolylineOptions(kpIndex)
-        val polyline = mMap!!.addPolyline(polylineOptions)
+        mPolyline = mMap!!.addPolyline(polylineOptions)
         mMap!!.setOnMapClickListener { latLng ->
             auroraViewModel.setClickedLocation(latLng)
             // When Clicked Location is on Polyline, Google Map shows Info.
             val tolerance = getKpPolylineTolerance(mMap!!.cameraPosition.zoom)
             if (PolyUtil.isLocationOnPath(latLng, polylineOptions.points, true, tolerance)) {
-                polyline.addInfoWindow(mMap!!, latLng, "KP 지수", "${round(kpIndex * 100) / 100}")
+                mPolyline!!.addInfoWindow(mMap!!, latLng, "KP 지수", "${round(kpIndex * 100) / 100}")
             }
         } // End of setOnMapClickListener
     } // End of setPolyLine
@@ -402,5 +416,6 @@ class AuroraFragment : BaseFragment<FragmentAuroraBinding>(FragmentAuroraBinding
         super.onDestroyView()
         mClusterManager.clearItems()
         mClusterManager.cluster()
+        mMap = null
     }
 }

@@ -1,5 +1,6 @@
 package com.nassafy.aro.ui.view.main
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,7 +11,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+private const val TAG = "MainActivityViewModel_sdr"
+
 @HiltViewModel
+
 class MainActivityViewModel @Inject constructor(private val mainRepository: MainRepository) :
     ViewModel() {
     var nickname: String = ""

@@ -33,12 +33,8 @@ class CustomMarkerInfoRenderer(
 
     override fun getInfoWindow(marker: Marker): View {
         if (lastMarker != marker) {
-            Log.d(TAG, "getInfoWindow: ${marker.title}")
-            Log.d(TAG, "position: ${marker.position}")
-            
             lastMarker = marker
             val placeItem: PlaceItem = marker.tag as PlaceItem
-
             val infoImageView = infoWindow.findViewById<ImageView>(R.id.map_info_imageview)
             val infoNameTextView = infoWindow.findViewById<TextView>(R.id.map_info_name_textview)
             val infoTextView = infoWindow.findViewById<TextView>(R.id.map_info_textview)
@@ -46,13 +42,10 @@ class CustomMarkerInfoRenderer(
             val infoLinearLayout = infoWindow.findViewById<LinearLayout>(R.id.map_info_linearlayout)
             val infoProgressBar = infoWindow.findViewById<ProgressBar>(R.id.map_info_progressbar)
 
-//            infoProgressBar.visibility = View.VISIBLE
             infoLinearLayout.visibility = View.INVISIBLE
             infoNameTextView.text = placeItem.placeName
-//            infoImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.loading_spinner))
 
             CoroutineScope(Dispatchers.Main).launch {
-//                val currentWeatherLiveData = auroraViewModel.currentWeatherLiveData
                 val resultPicture: Deferred<Int> = async {
                     val picasso = Picasso.get()
                         .load(placeItem.image)

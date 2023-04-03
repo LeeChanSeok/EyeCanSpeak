@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nassafy.aro.domain.repository.SettingRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -35,7 +37,11 @@ class SettingFragmentViewModel @Inject constructor(private val settingRepository
 
     fun setAuroraDisplayOption() {
         viewModelScope.launch {
-            settingRepository.setAuroraDisplayOption()
+            var result : Deferred<Int> = async {
+                settingRepository.setAuroraDisplayOption()
+                1
+            }
+            result.await()
         }
     }
     fun deleteAccount(email: String) {
