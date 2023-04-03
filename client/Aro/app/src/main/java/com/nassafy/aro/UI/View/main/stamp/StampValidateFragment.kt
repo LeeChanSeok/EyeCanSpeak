@@ -1,7 +1,7 @@
 package com.nassafy.aro.ui.view.main.stamp
 
 import android.app.Activity
-import android.app.Activity.*
+import android.app.Activity.RESULT_OK
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
@@ -23,6 +23,7 @@ import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
+import com.drew.imaging.ImageMetadataReader
 import com.nassafy.aro.R
 import com.nassafy.aro.databinding.FragmentStampValidateBinding
 import com.nassafy.aro.ui.view.BaseFragment
@@ -70,37 +71,19 @@ class StampValidateFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewPagerPosition = requireArguments().getInt("position")
-
-
         postImageValidateResponseLiveDataObserve()
         postImageValidateSuccessResponseLiveDataObserve()
-
-        Log.d(TAG, "현재 선택한 명소 : ${stampNavViewModel.nowSelectedAttractionId}")
 
         // 사진 찍어서 가져오기
         binding.stampValidateCameraButton.setOnClickListener {
             if (isCameraServiceAvaliable()) {
                 openCam()
-
-                binding.stampValidateProgressbar.visibility = View.VISIBLE
-                binding.stampValidateProgressbar.isVisible = true
-                binding.validateConstraintLayout.visibility = View.GONE
-                binding.validateConstraintLayout.isVisible = false
-                binding.stampValidateProgressbarInformTextview.visibility = View.VISIBLE
-                binding.stampValidateProgressbarInformTextview.isVisible = true
             }
         }
 
         // 갤러리에서 가져온 사진.
         binding.stampValidateGalleryButton.setOnClickListener {
             openGallery()
-
-            binding.stampValidateProgressbar.visibility = View.VISIBLE
-            binding.stampValidateProgressbar.isVisible = true
-            binding.validateConstraintLayout.visibility = View.GONE
-            binding.validateConstraintLayout.isVisible = false
-            binding.stampValidateProgressbarInformTextview.visibility = View.VISIBLE
-            binding.stampValidateProgressbarInformTextview.isVisible = true
         }
     } // End of onViewCreated
 
@@ -172,11 +155,19 @@ class StampValidateFragment :
             val file = File(
                 ChangeMultipartUtil().changeAbsoluteyPath(imageUri, requireActivity())
             )
+
+            Log.d(TAG, "file : ${file}")
+
+            val metadata = ImageMetadataReader.readMetadata(file)
+            for (directory in metadata.directories) {
+                for (tag in directory.tags) {
+                    Log.d(TAG, "${tag.tagName}: ${tag.description}")
+                }
+            }
+
+
             val exif = ExifInterface(file)
-
             Picasso.get().load(imageUri).fit().centerCrop().into(binding.stampValidateImageview)
-
-            Log.d(TAG, "exif : $exif")
 
             // 위경도 좌표가 있을 때만,
             if (exif.latLong != null) {
@@ -196,9 +187,10 @@ class StampValidateFragment :
             val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
             val body = MultipartBody.Part.createFormData("image", file.name, requestFile)
 
-            Log.d(TAG, "openGallery() : ${body}")
-
             CoroutineScope(Dispatchers.IO).launch {
+                withContext(Dispatchers.Main) {
+                    loadingViewOn()
+                }
                 sendValidateImage(body)
             }
         }
@@ -216,9 +208,6 @@ class StampValidateFragment :
         requestCode: Int, permissions: Array<out String>, grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        Log.d(TAG, "onRequestPermissionsResult -> grantResults: $grantResults")
-        Log.d(TAG, "onRequestPermissionsResult -> grantResults.size: ${grantResults.size}")
-
         if (requestCode == REQ_GALLERY && grantResults.size == REQUIRED_PERMISSIONS.size) {
             var checkResult = true
 
@@ -265,17 +254,16 @@ class StampValidateFragment :
                         requireView().showSnackBarMessage("해당 이미지의 좌표를 찾을 수 없습니다 다른 이미지를 선택해주세요")
                     }
 
-
                     val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
                     val body = MultipartBody.Part.createFormData("image", file.name, requestFile)
 
-                    Log.d(TAG, "onActivityResult: $body")
-
                     CoroutineScope(Dispatchers.IO).launch {
+                        withContext(Dispatchers.Main) {
+                            loadingViewOn()
+                        }
+
                         sendValidateImage(body)
                     }
-
-
                 }
             }
         }
@@ -336,22 +324,12 @@ class StampValidateFragment :
 
     private fun postImageValidateResponseLiveDataObserve() {
         validateViewModel.postImageValidateResponseLiveData.observe(this.viewLifecycleOwner) {
-//            binding.stampValidateProgressbar.visibility = View.GONE
-//            binding.stampValidateProgressbar.isVisible = false
-//            binding.validateConstraintLayout.visibility = View.VISIBLE
-//            binding.validateConstraintLayout.isVisible = true
-//            binding.stampValidateProgressbarInformTextview.visibility = View.GONE
-//            binding.stampValidateProgressbarInformTextview.isVisible = false
-
+            loadingViewOff()
 
             when (it) {
                 is NetworkResult.Success -> {
                     if (it.data == 201) {
-
-                        // 이미지 오로라 맞으면 서버에서 검증 성공 데이터 통신 해야됨
-                        // TODO 오로라 검증 성공 데이터 통신부 구현
                         CoroutineScope(Dispatchers.IO).launch {
-                            Log.d(TAG, "선택된 명소ID : ${stampNavViewModel.nowSelectedAttractionId}")
                             validateViewModel.postImageValidateSuccess(stampNavViewModel.nowSelectedAttractionId)
                         }
                     }
@@ -368,12 +346,7 @@ class StampValidateFragment :
                 }
 
                 is NetworkResult.Loading -> {
-                    binding.stampValidateProgressbar.visibility = View.VISIBLE
-                    binding.stampValidateProgressbar.isVisible = true
-                    binding.validateConstraintLayout.visibility = View.GONE
-                    binding.validateConstraintLayout.isVisible = false
-                    binding.stampValidateProgressbarInformTextview.visibility = View.VISIBLE
-                    binding.stampValidateProgressbarInformTextview.isVisible = true
+                    loadingViewOn()
                 }
             }
         }
@@ -381,12 +354,7 @@ class StampValidateFragment :
 
     private fun postImageValidateSuccessResponseLiveDataObserve() {
         validateViewModel.postImageValidateSuccessResponseLiveData.observe(this.viewLifecycleOwner) {
-            binding.stampValidateProgressbar.visibility = View.GONE
-            binding.stampValidateProgressbar.isVisible = false
-            binding.validateConstraintLayout.visibility = View.VISIBLE
-            binding.validateConstraintLayout.isVisible = true
-            binding.stampValidateProgressbarInformTextview.visibility = View.GONE
-            binding.stampValidateProgressbarInformTextview.isVisible = false
+            loadingViewOff()
 
             when (it) {
                 is NetworkResult.Success -> {
@@ -401,8 +369,6 @@ class StampValidateFragment :
 
                         // 내 현재 위치 index를 bundle에 저장함
                         val bundle = bundleOf("position" to viewPagerPosition)
-                        Log.d(TAG, "viewPagerPosition: $viewPagerPosition")
-
                         findNavController().navigate(
                             R.id.action_stampValidateFragment_to_stampCountryPlacesFragment,
                             bundle
@@ -421,16 +387,29 @@ class StampValidateFragment :
                 }
 
                 is NetworkResult.Loading -> {
-                    binding.stampValidateProgressbar.visibility = View.VISIBLE
-                    binding.stampValidateProgressbar.isVisible = true
-                    binding.validateConstraintLayout.visibility = View.GONE
-                    binding.validateConstraintLayout.isVisible = false
-                    binding.stampValidateProgressbarInformTextview.visibility = View.VISIBLE
-                    binding.stampValidateProgressbarInformTextview.isVisible = true
+                    loadingViewOn()
                 }
             }
         }
     } // End of postImageValidateSuccessResponseLiveDataObserve
+
+    private fun loadingViewOn() {
+        binding.stampValidateProgressbar.visibility = View.VISIBLE
+        binding.stampValidateProgressbar.isVisible = true
+        binding.validateConstraintLayout.visibility = View.GONE
+        binding.validateConstraintLayout.isVisible = false
+        binding.stampValidateProgressbarInformTextview.visibility = View.VISIBLE
+        binding.stampValidateProgressbarInformTextview.isVisible = true
+    } // End of loadingViewOn
+
+    private fun loadingViewOff() {
+        binding.stampValidateProgressbar.visibility = View.GONE
+        binding.stampValidateProgressbar.isVisible = false
+        binding.validateConstraintLayout.visibility = View.VISIBLE
+        binding.validateConstraintLayout.isVisible = true
+        binding.stampValidateProgressbarInformTextview.visibility = View.GONE
+        binding.stampValidateProgressbarInformTextview.isVisible = false
+    } // End of loadingViewOff
 
     companion object {
         private const val REQ_GALLERY = 1

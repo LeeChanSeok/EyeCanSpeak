@@ -54,6 +54,9 @@ class StampHomeFragment :
         main.closeDrawer()
     } // End of onCreate
 
+    private var xCoor: Float? = null
+    private var yCoor: Float? = null
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -93,6 +96,7 @@ class StampHomeFragment :
 
             true
         }
+
     } // End of onViewCreated
 
     private fun initEventListeners() {

@@ -32,6 +32,7 @@ class StampCountryPlacesFragment :
     // Fragment ViewModel
     private val stampCountryPlaceViewModel: StampCountryPlaceViewModel by viewModels()
 
+    // viewPager setCurrentItem
     private var viewPagerPosition: Int = 0
 
     override fun onAttach(context: Context) {
@@ -68,6 +69,7 @@ class StampCountryPlacesFragment :
 
     private fun initViewPagerAdapter() {
         countryPlaceViewPager = CountryPlaceViewPagerAdapter(
+            mContext,
             stampHomeNavViewModel.nowSelectedCountry, stampHomeNavViewModel.userCountryPlaceDataList
         )
         binding.stampCountryCustomViewpager2.apply {
@@ -75,7 +77,9 @@ class StampCountryPlacesFragment :
             ViewPager2.ORIENTATION_HORIZONTAL
         }
 
-        binding.stampCountryCustomViewpager2.setCurrentItem(viewPagerPosition)
+        if (viewPagerPosition != 0) {
+            binding.stampCountryCustomViewpager2.setCurrentItem(viewPagerPosition)
+        }
 
         countryPlaceViewPager.setItemClickListener(object :
             CountryPlaceViewPagerAdapter.ItemClickListener {
