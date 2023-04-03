@@ -1,7 +1,7 @@
 package com.nassafy.aro.ui.view.main.stamp
 
 import android.app.Activity
-import android.app.Activity.RESULT_OK
+import android.app.Activity.*
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
@@ -60,7 +60,7 @@ class StampValidateFragment :
     // 갤러리 권한 목록
     // SDK 버전 올라가서 갤러리 권한 가져오는 부분이 변경됨. (더 세분화 되었음)
     var REQUIRED_PERMISSIONS = arrayOf(
-        android.Manifest.permission.READ_MEDIA_IMAGES,
+        android.Manifest.permission.READ_EXTERNAL_STORAGE,
     )
 
     override fun onAttach(context: Context) {
@@ -108,21 +108,28 @@ class StampValidateFragment :
     // ==================================== 권환 확인 ==================================== 
     // 갤러리 권한을 가지고 있는지 확인하는 메소드
     private fun openGallery() {
-        val hasMediaPermission = ContextCompat.checkSelfPermission(
-            mContext as Activity, android.Manifest.permission.READ_MEDIA_IMAGES
-        )
+//        val hasMediaPermission = ContextCompat.checkSelfPermission(
+//            mContext as Activity, android.Manifest.permission.READ_EXTERNAL_STORAGE
+//        )
+//
+//        if (hasMediaPermission != PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.requestPermissions(
+//                mContext as Activity, REQUIRED_PERMISSIONS, REQ_GALLERY
+//            )
+//        } else {
+//            val intent = Intent(Intent.ACTION_PICK)
+//            intent.setDataAndType(
+//                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*"
+//            )
+//            imageResult.launch(intent)
+//        }
 
-        if (hasMediaPermission != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                mContext as Activity, REQUIRED_PERMISSIONS, REQ_GALLERY
-            )
-        } else {
-            val intent = Intent(Intent.ACTION_PICK)
-            intent.setDataAndType(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*"
-            )
-            imageResult.launch(intent)
-        }
+
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.setDataAndType(
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*"
+        )
+        imageResult.launch(intent)
     } // End of isGalleryServiceAvaliable
 
 
@@ -158,12 +165,12 @@ class StampValidateFragment :
 
             Log.d(TAG, "file : ${file}")
 
-            val metadata = ImageMetadataReader.readMetadata(file)
-            for (directory in metadata.directories) {
-                for (tag in directory.tags) {
-                    Log.d(TAG, "${tag.tagName}: ${tag.description}")
-                }
-            }
+//            val metadata = ImageMetadataReader.readMetadata(file)
+//            for (directory in metadata.directories) {
+//                for (tag in directory.tags) {
+//                    Log.d(TAG, "${tag.tagName}: ${tag.description}")
+//                }
+//            }
 
 
             val exif = ExifInterface(file)
