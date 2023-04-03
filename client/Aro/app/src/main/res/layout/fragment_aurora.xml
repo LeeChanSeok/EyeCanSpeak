@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    tools:context=".ui.view.main.MainActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.view.aurora.AuroraFragment">
+
+        <FrameLayout
+            android:id="@+id/aurora_header_framelayout"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:orientation="horizontal"
+            android:background="@color/view_pager_background_color"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <LinearLayout
+                android:id="@+id/date_hour_linearlayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center"
+                android:layout_marginStart="16dp">
+
+                <TextView
+                    android:id="@+id/date_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:text="2023.3.7"
+                    android:textSize="24sp"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/hour_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="01:00"
+                    android:textSize="20sp"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/drawer_imagebutton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="16dp"
+                android:layout_gravity="end|center"
+                android:background="@drawable/menu_icon"
+                android:scaleType="fitCenter"
+                app:icon="@drawable/menu_icon"
+                app:iconTint="@color/main_app_color"
+                android:contentDescription="@string/navigation_drawer_open" />
+        </FrameLayout>
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/map_view"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/aurora_header_framelayout"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+<!--    <include-->
+<!--        layout="@layout/fragment_aurora_bottom_sheet"-->
+<!--        android:id="@+id/bottom_sheet"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:paddingTop="?attr/actionBarSize"-->
+<!--        app:behavior_hideable="false"-->
+<!--        app:behavior_peekHeight="96dp"-->
+<!--        app:layout_behavior="@string/bottom_sheet_behavior" />-->
+    <include
+        android:id="@+id/bottom_sheet"
+        layout="@layout/fragment_aurora_bottom_sheet"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

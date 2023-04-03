@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="colorPrimary">#2196F3</color>
+    <color name="colorPrimaryLight">#64b5f6</color>
+    <color name="colorPrimaryDark">#1976D2</color>
+    <color name="colorAccent">#FFFF9800</color>
+    <color name="colorTextPrimary">@android:color/white</color>
+    <color name="colorScreenBackground">#fff3e0</color>
+    <color name="colorTextHint">#E0E0E0</color>
+    <color name="purple_500">#6200EE</color>
+    <color name="purple_700">#3700B3</color>
+    <color name="teal_700">#00796B</color>
+    <color name="teal_200">#03DAC5</color>
+    <color name="black">#000000</color>
+    <color name="purple_200">#03DAC5</color>
+
     <!-- 로고 컬러 -->
     <color name="main_logo_color">#73E29F</color>
     <color name="main_logo_color_dark">#363636</color>
@@ -8,6 +22,10 @@
     <!-- 메인 컬러 -->
     <color name="main_app_color">#4BB575</color>
     <color name="main_app_color_light">#72DFC5</color>
+
+    <!-- 스탬프 명소 이름 색상 -->
+    <color name="stamp_location_name_color">#22D179</color>
+
 
     <!-- 회원 가입 -->
     <!--회원 화면 백그라운드 컬러-->
@@ -20,6 +38,7 @@
 
     <!-- 다이얼로그 백그라운드 컬러 -->
     <color name="dialog_background_color">#353535</color>
+    <color name="dialog_background_color_opacity">#E6353535</color>
 
     <!-- 뷰 페이저 컬러 -->
     <color name="view_pager_background_color">#1e1e1e</color>
@@ -30,5 +49,11 @@
     <color name="light_dark_gray">#BBBBBB</color>
 
     <color name="white">#FFFFFF</color>
+
+    <!-- Bottom Sheet RecyclerView Item -->
+    <color name="over_70">#FF5757</color>
+    <color name="over_50">#FFA944</color>
+    <color name="under_50">#ADADAD</color>
+    <color name="under_20">#738A6B</color>
 
 </resources>

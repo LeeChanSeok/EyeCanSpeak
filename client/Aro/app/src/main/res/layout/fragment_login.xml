@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login_background"
+    tools:context=".ui.view.login.LoginFragment">
+
+    <ImageView
+        android:id="@+id/logo_imageview"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:src="@drawable/green_logo"
+        app:layout_constraintBottom_toTopOf="@id/login_edittext_linearlayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/login_edittext_linearlayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@id/login_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/logo_imageview">
+
+        <EditText
+            android:id="@+id/login_email_id_edittext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:backgroundTint="@color/main_app_color"
+            android:fontFamily="@font/nanum_square_b"
+            android:hint="@string/login_edittext_email_hint_text"
+            android:inputType="textEmailSubject"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white" />
+
+
+        <EditText
+            android:id="@+id/login_password_edittext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/main_app_color"
+            android:hint="@string/login_edittext_pw_hint_text"
+            android:inputType="textPassword"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <ImageButton
+        android:id="@+id/login_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:src="@drawable/sign_in_button"
+        app:layout_constraintBottom_toTopOf="@id/login_naver_imagebutton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/login_edittext_linearlayout" />
+
+    <TextView
+        android:id="@+id/join_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/nanum_square_r"
+        android:text="@string/join_button_text"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/login_button" />
+
+    <ImageButton
+        android:id="@+id/login_naver_imagebutton"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginBottom="4dp"
+        android:background="@android:color/transparent"
+        android:scaleType="fitCenter"
+        android:src="@drawable/sign_in_naver_circle_button"
+        app:layout_constraintBottom_toTopOf="@id/footer_textview"
+        app:layout_constraintEnd_toStartOf="@id/login_github_imagebutton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/login_button" />
+
+    <TextView
+        android:id="@+id/login_naver_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/nanum_square_r"
+        android:text="@string/start_naver_textview_text"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@id/login_naver_imagebutton"
+        app:layout_constraintStart_toStartOf="@id/login_naver_imagebutton"
+        app:layout_constraintTop_toBottomOf="@id/login_naver_imagebutton" />
+
+    <ImageButton
+        android:id="@+id/login_github_imagebutton"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginBottom="4dp"
+        android:background="@android:color/transparent"
+        android:scaleType="fitCenter"
+        android:src="@drawable/sign_in_github_circle_button"
+        app:layout_constraintBottom_toBottomOf="@id/login_naver_imagebutton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/login_naver_imagebutton"
+        app:layout_constraintTop_toTopOf="@id/login_naver_imagebutton" />
+
+    <TextView
+        android:id="@+id/login_github_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/nanum_square_r"
+        android:text="@string/start_github_textview_text"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@id/login_github_imagebutton"
+        app:layout_constraintStart_toStartOf="@id/login_github_imagebutton"
+        app:layout_constraintTop_toBottomOf="@id/login_naver_imagebutton" />
+
+    <TextView
+        android:id="@+id/footer_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="@string/made_by_textview_text"
+        android:fontFamily="@font/nanum_square_l"
+        android:textSize="8sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

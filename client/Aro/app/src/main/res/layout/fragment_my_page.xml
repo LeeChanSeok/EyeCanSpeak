@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/join_background_color"
+    tools:context=".ui.view.login.JoinEmailFragment">
+
+    <ImageButton
+        android:id="@+id/cancel_button"
+        android:layout_width="@dimen/small_button_size"
+        android:layout_height="@dimen/small_button_size"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:scaleType="fitXY"
+        android:background="@android:color/transparent"
+        android:src="@drawable/back_step_arrow_button_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/my_page_title_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/nanum_square_eb"
+        android:text="@string/my_page_main_title_textview_text"
+        android:textColor="@color/main_app_color"
+        android:textSize="@dimen/fragment_title_textview_size"
+        app:layout_constraintBottom_toBottomOf="@id/cancel_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/cancel_button" />
+
+    <ImageView
+        android:id="@+id/user_icon_imageview"
+        android:layout_width="@dimen/small_button_size"
+        android:layout_height="@dimen/small_button_size"
+        android:src="@drawable/menu_mypage_icon"
+        app:layout_constraintBottom_toBottomOf="@id/user_email_textview"
+        app:layout_constraintStart_toStartOf="@id/cancel_button"
+        app:layout_constraintTop_toTopOf="@id/user_nickname_edittext" />
+
+    <EditText
+        android:id="@+id/user_nickname_edittext"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:enabled="false"
+        android:fontFamily="@font/nanum_square_b"
+        android:paddingStart="0dp"
+        android:paddingBottom="10dp"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/nickname_change_imagebutton"
+        app:layout_constraintStart_toEndOf="@id/user_icon_imageview"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.16"
+        tools:text="신짱구" />
+
+    <TextView
+        android:id="@+id/user_email_textview"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/nanum_square_l"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toStartOf="@id/nickname_change_imagebutton"
+        app:layout_constraintStart_toStartOf="@id/user_nickname_edittext"
+        app:layout_constraintTop_toBottomOf="@id/user_nickname_edittext"
+        tools:text="abc@naver.com" />
+
+    <ImageButton
+        android:id="@+id/nickname_change_imagebutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="@android:color/transparent"
+        android:src="@drawable/nickname_change_button_selector"
+        app:layout_constraintBottom_toBottomOf="@id/user_email_textview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/user_nickname_edittext"
+        app:layout_constraintVertical_bias="0.75" />
+
+    <ImageView
+        android:id="@+id/nickname_change_save_alert_imagebutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/save_success_custom_toast"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/favorite_icon_imageview"
+        android:layout_width="@dimen/small_button_size"
+        android:layout_height="@dimen/small_button_size"
+        android:src="@drawable/favorite_icon"
+        app:layout_constraintBottom_toBottomOf="@id/my_favorite_description_textview"
+        app:layout_constraintStart_toStartOf="@id/cancel_button"
+        app:layout_constraintTop_toTopOf="@id/my_favorite_textview" />
+
+    <TextView
+        android:id="@+id/my_favorite_textview"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/nanum_square_b"
+        android:paddingBottom="12dp"
+        android:text="@string/my_favorite_textview_text"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@id/nickname_change_imagebutton"
+        app:layout_constraintStart_toEndOf="@id/user_icon_imageview"
+        app:layout_constraintTop_toBottomOf="@id/user_email_textview" />
+
+    <TextView
+        android:id="@+id/my_favorite_description_textview"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/nanum_square_l"
+        android:text="@string/my_page_my_favorite_inform_textview_text"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toStartOf="@id/nickname_change_imagebutton"
+        app:layout_constraintStart_toStartOf="@id/my_favorite_textview"
+        app:layout_constraintTop_toBottomOf="@id/my_favorite_textview" />
+
+    <ImageButton
+        android:id="@+id/my_favorite_add_image_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="@android:color/transparent"
+        android:src="@drawable/add_button"
+        app:layout_constraintBottom_toBottomOf="@id/my_favorite_description_textview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/my_favorite_textview" />
+
+    <View
+        android:id="@+id/layout_divider"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/country_place_divider"
+        android:backgroundTint="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/my_favorite_description_textview" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/service_not_selected_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginVertical="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/layout_divider"
+        app:layout_constraintStart_toStartOf="@id/layout_divider"
+        app:layout_constraintTop_toBottomOf="@id/layout_divider">
+
+        <TextView
+            android:id="@+id/service_not_selected_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/my_page_not_select_service_title_textview_text"
+            android:textColor="@color/main_app_color"
+            android:textSize="16sp"
+            android:fontFamily="@font/nanum_square_b"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.2" />
+
+        <TextView
+            android:id="@+id/service_not_selected_inform_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/nanum_square_l"
+            android:text="@string/my_page_not_select_service_inform_textview_text"
+            android:textColor="@color/main_app_color"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/service_not_selected_textview" />
+
+        <ImageButton
+            android:id="@+id/service_regist_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@android:color/transparent"
+            android:src="@drawable/service_regist_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/service_not_selected_inform_textview"
+            app:layout_constraintVertical_bias="0.2" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/service_selected_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_divider">
+
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/my_favorite_composeview"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toTopOf="@id/my_page_layout_divider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/my_page_layout_divider"
+            android:layout_width="0dp"
+            android:layout_height="8dp"
+            android:layout_marginHorizontal="24dp"
+            android:background="@drawable/country_place_divider"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.84" />
+
+        <ImageButton
+            android:id="@+id/service_modify_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@android:color/transparent"
+            android:src="@drawable/service_modify_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/my_page_layout_divider" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
+        android:indeterminateTint="@color/white"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/service_not_selected_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:constraint_referenced_ids="service_not_selected_layout" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/service_selected_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="service_selected_layout, my_favorite_add_image_button" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
