@@ -15,7 +15,6 @@ class Application : Application() {
     companion object {
         lateinit var retrofit: Retrofit
         lateinit var headerRetrofit: Retrofit
-
         lateinit var sharedPreferencesUtil: SharedPreferencesUtil
     } // End of companion object
 }  // End of Application class
