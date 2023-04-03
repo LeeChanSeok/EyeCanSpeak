@@ -5,22 +5,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Polyline
-import com.nassafy.aro.R
-import com.nassafy.aro.data.dto.KpResponse
+import com.nassafy.aro.data.dto.kp.KpResponse
 import com.nassafy.aro.data.dto.PlaceItem
+import com.nassafy.aro.data.dto.kp.KpWithProbs
 import com.nassafy.aro.data.dto.weather.WeatherResponse
 import com.nassafy.aro.domain.repository.AuroraRepository
 import com.nassafy.aro.domain.repository.WeatherRepository
 import com.nassafy.aro.util.NetworkResult
-import com.nassafy.aro.util.addInfoWindow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import javax.inject.Inject
-import kotlin.math.ln
 
 private const val TAG = "AuroraViewModel_sdr"
 
@@ -39,10 +34,9 @@ class AuroraViewModel @Inject constructor(
 
     val placeItemListLiveData: LiveData<NetworkResult<List<PlaceItem>>>
         get() = auroraRepository.placeItemListLiveData
-
-    fun getPlaceItemList() {
+    fun getPlaceItemList(dateString: String, hour: Int) {
         viewModelScope.launch {
-            auroraRepository.getPlaceItemList()
+            auroraRepository.getPlaceItemList(dateString, hour)
         }
     }
 
@@ -58,8 +52,17 @@ class AuroraViewModel @Inject constructor(
         get() = auroraRepository.kpCurrentLiveData
     fun getCurrentKpIndex(dateString: String, hour: Int) {
         viewModelScope.launch {
-            Log.d(TAG, "getCurrentKpIndex: vm go")
             auroraRepository.getCurrentKpIndex(dateString, hour)
+        }
+    }
+
+    val kpAndProbsLiveData: LiveData<NetworkResult<KpWithProbs>>
+        get() = auroraRepository.kpAndProbsLiveData
+    fun getKpAndProbsLiveData(dateString: String, hour: Int) {
+        viewModelScope.launch {
+            Log.d(TAG, "vm: GO")
+            auroraRepository.getKpAndProbsLiveData(dateString, hour)
+            Log.d(TAG, "vm: END")
         }
     }
 
