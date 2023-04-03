@@ -1,6 +1,6 @@
 package com.nassafy.aro.ui.view.main.stamp
 
-import android.app.Activity.*
+import android.app.Activity.RESULT_OK
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
@@ -122,7 +122,6 @@ class StampValidateFragment :
 //            imageResult.launch(intent)
 //        }
 
-
         val intent = Intent(Intent.ACTION_PICK)
         intent.setDataAndType(
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*"
@@ -170,20 +169,30 @@ class StampValidateFragment :
                 val lng = exif.latLong?.get(1)!!
 
                 CoroutineScope(Dispatchers.IO).launch {
-                    locationCarc(lat, lng)
+                    val locationResult = locationCarc(lat, lng)
+
+                    if (locationResult == true) {
+                        val deferred: Deferred<Int> = async {
+                            // 좌표가 맞는걸 확인했으면 이미지를 보내서 확인.
+                            withContext(Dispatchers.Main) {
+                                loadingViewOn()
+                            }
+                            val requestFile =
+                                RequestBody.create("image/*".toMediaTypeOrNull(), file)
+                            val body = MultipartBody.Part.createFormData(
+                                "image",
+                                file.name,
+                                requestFile
+                            )
+
+                            sendValidateImage(body)
+                            1
+                        }
+                    }
+
                 }
             } else {
-                requireView().showSnackBarMessage("해당 이미지의 좌표를 찾을 수 없습니다 다른 이미지를 선택해주세요")
-            }
-
-            val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
-            val body = MultipartBody.Part.createFormData("image", file.name, requestFile)
-
-            CoroutineScope(Dispatchers.IO).launch {
-                withContext(Dispatchers.Main) {
-                    loadingViewOn()
-                }
-                sendValidateImage(body)
+                requireView().showSnackBarMessage("해당 이미지의 좌표를 찾을 수 없습니다 다른 이미지를 선택해주세요!")
             }
         }
     } // End of registerForActivityResult
@@ -236,21 +245,30 @@ class StampValidateFragment :
                         val lng = exif.latLong?.get(1)!!
 
                         CoroutineScope(Dispatchers.IO).launch {
-                            locationCarc(lat, lng)
+                            val locationResult = locationCarc(lat, lng)
+
+                            if (locationResult == true) {
+                                val deferred: Deferred<Int> = async {
+                                    // 좌표가 맞는걸 확인했으면 이미지를 보내서 확인.
+                                    withContext(Dispatchers.Main) {
+                                        loadingViewOn()
+                                    }
+                                    val requestFile =
+                                        RequestBody.create("image/*".toMediaTypeOrNull(), file)
+                                    val body = MultipartBody.Part.createFormData(
+                                        "image",
+                                        file.name,
+                                        requestFile
+                                    )
+
+                                    sendValidateImage(body)
+                                    1
+                                }
+                            }
+
                         }
                     } else {
                         requireView().showSnackBarMessage("해당 이미지의 좌표를 찾을 수 없습니다 다른 이미지를 선택해주세요")
-                    }
-
-                    val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
-                    val body = MultipartBody.Part.createFormData("image", file.name, requestFile)
-
-                    CoroutineScope(Dispatchers.IO).launch {
-                        withContext(Dispatchers.Main) {
-                            loadingViewOn()
-                        }
-
-                        sendValidateImage(body)
                     }
                 }
             }
@@ -258,7 +276,7 @@ class StampValidateFragment :
     } // End of onActivityResult
 
 
-    private suspend fun locationCarc(nowLat: Double, nowLng: Double) {
+    private suspend fun locationCarc(nowLat: Double, nowLng: Double): Boolean {
         var address: String? = null
         val job = CoroutineScope(Dispatchers.IO).async {
             val getAdd = getAddressByCoordinates(nowLat, nowLng)
@@ -269,12 +287,21 @@ class StampValidateFragment :
 
         job.join()
 
-        Log.d(TAG, "locationCarc: ${address}")
-        Log.d(TAG, "locationCarc: ${address}")
+        Log.d(
+            TAG,
+            "stampNavViewModel.nowSelectedAttractionOriginalName: ${stampNavViewModel.nowSelectedAttractionOriginalName}"
+        )
 
-        val result = address!!.indexOf("Stockholm")
+        // 해당 이름을 포함하고 있으면 일치하는 걸로 간주
+        val result =
+            address!!.indexOf(stampNavViewModel.nowSelectedAttractionOriginalName)
         if (result != -1) {
             // 지역이 일치한다는 조건.
+            requireView().showSnackBarMessage("명소가 일치합니다!")
+            return true
+        } else {
+            requireView().showSnackBarMessage("명소가 일치하지 않습니다.")
+            return false
         }
     } // End of getAddress
 
@@ -301,39 +328,11 @@ class StampValidateFragment :
         }
 
         val address: Address = addresses[0]
-        Log.d(TAG, "featureName: ${address.featureName}")
-        Log.d(TAG, "extras: ${address.extras}")
-        Log.d(TAG, "locality: ${address.locality}") // 유력 후보
-        Log.d(TAG, "getAddressByCoordinates: ${address}")
-        Log.d(TAG, "addresses: ${addresses}")
-        // Murmansk // Reykjavík //
 
         withContext(Dispatchers.Main) {
             binding.imageLocationInformTextview.text =
                 "locallty : ${address.locality} , featureName : ${address.featureName}"
         }
-
-        // 로직 : address의 locallty나 featureName 둘 중에 하나라도 조건에 부합하는 값일 경우, 해당 지역에 있다고 인정해줌.
-
-
-        // 아이슬란드
-        /*
-
-            레이캬비크 : Reykjavík
-            아퀴레이리 : Akureyri
-            요쿨살론 : Jökulsárlón
-
-         */
-
-
-        // 캐나다
-        /*
-
-         */
-
-        Log.d(TAG, "subAdminArea: ${address.subAdminArea}")
-        Log.d(TAG, "maxAddressLineIndex: ${address.maxAddressLineIndex}")
-        // locality를 사용하자.
 
         return address
     } // End of getAddressByCoordinates
