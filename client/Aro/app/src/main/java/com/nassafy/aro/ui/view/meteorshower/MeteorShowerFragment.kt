@@ -44,38 +44,17 @@ class MeteorShowerFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        // observe
-        getMyMeteorShowerResponseLiveDataObserve()
+        Log.d(TAG, "onViewCreated: 여기 돌음?")
 
         if (mainActivityViewModel.meteorShowerServiceEnabled) {
             mLayoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
+            getMyMeteorShowerResponseLiveDataObserve()
+
             CoroutineScope(Dispatchers.IO).launch {
                 meteorShowerViewModel.getMyMeteorShower()
             }
-
-            binding.meteorShowerCountryTextview.apply {
-                text =
-                    meteorShowerViewModel.getMyMeteorShowerResponseLiveData.value!!.data!!.nation.toString()
-//                setOnClickListener {
-//                    val meteorCountrySelectDialog = MeteorCountrySelectDialog(
-//                        countryList
-//                    )
-//                    meteorCountrySelectDialog.show(
-//                        childFragmentManager, "MeteorCountrySelectDialog"
-//                    )
-//                }
-            }
-            binding.drawerImagebutton.setOnClickListener {
-                val mainActivity = activity as MainActivity
-                mainActivity.openDrawer()
-            }
-
-            binding.meteorShowerCountryTextview.visibility = View.VISIBLE
-            binding.meteorShowerRecyclerview.visibility = View.VISIBLE
-            binding.altView.root.visibility = View.GONE
         } else {
             binding.meteorShowerCountryTextview.visibility = View.GONE
             binding.meteorShowerRecyclerview.visibility = View.GONE
@@ -133,6 +112,27 @@ class MeteorShowerFragment :
         meteorShowerViewModel.getMyMeteorShowerResponseLiveData.observe(this.viewLifecycleOwner) {
             when (it) {
                 is NetworkResult.Success -> {
+
+                    binding.meteorShowerCountryTextview.apply {
+                        text = it.data!!.nation.toString()
+
+//                setOnClickListener {
+//                    val meteorCountrySelectDialog = MeteorCountrySelectDialog(
+//                        countryList
+//                    )
+//                    meteorCountrySelectDialog.show(
+//                        childFragmentManager, "MeteorCountrySelectDialog"
+//                    )
+//                }
+                    }
+                    binding.drawerImagebutton.setOnClickListener {
+                        val mainActivity = activity as MainActivity
+                        mainActivity.openDrawer()
+                    }
+
+                    binding.meteorShowerCountryTextview.visibility = View.VISIBLE
+                    binding.meteorShowerRecyclerview.visibility = View.VISIBLE
+                    binding.altView.root.visibility = View.GONE
 
                     setAdapter()
                 }
