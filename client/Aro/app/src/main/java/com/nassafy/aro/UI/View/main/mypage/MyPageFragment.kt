@@ -249,16 +249,16 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
 
     fun moveToServiceRegisterFragment() {
         val action = MyPageFragmentDirections.actionMyPageFragmentToMyPageServiceRegisterFragment(
-            myPageFragmentViewModel.auroraService,
-            myPageFragmentViewModel.meteorService,
+            auroraService = myPageFragmentViewModel.auroraService,
+            meteorService = myPageFragmentViewModel.meteorService,
         )
         findNavController().navigate(action)
     } // End of moveToServiceRegisterFragment
 
     fun moveToFavoriteRegisterFragment() {
         val action = MyPageFragmentDirections.actionMyPageFragmentToMyPageFavoriteRegisterFragment(
-            myPageFragmentViewModel.auroraService,
-            myPageFragmentViewModel.meteorService,
+            auroraService = myPageFragmentViewModel.auroraService,
+            meteorService = myPageFragmentViewModel.meteorService,
         )
         findNavController().navigate(action)
     } // End of moveToFavoriteRegisterFragment
@@ -326,7 +326,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
                                                     contentAlignment = Alignment.Center
                                                 ) {
                                                     Text(
-                                                        text = "관심위치로 지정한 나라가 존재하지 않습니다.",
+                                                        text = "관심위치로 지정한 나라가\n존재하지 않습니다.",
                                                         style = TextStyle(
                                                             fontFamily = NanumSqaureFont,
                                                             fontWeight = FontWeight.Bold,
@@ -409,7 +409,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
                                                 }
                                             }
                                         }
-                                    }
+                                    } // End of true
                                     false -> {
                                         Box(
                                             contentAlignment = Alignment.Center
@@ -425,7 +425,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
                                                 color = Color.White
                                             ) // End of Text
                                         }
-                                    }
+                                    } // End of false
                                 } // End of when
                             } // End of when(page) : page -> 1
                         } // End of when(page)

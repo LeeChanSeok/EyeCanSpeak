@@ -14,7 +14,7 @@ import javax.inject.Inject
 class MyPageServiceRegisterFragmentViewModel @Inject constructor(private val myPageRepository: MyPageRepository): ViewModel() {
 
     var auroraService: Boolean = false
-    var meteorService: Boolean = true
+    var meteorService: Boolean = false
     val setSelectServiceNetworkResultLiveData: LiveData<NetworkResult<JsonObject>> get() = myPageRepository.setSelectServiceNetworkResultLiveData
 
     suspend fun selectService(auroraService: Boolean, meteorService: Boolean) {
