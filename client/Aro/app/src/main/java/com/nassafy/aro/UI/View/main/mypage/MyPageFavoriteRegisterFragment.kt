@@ -23,6 +23,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -36,6 +37,7 @@ import com.nassafy.aro.databinding.FragmentAroCountryPlaceSelectBinding
 import com.nassafy.aro.ui.adapter.CountrySpinnerAdapter
 import com.nassafy.aro.ui.view.BaseFragment
 import com.nassafy.aro.ui.view.custom.*
+import com.nassafy.aro.ui.view.main.MainActivityViewModel
 import com.nassafy.aro.ui.view.main.mypage.viewmodel.MyPageFavoriteRegisterFragmentViewModel
 import com.nassafy.aro.util.NetworkResult
 import com.nassafy.aro.util.showSnackBarMessage
@@ -51,6 +53,7 @@ class MyPageFavoriteRegisterFragment :
     lateinit var adapter: CountrySpinnerAdapter
     private var spinnerList = arrayListOf<String>()
     private val myPageFavoriteRegisterFragmentViewModel: MyPageFavoriteRegisterFragmentViewModel by viewModels()
+    private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -116,6 +119,10 @@ class MyPageFavoriteRegisterFragment :
         myPageFavoriteRegisterFragmentViewModel.setSelectServiceNetworkResultLiveData.observe(this.viewLifecycleOwner) {
             when (it) {
                 is NetworkResult.Success -> {
+
+                    mainActivityViewModel.auroraServiceEnabled = myPageFavoriteRegisterFragmentViewModel.isAuroraServiceSelected
+                    mainActivityViewModel.meteorShowerServiceEnabled = myPageFavoriteRegisterFragmentViewModel.isMeteorServiceSelected
+
                     val gson = GsonBuilder().create()
                     val requestBody = JsonObject()
                     CoroutineScope(Dispatchers.IO).launch {
@@ -126,7 +133,7 @@ class MyPageFavoriteRegisterFragment :
                                     .getAsJsonArray()
                             )
                             postFavoriteList(requestBody)
-                        } // End of viewModel.apply
+                        }
                     } // End of CoroutineScope
                 } // End of Success
                 is NetworkResult.Error -> {
@@ -143,6 +150,22 @@ class MyPageFavoriteRegisterFragment :
         myPageFavoriteRegisterFragmentViewModel.postFavoriteListNetworkResultLiveData.observe(this.viewLifecycleOwner) {
             when (it) {
                 is NetworkResult.Success -> {
+                    CoroutineScope(Dispatchers.IO).launch {
+                        myPageFavoriteRegisterFragmentViewModel.postFavoriteMeteorCounry()
+                    }
+                } // End of Success
+                is NetworkResult.Error -> {
+                    requireView().showSnackBarMessage("서버 통신 에러 발생")
+                } // End of Error
+                is NetworkResult.Loading -> {
+                    Log.d("ssafy_pcs", "로딩 중..")
+                } // End of Loading
+            } // End of when
+        } // End of postFavoriteListNetworkResultLiveData.observe
+
+        myPageFavoriteRegisterFragmentViewModel.postFavoriteMeteorCountryNetworkResultLiveData.observe(this.viewLifecycleOwner) {
+            when (it) {
+                is NetworkResult.Success -> {
                     requireView().showSnackBarMessage(getString(R.string.my_page_my_favorite_modify_success_text))
                     findNavController().navigate(R.id.action_myPageFavoriteRegisterFragment_to_myPageFragment)
                 } // End of Success
@@ -154,6 +177,7 @@ class MyPageFavoriteRegisterFragment :
                 } // End of Loading
             } // End of when
         } // End of postFavoriteListNetworkResultLiveData.observe
+
     } // End of initEssentialObserve
 
     private fun initAuroraFavoriteObserve() {
@@ -377,44 +401,7 @@ class MyPageFavoriteRegisterFragment :
                                     true -> {
 //                                        TODO 유성우
                                         MeteorCountryLazyColumn(
-                                            meteorCountryList = meteorCountryList, //todo Active
-//                                            meteorCountryList = mutableListOf(
-//                                                MeteorCountry(
-//                                                    1,
-//                                                    "\uD83C\uDDF0\uD83C\uDDF7",
-//                                                    "대한민국"
-//                                                ),
-//                                                MeteorCountry(
-//                                                    1,
-//                                                    "\uD83C\uDDF0\uD83C\uDDF7",
-//                                                    "대한민국1"
-//                                                ),
-//                                                MeteorCountry(
-//                                                    1,
-//                                                    "\uD83C\uDDF0\uD83C\uDDF7",
-//                                                    "대한민국2"
-//                                                ),
-//                                                MeteorCountry(
-//                                                    1,
-//                                                    "\uD83C\uDDF0\uD83C\uDDF7",
-//                                                    "대한민국3"
-//                                                ),
-//                                                MeteorCountry(
-//                                                    1,
-//                                                    "\uD83C\uDDF0\uD83C\uDDF7",
-//                                                    "대한민국4"
-//                                                ),
-//                                                MeteorCountry(
-//                                                    1,
-//                                                    "\uD83C\uDDF0\uD83C\uDDF7",
-//                                                    "대한민국5"
-//                                                ),
-//                                                MeteorCountry(
-//                                                    1,
-//                                                    "\uD83C\uDDF0\uD83C\uDDF7",
-//                                                    "대한민국6"
-//                                                ),
-//                                            ),
+                                            meteorCountryList = meteorCountryList,
                                             selectedCountry = selectedCountry,
                                             viewModel = myPageFavoriteRegisterFragmentViewModel
                                         )

@@ -38,6 +38,9 @@ class MyPageRepository @Inject constructor(private val myPageApi: MyPageApi, pri
     private val _postFavoriteListNetworkResultLiveData = MutableLiveData<NetworkResult<Unit>>()
     val postFavoriteListNetworkResultLiveData: LiveData<NetworkResult<Unit>> get() = _postFavoriteListNetworkResultLiveData
 
+    private val _postFavoriteMeteorCountryNetworkResultLiveData = MutableLiveData<NetworkResult<Unit>>()
+    val postFavoriteMeteorCountryNetworkResultLiveData: LiveData<NetworkResult<Unit>> get() = _postFavoriteMeteorCountryNetworkResultLiveData
+
     private val _deleteFavoriteNetworkResultLiveData = MutableLiveData<NetworkResult<Long>>()
     val deleteFavoriteNetworkResultLiveData: LiveData<NetworkResult<Long>> get() = _deleteFavoriteNetworkResultLiveData
 
@@ -151,6 +154,29 @@ class MyPageRepository @Inject constructor(private val myPageApi: MyPageApi, pri
         val response = myPageApi.postFavoriteList(requestBody)
         _postFavoriteListNetworkResultLiveData.setNetworkResult(response)
     } // End of postFavoriteList
+
+    suspend fun postFavoriteMeteorCountry(selectedCountryId: Long?) {
+        val response = myPageApi.postFavoriteMeteorCountry(JsonObject().apply {
+            selectedCountryId?.let {
+                addProperty("countryId", it)
+            }
+        })
+        Log.d(TAG, "postFavoriteMeteorCountry: ${response}")
+        _postFavoriteMeteorCountryNetworkResultLiveData.postValue(NetworkResult.Loading())
+        try {
+            when {
+                response.isSuccessful -> {
+                    _postFavoriteMeteorCountryNetworkResultLiveData.postValue(NetworkResult.Success(Unit))
+
+                }
+                response.errorBody() != null -> {
+                    _postFavoriteMeteorCountryNetworkResultLiveData.postValue(NetworkResult.Error(response.errorBody()!!.string()))
+                }
+            } // End of when
+        } catch (e: java.lang.Exception) {
+            Log.e("ssafy", "getServerCallTest: ${e.message}")
+        } // End of try-catch
+    } // End of postFavoriteMeteorCountry
 
     suspend fun deleteFavorite(interestId: Long) {
         val response = myPageApi.deleteFavorite(interestId)
