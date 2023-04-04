@@ -212,9 +212,8 @@ class MainActivity : AppCompatActivity() {
                 is NetworkResult.Success -> {
                     mainActivityViewModel.email = it.data!!.email
                     mainActivityViewModel.nickname = it.data!!.nickname
-                    // TODO : Aurora, Meteor Service Enable SDR
-//                    mainActivityViewModel.auroraServiceEnabled = it.data!!.???
-//                    mainActivityViewModel.meteorShowerServiceEnabled = it.data!!.???
+                    mainActivityViewModel.auroraServiceEnabled = it.data!!.auroraService
+                    mainActivityViewModel.meteorShowerServiceEnabled = it.data!!.meteorService
 
                     binding.mainNavigation.getHeaderView(0).apply {
                         findViewById<TextView>(R.id.nickname_textview).text =
