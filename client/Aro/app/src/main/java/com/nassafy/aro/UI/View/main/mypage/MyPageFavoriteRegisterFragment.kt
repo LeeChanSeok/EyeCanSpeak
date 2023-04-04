@@ -79,7 +79,7 @@ class MyPageFavoriteRegisterFragment :
             true -> {
                 initMeteorFavoriteObserve()
                 CoroutineScope(Dispatchers.IO).launch {
-//                    myPageFavoriteRegisterFragmentViewModel.getMeteorCountryList() // todo Activate
+                    myPageFavoriteRegisterFragmentViewModel.getMeteorCountryList() // todo Activate
                 } // End of CoroutineScope
             }
             false -> { }
@@ -154,7 +154,7 @@ class MyPageFavoriteRegisterFragment :
                 } // End of Loading
             } // End of when
         } // End of postFavoriteListNetworkResultLiveData.observe
-    }
+    } // End of initEssentialObserve
 
     private fun initAuroraFavoriteObserve() {
         myPageFavoriteRegisterFragmentViewModel.countryListNetworkResultLiveData.observe(this.viewLifecycleOwner) {
@@ -377,44 +377,44 @@ class MyPageFavoriteRegisterFragment :
                                     true -> {
 //                                        TODO 유성우
                                         MeteorCountryLazyColumn(
-//                                            meteorCountryList = meteorCountryList, //todo Active
-                                            meteorCountryList = mutableListOf(
-                                                MeteorCountry(
-                                                    1,
-                                                    "\uD83C\uDDF0\uD83C\uDDF7",
-                                                    "대한민국"
-                                                ),
-                                                MeteorCountry(
-                                                    1,
-                                                    "\uD83C\uDDF0\uD83C\uDDF7",
-                                                    "대한민국1"
-                                                ),
-                                                MeteorCountry(
-                                                    1,
-                                                    "\uD83C\uDDF0\uD83C\uDDF7",
-                                                    "대한민국2"
-                                                ),
-                                                MeteorCountry(
-                                                    1,
-                                                    "\uD83C\uDDF0\uD83C\uDDF7",
-                                                    "대한민국3"
-                                                ),
-                                                MeteorCountry(
-                                                    1,
-                                                    "\uD83C\uDDF0\uD83C\uDDF7",
-                                                    "대한민국4"
-                                                ),
-                                                MeteorCountry(
-                                                    1,
-                                                    "\uD83C\uDDF0\uD83C\uDDF7",
-                                                    "대한민국5"
-                                                ),
-                                                MeteorCountry(
-                                                    1,
-                                                    "\uD83C\uDDF0\uD83C\uDDF7",
-                                                    "대한민국6"
-                                                ),
-                                            ),
+                                            meteorCountryList = meteorCountryList, //todo Active
+//                                            meteorCountryList = mutableListOf(
+//                                                MeteorCountry(
+//                                                    1,
+//                                                    "\uD83C\uDDF0\uD83C\uDDF7",
+//                                                    "대한민국"
+//                                                ),
+//                                                MeteorCountry(
+//                                                    1,
+//                                                    "\uD83C\uDDF0\uD83C\uDDF7",
+//                                                    "대한민국1"
+//                                                ),
+//                                                MeteorCountry(
+//                                                    1,
+//                                                    "\uD83C\uDDF0\uD83C\uDDF7",
+//                                                    "대한민국2"
+//                                                ),
+//                                                MeteorCountry(
+//                                                    1,
+//                                                    "\uD83C\uDDF0\uD83C\uDDF7",
+//                                                    "대한민국3"
+//                                                ),
+//                                                MeteorCountry(
+//                                                    1,
+//                                                    "\uD83C\uDDF0\uD83C\uDDF7",
+//                                                    "대한민국4"
+//                                                ),
+//                                                MeteorCountry(
+//                                                    1,
+//                                                    "\uD83C\uDDF0\uD83C\uDDF7",
+//                                                    "대한민국5"
+//                                                ),
+//                                                MeteorCountry(
+//                                                    1,
+//                                                    "\uD83C\uDDF0\uD83C\uDDF7",
+//                                                    "대한민국6"
+//                                                ),
+//                                            ),
                                             selectedCountry = selectedCountry,
                                             viewModel = myPageFavoriteRegisterFragmentViewModel
                                         )

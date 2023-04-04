@@ -111,7 +111,6 @@ class JoinServiceFragment : BaseFragment<FragmentAroServiceSelectBinding>(Fragme
                 addProperty("nickname", nickname)
                 addProperty("auroraService", false)
                 addProperty("meteorService", false)
-                addProperty("countryId", 1)
             }
             user.add(
                 "auroraPlaces",

@@ -20,7 +20,7 @@ interface MyPageApi {
     @GET("api/interest")
     suspend fun getFavoriteList(): Response<FavoriteList>
 
-    @GET("api/") // todo
+    @GET("api/country")
     suspend fun getMeteorCountryList(): Response<List<MeteorCountry>>
 
     @POST("api/interest")

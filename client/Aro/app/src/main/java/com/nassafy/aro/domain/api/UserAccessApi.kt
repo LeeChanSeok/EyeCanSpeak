@@ -30,7 +30,7 @@ interface UserAccessApi {
         @Path("nation") nation: String
     ): Response<List<PlaceItem>>
 
-    @GET("api/") // todo
+    @GET("api/country/signup")
     suspend fun getMeteorCountryList(): Response<List<MeteorCountry>>
 
     @POST("api/members/signup")

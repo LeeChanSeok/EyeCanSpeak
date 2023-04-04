@@ -112,6 +112,7 @@ class JoinCountryPlaceSelectFragment : BaseFragment<FragmentAroCountryPlaceSelec
                 is NetworkResult.Success -> {
                     loginActivityViewModel.meteorCountryList.clear()
                     loginActivityViewModel.meteorCountryList.addAll(it.data!!)
+                    Log.d(TAG, "initAuroraCountryPlaceObserve: ${loginActivityViewModel.meteorCountryList.joinToString()}")
                 }
                 is NetworkResult.Error -> {
                     requireView().showSnackBarMessage("서버 통신 에러 발생")
@@ -174,14 +175,16 @@ class JoinCountryPlaceSelectFragment : BaseFragment<FragmentAroCountryPlaceSelec
                     addProperty("nickname", nickname)
                     addProperty("auroraService", loginActivityViewModel.isAuroraServiceSelected)
                     addProperty("meteorService", loginActivityViewModel.isMeteorServiceSelected)
-                    addProperty("countryId", loginActivityViewModel.selectedCountryId.value?.countryId)
+                    loginActivityViewModel.selectedCountryId.value?.let {
+                        addProperty("countryId", it.countryId)
+                    }
                 }
                 user.add(
                     "auroraPlaces",
                     gson.toJsonTree(selectedAuroraPlaceList.map { it.placeId })
                         .getAsJsonArray()
                 )
-                Log.d(TAG, "initView: ${loginActivityViewModel.selectedCountryId.value?.countryId}")
+                Log.d(TAG, "initView: ${user}")
                 joinCountryPlaceServiceSelectFragmentViewModel.join(user)
             }
         }
@@ -360,16 +363,16 @@ class JoinCountryPlaceSelectFragment : BaseFragment<FragmentAroCountryPlaceSelec
                                 when (loginActivityViewModel.isMeteorServiceSelected) {
                                     true -> {
                                         MeteorCountryLazyColumn(
-//                                            contryList = meteorCountryList // todo activate
-                                            meteorCountryList = mutableListOf( // todo delete
-                                                MeteorCountry(1, "\uD83C\uDDF0\uD83C\uDDF7", "대한민국"),
-                                                MeteorCountry(2, "\uD83C\uDDF0\uD83C\uDDF7", "대한민국1"),
-                                                MeteorCountry(3, "\uD83C\uDDF0\uD83C\uDDF7", "대한민국2"),
-                                                MeteorCountry(4, "\uD83C\uDDF0\uD83C\uDDF7", "대한민국3"),
-                                                MeteorCountry(5, "\uD83C\uDDF0\uD83C\uDDF7", "대한민국4"),
-                                                MeteorCountry(6, "\uD83C\uDDF0\uD83C\uDDF7", "대한민국5"),
-                                                MeteorCountry(7, "\uD83C\uDDF0\uD83C\uDDF7", "대한민국6"),
-                                            ),
+                                            meteorCountryList = meteorCountryList, // todo activate
+//                                            meteorCountryList = mutableListOf( // todo delete
+//                                                MeteorCountry(1, "\uD83C\uDDF0\uD83C\uDDF7", "대한민국"),
+//                                                MeteorCountry(2, "\uD83C\uDDF0\uD83C\uDDF7", "대한민국1"),
+//                                                MeteorCountry(3, "\uD83C\uDDF0\uD83C\uDDF7", "대한민국2"),
+//                                                MeteorCountry(4, "\uD83C\uDDF0\uD83C\uDDF7", "대한민국3"),
+//                                                MeteorCountry(5, "\uD83C\uDDF0\uD83C\uDDF7", "대한민국4"),
+//                                                MeteorCountry(6, "\uD83C\uDDF0\uD83C\uDDF7", "대한민국5"),
+//                                                MeteorCountry(7, "\uD83C\uDDF0\uD83C\uDDF7", "대한민국6"),
+//                                            ),
                                             selectedCountry = selectedCountry,
                                             viewModel = loginActivityViewModel
                                         )

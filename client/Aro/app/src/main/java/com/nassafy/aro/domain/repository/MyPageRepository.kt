@@ -14,6 +14,7 @@ import com.nassafy.aro.util.NetworkResult
 import com.nassafy.aro.util.setNetworkResult
 import javax.inject.Inject
 
+private const val TAG = "ssafy_pcs"
 class MyPageRepository @Inject constructor(private val myPageApi: MyPageApi, private val withoutHeaderMyPageApi: WithoutHeaderMyPageApi) {
 
     private val _nicknameLiveData = MutableLiveData<NetworkResult<Unit>>()
@@ -142,6 +143,7 @@ class MyPageRepository @Inject constructor(private val myPageApi: MyPageApi, pri
 
     suspend fun getMeteorCountryList() {
         val response = myPageApi.getMeteorCountryList()
+        Log.d(TAG, "getMeteorCountryList: ${response.body()}")
         _meteorCountryListNetworkResultLiveData.setNetworkResult(response)
     }
 
