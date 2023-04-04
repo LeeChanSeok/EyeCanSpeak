@@ -24,23 +24,14 @@ class AuroraViewModel @Inject constructor(
     private val auroraRepository: AuroraRepository,
     private val weatherRepository: WeatherRepository
 ) : ViewModel() {
-    private var _clickedLocation = MutableLiveData<LatLng>()
-    val clickedLocation: LiveData<LatLng>
-        get() = _clickedLocation
-
-    fun setClickedLocation(location: LatLng) {
-        _clickedLocation.value = location
-    } // End of setClickedLocation
 
     val placeItemListLiveData: LiveData<NetworkResult<List<PlaceItem>>>
         get() = auroraRepository.placeItemListLiveData
     fun getPlaceItemList(dateString: String, hour: Int) {
-        Log.d(TAG, "getPlaceItemList: Go")
         viewModelScope.launch {
             auroraRepository.getPlaceItemList(dateString, hour)
         }
-        Log.d(TAG, "getPlaceItemList: End")
-    }
+    } // End of getPlaceItemList
     
     val currentKpIndexLiveData: LiveData<NetworkResult<KpResponse>>
         get() = auroraRepository.kpCurrentLiveData
@@ -48,7 +39,7 @@ class AuroraViewModel @Inject constructor(
         viewModelScope.launch {
             auroraRepository.getCurrentKpIndex(dateString, hour)
         }
-    }
+    } // End
 
     val kpAndProbsLiveData: LiveData<NetworkResult<KpWithProbs>>
         get() = auroraRepository.kpAndProbsLiveData
