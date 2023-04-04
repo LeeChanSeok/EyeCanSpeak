@@ -79,32 +79,22 @@ class AuroraFragment : BaseFragment<FragmentAuroraBinding>(FragmentAuroraBinding
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //서비스선택안함
-        if (true) {
-            binding.mapView.visibility = View.GONE
-            binding.bottomSheet.root.visibility = View.GONE
-            binding.dateHourLinearlayout.visibility = View.GONE
-            binding.drawerImagebutton.setOnClickListener {
-                val mainActivity = activity as MainActivity
-                mainActivity.openDrawer()
-            }
-        } else {
-            initObserve()
+        initObserve()
 
-            Log.d(TAG, "onViewCreated: $utcString, ${utcNow.hour}")
-            getData(utcString, utcNow.hour)
+        Log.d(TAG, "onViewCreated: $utcString, ${utcNow.hour}")
+        getData(utcString, utcNow.hour)
 
-            initView()
+        initView()
 
-            initBottomSheetChart(chartHourLabel, kpWithProbs.kps)
+        initBottomSheetChart(chartHourLabel, kpWithProbs.kps)
 
-            initBottomSheetRecyclerView()
+        initBottomSheetRecyclerView()
 
-            val mapFragment: SupportMapFragment =
-                childFragmentManager.findFragmentById(R.id.map_view) as SupportMapFragment
+        val mapFragment: SupportMapFragment =
+            childFragmentManager.findFragmentById(R.id.map_view) as SupportMapFragment
 
-            OnMapAndViewReadyListener(mapFragment, this)
-        }
+        OnMapAndViewReadyListener(mapFragment, this)
+
     } // End of onViewCreated
 
     override fun onMapReady(googleMap: GoogleMap?) {
@@ -112,7 +102,7 @@ class AuroraFragment : BaseFragment<FragmentAuroraBinding>(FragmentAuroraBinding
         mMap!!.uiSettings.isMapToolbarEnabled = false
         setCustomMapStyle()
 
-        // TODO: setCloudTileOverlay
+        // TODO: setCloudTileOverlay SDR
 //        when {
 //            mainActivityViewModel.cloudDisplayOption -> {
 //                setCloudTileOverlay()
@@ -124,7 +114,6 @@ class AuroraFragment : BaseFragment<FragmentAuroraBinding>(FragmentAuroraBinding
 //        }
 
         // setPolyLine
-        Log.d(TAG, "onMapReady: ${mainActivityViewModel.auroraDisplayOption}")
         when {
             mainActivityViewModel.auroraDisplayOption -> {
                 setPolyLine()
@@ -142,6 +131,7 @@ class AuroraFragment : BaseFragment<FragmentAuroraBinding>(FragmentAuroraBinding
     private fun initObserve() {
         auroraViewModel.currentKpIndexLiveData.observe(viewLifecycleOwner) {
             kpIndex = if (it.data != null) {
+                Log.d(TAG, "initObserve: ${it.data}")
                 it.data!!.kp
             } else {
                 -1.0
@@ -150,6 +140,7 @@ class AuroraFragment : BaseFragment<FragmentAuroraBinding>(FragmentAuroraBinding
 
         auroraViewModel.kpAndProbsLiveData.observe(viewLifecycleOwner) {
             if (it.data != null) {
+                Log.d(TAG, "kpAndProbsLiveData: ${it.data}")
                 kpWithProbs = it.data!!
                 favoriteAdapter.probs = it.data!!.probs
                 favoriteAdapter.notifyDataSetChanged()
@@ -163,6 +154,7 @@ class AuroraFragment : BaseFragment<FragmentAuroraBinding>(FragmentAuroraBinding
             when (it) {
                 is NetworkResult.Success -> {
                     if (mMap != null && it.data != null) {
+                        Log.d(TAG, "placeItemListLiveData: ${it.data}")
                         mClusterManager.clearItems()
                         mClusterManager.addItems(it.data)
                         mClusterManager.cluster()
@@ -224,7 +216,9 @@ class AuroraFragment : BaseFragment<FragmentAuroraBinding>(FragmentAuroraBinding
         val kpValues = arrayListOf<Entry>()
         if (kps.size == 24) {
             for (i: Int in 0..23) {
-                kpValues.add(Entry(i.toFloat(), kpWithProbs.kps[i].toFloat()))
+                var tempValue = kpWithProbs.kps[i].toFloat()
+                var roundValue: Float = (tempValue * 100).roundToInt().toFloat() / 100
+                kpValues.add(Entry(i.toFloat(), roundValue))
             }
         } else {
             for (i: Int in 0..23) {
@@ -390,7 +384,6 @@ class AuroraFragment : BaseFragment<FragmentAuroraBinding>(FragmentAuroraBinding
         val polylineOptions = getKpPolylineOptions(kpIndex)
         mPolyline = mMap!!.addPolyline(polylineOptions)
         mMap!!.setOnMapClickListener { latLng ->
-            auroraViewModel.setClickedLocation(latLng)
             // When Clicked Location is on Polyline, Google Map shows Info.
             val tolerance = getKpPolylineTolerance(mMap!!.cameraPosition.zoom)
             if (PolyUtil.isLocationOnPath(latLng, polylineOptions.points, true, tolerance)) {

@@ -7,5 +7,5 @@ import kotlinx.parcelize.Parcelize
 data class  FavoriteList @JvmOverloads constructor (
     val attractionInterestOrNotDTOList: List<PlaceItem>,
 //    val memteorInterestOrNotDTO: List<PlaceItem> // TODO ACTIV
-    val memteorInterestOrNotDTO: String // TODO DELETE
+    val meteorInterestOrNotDTO: String // TODO DELETE
 ) : Parcelable

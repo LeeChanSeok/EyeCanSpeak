@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.RecyclerView
 import com.jackandphantom.carouselrecyclerview.CarouselLayoutManager
@@ -79,4 +80,12 @@ class DateHourSelectDialog(
             setOrientation(RecyclerView.VERTICAL)
         }
     } // End of initRecyclerView
+
+    override fun onResume() {
+        super.onResume()
+        val width = ((context?.resources?.displayMetrics?.widthPixels ?: 0) * 0.9).toInt()
+        val height = WindowManager.LayoutParams.WRAP_CONTENT
+        dialog?.window?.setLayout(width, height)
+    } // End of onResume
+
 } // End of DateHourSelectDialog

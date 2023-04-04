@@ -2,6 +2,7 @@ package com.nassafy.aro.ui.view.meteorshower
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,67 +15,61 @@ import com.nassafy.aro.ui.adapter.MeteorShowerAdapter
 import com.nassafy.aro.ui.view.BaseFragment
 import com.nassafy.aro.ui.view.dialog.MeteorCountrySelectDialog
 import com.nassafy.aro.ui.view.main.MainActivity
+import com.nassafy.aro.ui.view.main.MainActivityViewModel
 import com.nassafy.aro.util.showSnackBarMessage
 import com.nassafy.aro.util.showToastView
 
-class MeteorShowerFragment : BaseFragment<FragmentMeteorShowerBinding>(FragmentMeteorShowerBinding::inflate) {
+class MeteorShowerFragment :
+    BaseFragment<FragmentMeteorShowerBinding>(FragmentMeteorShowerBinding::inflate) {
     private lateinit var meteorShowerAdapter: MeteorShowerAdapter
+    private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
     private var country = "대한민국"
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 서비스 선택 안함
-        if (true) {
-
-            binding.meteorShowerCountryTextview.visibility = View.GONE
-            binding.meteorShowerRecyclerview.visibility = View.GONE
-
-            binding.drawerImagebutton.setOnClickListener {
-                val mainActivity = activity as MainActivity
-                mainActivity.openDrawer()
-            }
-
-
-        } else {
-            var mLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        if (mainActivityViewModel.meteorShowerServiceEnabled) {
+            val mLayoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
             meteorShowerAdapter = MeteorShowerAdapter(binding.meteorShowerRecyclerview, itemList)
 
             binding.meteorShowerCountryTextview.apply {
                 text = countryList[0]
-                setOnClickListener {
-                    val meteorCountrySelectDialog = MeteorCountrySelectDialog(
-                        countryList
-                    )
-                    meteorCountrySelectDialog.show(
-                        childFragmentManager, "MeteorCountrySelectDialog"
-                    )
-                }
+//                setOnClickListener {
+//                    val meteorCountrySelectDialog = MeteorCountrySelectDialog(
+//                        countryList
+//                    )
+//                    meteorCountrySelectDialog.show(
+//                        childFragmentManager, "MeteorCountrySelectDialog"
+//                    )
+//                }
             }
-
             binding.drawerImagebutton.setOnClickListener {
                 val mainActivity = activity as MainActivity
                 mainActivity.openDrawer()
             }
-
             binding.meteorShowerRecyclerview.apply {
                 adapter = meteorShowerAdapter
                 layoutManager = mLayoutManager
                 (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
                 addItemDecoration(DividerItemDecoration(requireContext(), RecyclerView.VERTICAL))
             }
+
+            binding.meteorShowerCountryTextview.visibility = View.VISIBLE
+            binding.meteorShowerRecyclerview.visibility = View.VISIBLE
+
+        } else {
+            binding.meteorShowerCountryTextview.visibility = View.GONE
+            binding.meteorShowerRecyclerview.visibility = View.GONE
+            binding.drawerImagebutton.setOnClickListener {
+                val mainActivity = activity as MainActivity
+                mainActivity.openDrawer()
+            }
         }
 
     } // End of onViewCreated
-
-    fun changeCountry(country: String) {
-        binding.meteorShowerCountryTextview.text = country
-
-        // TODO : GET DATA and Change Adapter List
-    }
-
 
     companion object {
         var item1 = MeteorShower(
