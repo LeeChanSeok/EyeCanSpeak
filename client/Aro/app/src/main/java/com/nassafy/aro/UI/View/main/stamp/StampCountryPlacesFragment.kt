@@ -46,6 +46,14 @@ class StampCountryPlacesFragment :
 
         getUserPlaceDataGroupByCountryResponseLiveDataObserve()
 
+        var viewPagerHeight : Int = 0
+
+        viewPagerHeight = 40
+
+
+
+
+
         // View가져오기.
         CoroutineScope(Dispatchers.IO).launch {
             val def: Deferred<Int> = async {
