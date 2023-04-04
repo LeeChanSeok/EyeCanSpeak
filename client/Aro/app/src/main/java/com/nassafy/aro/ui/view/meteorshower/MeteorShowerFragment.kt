@@ -80,18 +80,18 @@ class MeteorShowerFragment :
         }
 
 
-        binding.meteorShowerRecyclerview.setOnScrollChangeListener { view, scrollX, scrollY, oldScrollX, oldScrollY ->
-            //binding.meteorShowerHeaderFramelayout.alpha = getAlpahForFloatingButton(scrollY)
-
-            if (scrollY > oldScrollY + 2) {
-                binding.meteorShowerHeaderFramelayout.visibility = View.GONE
-            }
-
-            // 스크롤 위로
-            if (scrollY < oldScrollY - 2) {
-                binding.meteorShowerHeaderFramelayout.visibility = View.VISIBLE
-            }
-        }
+//        binding.meteorShowerRecyclerview.setOnScrollChangeListener { view, scrollX, scrollY, oldScrollX, oldScrollY ->
+//            //binding.meteorShowerHeaderFramelayout.alpha = getAlpahForFloatingButton(scrollY)
+//
+//            if (scrollY > oldScrollY + 2) {
+//                binding.meteorShowerHeaderFramelayout.visibility = View.GONE
+//            }
+//
+//            // 스크롤 위로
+//            if (scrollY < oldScrollY - 2) {
+//                binding.meteorShowerHeaderFramelayout.visibility = View.VISIBLE
+//            }
+//        }
     } // End of setAdapter
 
     private fun getAlpahForFloatingButton(scrollY: Int): Float {
