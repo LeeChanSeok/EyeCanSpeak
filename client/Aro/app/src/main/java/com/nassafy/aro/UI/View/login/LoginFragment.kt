@@ -34,6 +34,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
     private val loginActivityViewModel: LoginActivityViewModel by activityViewModels()
     private val loginFragmentViewModel: LoginFragmentViewModel by viewModels()
     private var isTriedLoginState = false
+    private var finishFlag = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -61,15 +62,19 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requireActivity().onBackPressedDispatcher.addCallback(this) {
-            val finishDialog = OkCancelDialog(
-                "Aro",
-                "어플리케이션을 종료하시겠습니까?",
-                object : OkCancelDialog.SetOnOkButtonClickListener {
-                    override fun onOkButtonClick() {
-                        requireActivity().finish()
+            when (finishFlag) {
+                true -> {
+                    requireActivity().finish()
+                }
+                false -> {
+                    finishFlag = true
+                    CoroutineScope(Dispatchers.IO).launch {
+                        requireView().showSnackBarMessage("\'뒤로가기\' 버튼을 한번 더 누르시면 종료됩니다.")
+                        delay(1800)
+                        finishFlag = false
                     }
-                })
-            finishDialog.show(childFragmentManager, null)
+                }
+            }
         }
     } // End of onCreate
 
@@ -102,6 +107,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
 
                             })
                         requireView().showSnackBarMessage("네이버 로그인에 실패했습니다.")
+                        binding.progressbar.isVisible = false
                     }
 
                     override fun onFailure(httpStatus: Int, message: String) {
@@ -112,10 +118,12 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
 
             override fun onError(errorCode: Int, message: String) {
                 requireView().showSnackBarMessage("네이버 로그인에 실패했습니다.")
+                binding.progressbar.isVisible = false
             }
 
             override fun onFailure(httpStatus: Int, message: String) {
                 requireView().showSnackBarMessage("네이버 로그인에 실패했습니다.")
+                binding.progressbar.isVisible = false
             }
         }
         NaverIdLoginSDK.initialize(requireContext(), NAVER_CLIENT_ID, NAVER_CLIENT_SECRET, "ARO")
@@ -166,6 +174,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                         }
                         is NetworkResult.Error -> {
                             requireView().showSnackBarMessage("$providerType 로그인에 실패했습니다.")
+                            binding.progressbar.isVisible = false
                         }
                         is NetworkResult.Loading -> {
                             // Todo loading progressBar
@@ -234,14 +243,14 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
             githubLogin()
         }
         binding.loginButton.setOnClickListener {
-            when (binding.loginEmailIdEdittext.text.toString().trim().length) {
+            when (binding.loginEmailIdEdittext.editText?.text.toString().trim().length) {
                 0 -> {
                     requireView().showSnackBarMessage(getString(R.string.email_empty_text))
                     return@setOnClickListener
                 }
                 else -> {}
             }
-            when (binding.loginPasswordEdittext.text.toString().trim().length) {
+            when (binding.loginPasswordEdittext.editText?.text.toString().trim().length) {
                 0 -> {
                     requireView().showSnackBarMessage(getString(R.string.password_empty_text))
                     return@setOnClickListener
@@ -253,8 +262,8 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
             CoroutineScope(Dispatchers.IO).launch {
                 loginFragmentViewModel.loginByIdPassword(
                     "LOCAL",
-                    binding.loginEmailIdEdittext.text.toString(),
-                    binding.loginPasswordEdittext.text.toString(),
+                    binding.loginEmailIdEdittext.editText?.text.toString(),
+                    binding.loginPasswordEdittext.editText?.text.toString(),
                 )
             }
 

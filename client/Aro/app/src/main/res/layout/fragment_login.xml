@@ -28,30 +28,50 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/logo_imageview">
 
-        <EditText
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/login_email_id_edittext"
+            style="@style/EditTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="top|start"
             android:layout_marginBottom="8dp"
-            android:backgroundTint="@color/main_app_color"
-            android:fontFamily="@font/nanum_square_b"
             android:hint="@string/login_edittext_email_hint_text"
-            android:maxLines="1"
-            android:inputType="textEmailSubject"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white" />
+            android:theme="@style/EditTextStyle"
+            android:translationZ="0dp"
+            app:errorEnabled="true">
 
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailSubject"
+                android:maxLines="1"
+                android:textColor="@color/white"
+                android:translationZ="0dp" />
 
-        <EditText
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/login_password_edittext"
+            style="@style/EditTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/main_app_color"
+            android:layout_gravity="top|start"
             android:hint="@string/login_edittext_pw_hint_text"
-            android:maxLines="1"
-            android:inputType="textPassword"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white" />
+            android:theme="@style/EditTextStyle"
+            android:translationZ="0dp"
+            app:endIconMode="password_toggle"
+            app:errorEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:textColor="@color/white"
+                android:translationZ="0dp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -133,8 +153,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:text="@string/made_by_textview_text"
         android:fontFamily="@font/nanum_square_l"
+        android:text="@string/made_by_textview_text"
         android:textSize="8sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -145,9 +165,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

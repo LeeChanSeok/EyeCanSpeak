@@ -182,7 +182,7 @@ class JoinCountryPlaceSelectFragment : BaseFragment<FragmentAroCountryPlaceSelec
                         .getAsJsonArray()
                 )
                 Log.d(TAG, "initView: ${loginActivityViewModel.selectedCountryId.value?.countryId}")
-//                joinCountryPlaceServiceSelectFragmentViewModel.join(user) todo Activate
+                joinCountryPlaceServiceSelectFragmentViewModel.join(user)
             }
         }
         binding.cancelButton.setOnClickListener {

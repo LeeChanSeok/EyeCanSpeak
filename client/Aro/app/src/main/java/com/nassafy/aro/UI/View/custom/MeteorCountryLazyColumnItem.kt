@@ -74,7 +74,7 @@ fun MeteorCountryLazyColumItem(
                         style = TextStyle(
                             fontFamily = NanumSqaureFont,
                             fontWeight = FontWeight.Normal,
-                            fontSize = 30.sp
+                            fontSize = 24.sp
                         )
                     )
                 }
