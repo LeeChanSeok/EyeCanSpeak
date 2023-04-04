@@ -191,7 +191,7 @@ class AuroraFragment : BaseFragment<FragmentAuroraBinding>(FragmentAuroraBinding
         }
 
         binding.dateTextview.text = LocalDate.of(now.year, now.month, now.dayOfMonth).format(
-            DateTimeFormatter.ofPattern("yy/MM/dd")
+            DateTimeFormatter.ofPattern("yy.MM.dd")
         )
 
         binding.hourTextview.text =
@@ -322,7 +322,7 @@ class AuroraFragment : BaseFragment<FragmentAuroraBinding>(FragmentAuroraBinding
         binding.dateTextview.text = date
         binding.hourTextview.text = hour
 
-        val formatter = DateTimeFormatter.ofPattern("yy/MM/dd HH:mm")
+        val formatter = DateTimeFormatter.ofPattern("yy.MM.dd HH:mm")
         var selectedDate = LocalDateTime.parse("$date $hour", formatter)
         utcNow = selectedDate.atZone(ZoneId.systemDefault())
                                     .withZoneSameInstant(ZoneId.of("UTC"))

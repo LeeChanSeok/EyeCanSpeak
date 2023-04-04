@@ -8,3 +8,4 @@ data class MeteorShower(
     var subImage: Int = 0,
     var expanded: Boolean = false,
 )
+// TODO: Meteor

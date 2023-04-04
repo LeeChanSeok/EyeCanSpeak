@@ -15,7 +15,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class MeteorShowerAdapter(var recyclerView: RecyclerView, var itemList: MutableList<MeteorShower>) :
+class MeteorShowerAdapter(var itemList: MutableList<MeteorShower>) :
     RecyclerView.Adapter<MeteorShowerAdapter.ViewHolder>() {
     private var expandedPosition = -1
     private var prevExpandedPosition = -1
@@ -54,11 +54,11 @@ class MeteorShowerAdapter(var recyclerView: RecyclerView, var itemList: MutableL
         val isExpanded = position == expandedPosition
         val item = itemList[position]
 
-//        val iconPicasso = Picasso.get()
-//            .load(item.image)
-//            .fit()
-//            .centerCrop()
-//        iconPicasso.into(holder.iconImageView)
+        val iconPicasso = Picasso.get()
+            .load(item.image)
+            .fit()
+            .centerCrop()
+        iconPicasso.into(holder.iconImageView)
 
         if (isExpanded) {
             CoroutineScope(Dispatchers.Main).launch {
@@ -74,8 +74,6 @@ class MeteorShowerAdapter(var recyclerView: RecyclerView, var itemList: MutableL
         holder.engNameTextView.text = item.engName
         holder.dateTextView.text = item.date
         holder.dateTextTextview.text = item.name
-
-
 
         holder.subItemView.visibility = if (isExpanded) View.VISIBLE else View.GONE
         holder.itemView.isActivated = isExpanded

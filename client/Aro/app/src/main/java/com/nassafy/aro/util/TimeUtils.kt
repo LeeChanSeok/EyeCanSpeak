@@ -19,13 +19,13 @@ fun getDateList(now : LocalDateTime): (ArrayList<String>) {
             tempLocalDateTime.year,
             tempLocalDateTime.month,
             tempLocalDateTime.dayOfMonth
-        ).format(DateTimeFormatter.ofPattern("yy/MM/dd"))
+        ).format(DateTimeFormatter.ofPattern("yy.MM.dd"))
         dateList.add(date)
         i += 1L
     }
     // 마지막 날 추가
     var lastDay = LocalDate.of(endTime.year, endTime.month, endTime.dayOfMonth).format(
-        DateTimeFormatter.ofPattern("yy/MM/dd")
+        DateTimeFormatter.ofPattern("yy.MM.dd")
     )
 
     if (lastDay != dateList.last()) {

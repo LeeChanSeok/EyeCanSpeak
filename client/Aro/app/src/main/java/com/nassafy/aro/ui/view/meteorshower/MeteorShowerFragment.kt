@@ -25,11 +25,15 @@ class MeteorShowerFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // observe
+
+        // getdata
+
         if (mainActivityViewModel.meteorShowerServiceEnabled) {
             val mLayoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
-            meteorShowerAdapter = MeteorShowerAdapter(binding.meteorShowerRecyclerview, itemList)
+            meteorShowerAdapter = MeteorShowerAdapter(itemList)
 
             binding.meteorShowerCountryTextview.apply {
                 text = countryList[0]
