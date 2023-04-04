@@ -117,11 +117,6 @@ class JoinServiceFragment : BaseFragment<FragmentAroServiceSelectBinding>(Fragme
                 gson.toJsonTree(emptyList<PlaceItem>())
                     .getAsJsonArray()
             )
-            user.add(
-                "meteorPlaces",
-                gson.toJsonTree(emptyList<PlaceItem>())
-                    .getAsJsonArray()
-            )
             joinSericeFragmentViewModel.join(user)
         }
     }

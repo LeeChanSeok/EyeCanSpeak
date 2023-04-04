@@ -2,6 +2,7 @@ package com.nassafy.aro.domain.api
 
 import com.google.gson.JsonObject
 import com.nassafy.aro.data.dto.FavoriteList
+import com.nassafy.aro.data.dto.MeteorCountry
 import com.nassafy.aro.data.dto.PlaceItem
 import com.nassafy.aro.data.dto.UserTest
 import retrofit2.Response
@@ -18,6 +19,9 @@ interface MyPageApi {
 
     @GET("api/interest")
     suspend fun getFavoriteList(): Response<FavoriteList>
+
+    @GET("api/country")
+    suspend fun getMeteorCountryList(): Response<List<MeteorCountry>>
 
     @POST("api/interest")
     suspend fun postFavoriteList(@Body requestBody: JsonObject): Response<Unit>
