@@ -1,5 +1,6 @@
 package com.nassafy.aro.ui.adapter
 
+import android.content.Context
 import android.transition.*
 import android.view.LayoutInflater
 import android.view.View
@@ -15,8 +16,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class MeteorShowerAdapter(var itemList: MutableList<MeteorShower>) :
-    RecyclerView.Adapter<MeteorShowerAdapter.ViewHolder>() {
+class MeteorShowerAdapter(
+    private val mContext: Context,
+    private val meteorList: List<MeteorShower>
+) :
+    RecyclerView.Adapter<MeteorShowerAdapter.ViewHolder>(
+    ) {
     private var expandedPosition = -1
     private var prevExpandedPosition = -1
 
@@ -52,10 +57,10 @@ class MeteorShowerAdapter(var itemList: MutableList<MeteorShower>) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val isExpanded = position == expandedPosition
-        val item = itemList[position]
+        val item = meteorList[position]
 
         val iconPicasso = Picasso.get()
-            .load(item.image)
+            .load(item.constellationImage)
             .fit()
             .centerCrop()
         iconPicasso.into(holder.iconImageView)
@@ -63,21 +68,22 @@ class MeteorShowerAdapter(var itemList: MutableList<MeteorShower>) :
         if (isExpanded) {
             CoroutineScope(Dispatchers.Main).launch {
                 val subImagePicasso = Picasso.get()
-                    .load(item.subImage)
+                    .load(item.detailImage)
                     .fit().centerCrop()
                 subImagePicasso.into(holder.subImageView)
             }
             prevExpandedPosition = holder.adapterPosition
         }
 
-        holder.nameTextView.text = item.name
-        holder.engNameTextView.text = item.engName
-        holder.dateTextView.text = item.date
-        holder.dateTextTextview.text = item.name
+        holder.nameTextView.text = item.meteorName
+        holder.engNameTextView.text = item.meteorOriginalName
+        holder.dateTextView.text = item.predictDate
+        holder.dateTextTextview.text = item.meteorName
 
         holder.subItemView.visibility = if (isExpanded) View.VISIBLE else View.GONE
         holder.itemView.isActivated = isExpanded
-        
+
+
         holder.itemView.setOnClickListener {
             val adapterPos = holder.adapterPosition
             if (adapterPos != RecyclerView.NO_POSITION) {
@@ -88,7 +94,10 @@ class MeteorShowerAdapter(var itemList: MutableList<MeteorShower>) :
                 }
 
                 val transition = createTransition()
-                TransitionManager.beginDelayedTransition(holder.subItemView.parent as ViewGroup, transition)
+                TransitionManager.beginDelayedTransition(
+                    holder.subItemView.parent as ViewGroup,
+                    transition
+                )
 
                 notifyItemChanged(adapterPos)
                 notifyItemChanged(prevExpandedPosition)
@@ -96,6 +105,11 @@ class MeteorShowerAdapter(var itemList: MutableList<MeteorShower>) :
         }
     }
 
-    override fun getItemCount(): Int = itemList.size
+    private lateinit var itemClickListener: ItemClickListener
 
-}
+    interface ItemClickListener {
+        fun itemClick(position: Int)
+    }
+
+    override fun getItemCount(): Int = meteorList.size
+} // End of MeteorShowerAdapter class

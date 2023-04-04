@@ -1,42 +1,64 @@
 package com.nassafy.aro.ui.view.meteorshower
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
-import com.nassafy.aro.R
-import com.nassafy.aro.data.dto.MeteorShower
 import com.nassafy.aro.databinding.FragmentMeteorShowerBinding
 import com.nassafy.aro.ui.adapter.MeteorShowerAdapter
 import com.nassafy.aro.ui.view.BaseFragment
 import com.nassafy.aro.ui.view.main.MainActivity
 import com.nassafy.aro.ui.view.main.MainActivityViewModel
+import com.nassafy.aro.util.NetworkResult
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
+private const val TAG = "MeteorShowerFragment_싸피"
+
+@AndroidEntryPoint
 class MeteorShowerFragment :
     BaseFragment<FragmentMeteorShowerBinding>(FragmentMeteorShowerBinding::inflate) {
     private lateinit var meteorShowerAdapter: MeteorShowerAdapter
     private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
-    private var country = "대한민국"
 
+    private lateinit var mLayoutManager: LinearLayoutManager
+
+    // Context
+    private lateinit var mContext: Context
+
+    // Fragment ViewModel
+    private val meteorShowerViewModel: MeteorShowerViewModel by viewModels()
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mContext = context
+    } // End of onAttach
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         // observe
-
-        // getdata
+        getMyMeteorShowerResponseLiveDataObserve()
 
         if (mainActivityViewModel.meteorShowerServiceEnabled) {
-            val mLayoutManager =
+            mLayoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
-            meteorShowerAdapter = MeteorShowerAdapter(itemList)
+            CoroutineScope(Dispatchers.IO).launch {
+                meteorShowerViewModel.getMyMeteorShower()
+            }
 
             binding.meteorShowerCountryTextview.apply {
-                text = countryList[0]
+                text =
+                    meteorShowerViewModel.getMyMeteorShowerResponseLiveData.value!!.data!!.nation.toString()
 //                setOnClickListener {
 //                    val meteorCountrySelectDialog = MeteorCountrySelectDialog(
 //                        countryList
@@ -50,12 +72,7 @@ class MeteorShowerFragment :
                 val mainActivity = activity as MainActivity
                 mainActivity.openDrawer()
             }
-            binding.meteorShowerRecyclerview.apply {
-                adapter = meteorShowerAdapter
-                layoutManager = mLayoutManager
-                (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
-                addItemDecoration(DividerItemDecoration(requireContext(), RecyclerView.VERTICAL))
-            }
+
             binding.meteorShowerCountryTextview.visibility = View.VISIBLE
             binding.meteorShowerRecyclerview.visibility = View.VISIBLE
             binding.altView.root.visibility = View.GONE
@@ -70,57 +87,68 @@ class MeteorShowerFragment :
 
     } // End of onViewCreated
 
-    companion object {
-        var item1 = MeteorShower(
-            name = "거문고자리",
-            engName = "Lyra",
-            date = "2023년 4월 20일",
-            image = R.drawable.star_1,
-            subImage = R.drawable.star_2
+    private fun setAdapter() {
+        meteorShowerAdapter = MeteorShowerAdapter(
+            mContext,
+            meteorShowerViewModel.getMyMeteorShowerResponseLiveData.value!!.data!!.meteorList!!
         )
-        var item2 = MeteorShower(
-            name = "머리털자리",
-            engName = "coma berenicids",
-            date = "2023년 1월 1일",
-            image = R.drawable.star_2,
-            subImage = R.drawable.star_2
-        )
-        var item3 = MeteorShower(
-            name = "거문고자리",
-            engName = "Lyra",
-            date = "2023년 2월 20일",
-            image = R.drawable.star_1,
-            subImage = R.drawable.star_2
-        )
-        var item4 = MeteorShower(
-            name = "머리털자리",
-            engName = "coma berenicids",
-            date = "2023년 1월 1일",
-            image = R.drawable.star_2,
-            subImage = R.drawable.star_2
-        )
-        var item5 = MeteorShower(
-            name = "거문고자리",
-            engName = "Lyra",
-            date = "2023년 2월 20일",
-            image = R.drawable.star_1,
-            subImage = R.drawable.star_1
-        )
-        var item6 = MeteorShower(
-            name = "머리털자리",
-            engName = "coma berenicids",
-            date = "2023년 1월 1일",
-            image = R.drawable.star_2,
-            subImage = R.drawable.star_2
-        )
-        var item7 = MeteorShower(
-            name = "거문고자리",
-            engName = "Lyra",
-            date = "2023년 2월 20일",
-            image = R.drawable.star_1,
-            subImage = R.drawable.star_1
-        )
-        var itemList = arrayListOf<MeteorShower>(item1, item2, item3, item4, item5, item6, item7)
-        var countryList = arrayListOf<String>("대한민국", "아이슬란드", "가나", "일본", "중국", "미국", "영국", "프랑스")
+
+        binding.meteorShowerRecyclerview.apply {
+            adapter = meteorShowerAdapter
+            layoutManager = mLayoutManager
+            (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+            addItemDecoration(DividerItemDecoration(requireContext(), RecyclerView.VERTICAL))
+        }
+
+
+        binding.meteorShowerRecyclerview.setOnScrollChangeListener { view, scrollX, scrollY, oldScrollX, oldScrollY ->
+            //binding.meteorShowerHeaderFramelayout.alpha = getAlpahForFloatingButton(scrollY)
+
+            if (scrollY > oldScrollY + 2) {
+                binding.meteorShowerHeaderFramelayout.visibility = View.GONE
+            }
+
+            // 스크롤 위로
+            if (scrollY < oldScrollY - 2) {
+                binding.meteorShowerHeaderFramelayout.visibility = View.VISIBLE
+            }
+        }
+    } // End of setAdapter
+
+    private fun getAlpahForFloatingButton(scrollY: Int): Float {
+        val minDist = 0
+        val maxDist = 10000
+        if (scrollY > maxDist / 100) {
+            return 1.0f
+        } else if (scrollY < minDist) {
+            return 0f
+        } else {
+            var alpha = 0f
+            alpha = ((255.0 / maxDist) * scrollY).toFloat()
+            return alpha
+        }
     }
+
+    private fun getMyMeteorShowerResponseLiveDataObserve() {
+        meteorShowerViewModel.getMyMeteorShowerResponseLiveData.observe(this.viewLifecycleOwner) {
+            when (it) {
+                is NetworkResult.Success -> {
+
+                    setAdapter()
+                }
+
+                is NetworkResult.Error -> {
+                    Log.d(
+                        TAG, "getUserPlaceDataGroupByCountryResponseLiveDataObserve: ${it.message}"
+                    )
+                }
+
+                is NetworkResult.Loading -> {
+                    Log.d(
+                        TAG, "getUserPlaceDataGroupByCountryResponseLiveDataObserve: 로딩 중"
+                    )
+                }
+            }
+        }
+    } // End of getMyMeteorShowerResponseLiveDataObserve
 }

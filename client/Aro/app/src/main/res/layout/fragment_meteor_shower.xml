@@ -56,10 +56,10 @@
         android:id="@+id/alt_view"
         layout="@layout/fragment_service_not_selected_layout"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/meteor_shower_recyclerview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:descendantFocusability="blocksDescendants" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/meteor_shower_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:descendantFocusability="blocksDescendants" />
     </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

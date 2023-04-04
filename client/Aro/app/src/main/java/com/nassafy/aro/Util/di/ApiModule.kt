@@ -322,4 +322,18 @@ object ApiModule {
             .build()
             .create(GithubApi::class.java)
     } // End of provideHeaderSplashApi
+
+    // ============================================= Meteor =============================================
+    @Provides
+    @HeaderInterceptorApi
+    fun provideHeaderMeteorShowerApi(@HeaderInterceptorOkHttpClient okHttpClient: OkHttpClient): MeteorShowerApi {
+        return Retrofit.Builder()
+            .client(okHttpClient)
+            .baseUrl(provideBaseUrl())
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .build()
+            .create(MeteorShowerApi::class.java)
+    } // End of provideHeaderSplashApi
+
+
 } // End of ApiModule
