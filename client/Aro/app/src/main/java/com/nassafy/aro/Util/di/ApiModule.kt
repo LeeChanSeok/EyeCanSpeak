@@ -251,17 +251,6 @@ object ApiModule {
             .create(AuroraApi::class.java)
     } // End of provideHeaderDiaryApi
 
-    @Provides
-    @WithoutHeaderInterceptorApi
-    fun provideWithoutHeaderWeatherApi(@WithoutHeaderInterceptorOkHttpClient okHttpClient: OkHttpClient): WeatherApi {
-        return Retrofit.Builder()
-            .client(okHttpClient)
-            .baseUrl(provideBaseUrl())
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .build()
-            .create(WeatherApi::class.java)
-    } // End of provideWithoutHeaderWeatherApi
-
     // ============================================= Splash =============================================
     @Provides
     @WithoutHeaderInterceptorApi

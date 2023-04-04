@@ -1,17 +1,12 @@
 package com.nassafy.aro.ui.view.aurora
 
-import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.android.gms.maps.model.LatLng
 import com.nassafy.aro.data.dto.kp.KpResponse
 import com.nassafy.aro.data.dto.PlaceItem
 import com.nassafy.aro.data.dto.kp.KpWithProbs
-import com.nassafy.aro.data.dto.weather.WeatherResponse
 import com.nassafy.aro.domain.repository.AuroraRepository
-import com.nassafy.aro.domain.repository.WeatherRepository
 import com.nassafy.aro.util.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
@@ -22,7 +17,6 @@ private const val TAG = "AuroraViewModel_sdr"
 @HiltViewModel
 class AuroraViewModel @Inject constructor(
     private val auroraRepository: AuroraRepository,
-    private val weatherRepository: WeatherRepository
 ) : ViewModel() {
 
     val placeItemListLiveData: LiveData<NetworkResult<List<PlaceItem>>>

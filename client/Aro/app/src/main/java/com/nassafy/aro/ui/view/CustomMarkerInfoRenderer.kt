@@ -18,8 +18,7 @@ import com.squareup.picasso.Picasso
 import kotlinx.coroutines.*
 import java.lang.Exception
 
-private const val TAG = "InfoRenderer_SDR"
-
+private const val TAG = "CustomMarkerInfoRenderer_SSAFY"
 class CustomMarkerInfoRenderer(
     private val layoutInflater: LayoutInflater, val context: Context, val auroraViewModel: AuroraViewModel) :
     GoogleMap.InfoWindowAdapter {
@@ -40,7 +39,6 @@ class CustomMarkerInfoRenderer(
             val infoTextView = infoWindow.findViewById<TextView>(R.id.map_info_textview)
 
             val infoLinearLayout = infoWindow.findViewById<LinearLayout>(R.id.map_info_linearlayout)
-            val infoProgressBar = infoWindow.findViewById<ProgressBar>(R.id.map_info_progressbar)
 
             infoLinearLayout.visibility = View.INVISIBLE
             infoNameTextView.text = placeItem.placeName

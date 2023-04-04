@@ -56,10 +56,9 @@ class MeteorShowerFragment :
                 (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
                 addItemDecoration(DividerItemDecoration(requireContext(), RecyclerView.VERTICAL))
             }
-
             binding.meteorShowerCountryTextview.visibility = View.VISIBLE
             binding.meteorShowerRecyclerview.visibility = View.VISIBLE
-
+            binding.altView.root.visibility = View.GONE
         } else {
             binding.meteorShowerCountryTextview.visibility = View.GONE
             binding.meteorShowerRecyclerview.visibility = View.GONE
