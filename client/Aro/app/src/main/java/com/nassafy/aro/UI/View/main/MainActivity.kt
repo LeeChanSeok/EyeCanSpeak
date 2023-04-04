@@ -21,6 +21,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.nassafy.aro.Application
@@ -33,13 +34,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-private const val TAG = "MainActivity_SDR"
+private const val TAG = "MainActivity_SSAFY"
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-
     // Activity ViewModel
     private val mainActivityViewModel by viewModels<MainActivityViewModel>()
 
@@ -59,7 +60,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
         checkPermission()
 
         val navHostFragment =
@@ -69,8 +69,8 @@ class MainActivity : AppCompatActivity() {
         binding.mainNavigation.setupWithNavController(navController)
 
         initObserver()
-        initDrawer()
         initOption()
+        initDrawer()
 
         CoroutineScope(Dispatchers.IO).launch {
             mainActivityViewModel.getUserInfo(Application.sharedPreferencesUtil.getFcmToken())
@@ -205,6 +205,14 @@ class MainActivity : AppCompatActivity() {
         mainActivityViewModel.userInfo.observe(this) {
             when (it) {
                 is NetworkResult.Success -> {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        withContext(Dispatchers.IO) {
+                            mainActivityViewModel.getAuroraDisplayOption()
+                            mainActivityViewModel.getCloudDisplayOption()
+                            mainActivityViewModel.getAlarmOption()
+                        }
+                        setContentView(binding.root)
+                    }
                     mainActivityViewModel.email = it.data!!.email
                     mainActivityViewModel.nickname = it.data!!.nickname
                     mainActivityViewModel.auroraServiceEnabled = it.data!!.auroraService
@@ -227,19 +235,6 @@ class MainActivity : AppCompatActivity() {
             } // End of when
         } // End of userInfo.observe
 
-        mainActivityViewModel.getAlarmOptionNetworkResultLiveData.observe(this) {
-            when (it) {
-                is NetworkResult.Success -> {
-                    mainActivityViewModel.alarmOption = it.data!!
-                }
-                is NetworkResult.Error -> {
-                    binding.root.showSnackBarMessage("유저 정보를 불러오는데 실패했습니다.")
-                }
-                is NetworkResult.Loading -> {
-                }
-            } // End of when
-        } // End of getAlarmOptionNetworkResultLiveData.observe
-
         mainActivityViewModel.getAuroraOptionNetworkResultLiveData.observe(this) {
             when (it) {
                 is NetworkResult.Success -> {
@@ -253,7 +248,6 @@ class MainActivity : AppCompatActivity() {
             } // End of when
         } // End of getAuroraOptionNetworkResultLiveData.observe
 
-        // TODO : Cloud SDR
         mainActivityViewModel.getCloudOptionNetworkResultLiveData.observe(this) {
             when (it) {
                 is NetworkResult.Success -> {
@@ -266,6 +260,19 @@ class MainActivity : AppCompatActivity() {
                 }
             } // End of when
         } // End of getCloudOptionNetworkResultLiveData.observe
+
+        mainActivityViewModel.getAlarmOptionNetworkResultLiveData.observe(this) {
+            when (it) {
+                is NetworkResult.Success -> {
+                    mainActivityViewModel.alarmOption = it.data!!
+                }
+                is NetworkResult.Error -> {
+                    binding.root.showSnackBarMessage("유저 정보를 불러오는데 실패했습니다.")
+                }
+                is NetworkResult.Loading -> {
+                }
+            } // End of when
+        } // End of getAlarmOptionNetworkResultLiveData.observe
 
         mainActivityViewModel.logoutNetworkResultLiveData.observe(this) {
             when (it) {
@@ -342,9 +349,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun initOption() {
         CoroutineScope(Dispatchers.IO).launch {
-            mainActivityViewModel.getAlarmOption()
             mainActivityViewModel.getAuroraDisplayOption()
             mainActivityViewModel.getCloudDisplayOption()
+            mainActivityViewModel.getAlarmOption()
         }
     } // End of initOption
 

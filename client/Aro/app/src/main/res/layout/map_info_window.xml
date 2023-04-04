@@ -51,13 +51,6 @@
             android:textColor="@color/white" />
     </LinearLayout>
 
-    <ProgressBar
-        android:id="@+id/map_info_progressbar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:indeterminateTint="@color/main_app_color" />
-
 </FrameLayout>
 
 

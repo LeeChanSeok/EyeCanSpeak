@@ -7,6 +7,9 @@ import com.nassafy.aro.data.dto.UserTest
 import com.nassafy.aro.domain.repository.MainRepository
 import com.nassafy.aro.util.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,8 +22,8 @@ class MainActivityViewModel @Inject constructor(private val mainRepository: Main
     var nickname: String = ""
     var email: String = ""
     var alarmOption: Boolean = false
-    var auroraDisplayOption: Boolean = false
-    var cloudDisplayOption: Boolean = false
+    var auroraDisplayOption: Boolean = true
+    var cloudDisplayOption: Boolean = true
     var auroraServiceEnabled: Boolean = false
     var meteorShowerServiceEnabled: Boolean = false
 
@@ -36,28 +39,26 @@ class MainActivityViewModel @Inject constructor(private val mainRepository: Main
         }
     }
 
-    fun getUserInfo(fcmToken: String) {
+    suspend fun getUserInfo(fcmToken: String) {
         viewModelScope.launch {
             mainRepository.getUserInfo(fcmToken)
         }
     } // End of getUserInfo
 
-    fun getAlarmOption() {
+    suspend fun getAlarmOption() {
         viewModelScope.launch {
             mainRepository.getAlarmOption()
         }
     } // End of getAlarmOption
 
-    fun getAuroraDisplayOption() {
+    suspend fun getAuroraDisplayOption() {
         viewModelScope.launch {
             mainRepository.getAuroraDisplayOption()
         }
     } // End of getAuroraDisplayOption
 
-    fun getCloudDisplayOption() {
-        viewModelScope.launch {
-            mainRepository.getCloudDisplayOption()
-        }
+    suspend fun getCloudDisplayOption() {
+        mainRepository.getCloudDisplayOption()
     } // End of getAuroraDisplayOption
 
 } // End of MainActivityViewModel class
