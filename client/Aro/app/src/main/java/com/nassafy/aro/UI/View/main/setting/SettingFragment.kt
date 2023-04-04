@@ -51,7 +51,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(FragmentSettingBind
             when (it) {
                 is NetworkResult.Success -> {
                     activityViewModel.alarmOption = it.data!!
-                    binding.settingsFragmentNotificationSetToogleImgaeButton.isSelected =
+                    binding.settingsFragmentNotificationSetToogleImageButton.isSelected =
                         activityViewModel.alarmOption
                 }
                 is NetworkResult.Error -> {
@@ -64,7 +64,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(FragmentSettingBind
             when (it) {
                 is NetworkResult.Success -> {
                     activityViewModel.alarmOption = !activityViewModel.alarmOption
-                    binding.settingsFragmentNotificationSetToogleImgaeButton.isSelected =
+                    binding.settingsFragmentNotificationSetToogleImageButton.isSelected =
                         activityViewModel.alarmOption
                 }
                 is NetworkResult.Error -> {
@@ -77,7 +77,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(FragmentSettingBind
             when (it) {
                 is NetworkResult.Success -> {
                     activityViewModel.auroraDisplayOption = it.data!!
-                    binding.settingsFragmentMapOnAuroraSetToogleImgaeButton.isSelected =
+                    binding.settingsFragmentMapOnAuroraSetToogleImageButton.isSelected =
                         activityViewModel.auroraDisplayOption
                 }
                 is NetworkResult.Error -> {
@@ -90,7 +90,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(FragmentSettingBind
             when (it) {
                 is NetworkResult.Success -> {
                     activityViewModel.auroraDisplayOption = !activityViewModel.auroraDisplayOption
-                    binding.settingsFragmentMapOnAuroraSetToogleImgaeButton.isSelected =
+                    binding.settingsFragmentMapOnAuroraSetToogleImageButton.isSelected =
                         activityViewModel.auroraDisplayOption
                 }
                 is NetworkResult.Error -> {
@@ -103,8 +103,9 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(FragmentSettingBind
         settingFragmentViewModel.getCloudOptionNetworkResultLiveData.observe(this.viewLifecycleOwner) {
             when (it) {
                 is NetworkResult.Success -> {
+                    Log.d("SDR", "cloud initObserve: ${it.data}")
                     activityViewModel.cloudDisplayOption = it.data!!
-                    binding.settingsFragmentMapOnAuroraSetToogleImgaeButton.isSelected =
+                    binding.settingsFragmentMapOnCloudSetToogleImageButton.isSelected =
                         activityViewModel.cloudDisplayOption
                 }
                 is NetworkResult.Error -> {
@@ -117,7 +118,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(FragmentSettingBind
             when (it) {
                 is NetworkResult.Success -> {
                     activityViewModel.cloudDisplayOption = !activityViewModel.cloudDisplayOption
-                    binding.settingsFragmentMapOnCloudSetToogleImgaeButton.isSelected =
+                    binding.settingsFragmentMapOnCloudSetToogleImageButton.isSelected =
                         activityViewModel.cloudDisplayOption
                 }
                 is NetworkResult.Error -> {
@@ -151,23 +152,23 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(FragmentSettingBind
             settingFragmentViewModel.apply {
                 getAlarmOption()
                 getAuroraDisplayOption()
-                // getCloudDisplayOption()
+                getCloudDisplayOption()
             }
         }
 
-        binding.settingsFragmentNotificationSetToogleImgaeButton.setOnClickListener {
+        binding.settingsFragmentNotificationSetToogleImageButton.setOnClickListener {
             settingFragmentViewModel.setAlarmOption()
         }
 
-        binding.settingsFragmentMapOnAuroraSetToogleImgaeButton.setOnClickListener {
+        binding.settingsFragmentMapOnAuroraSetToogleImageButton.setOnClickListener {
             settingFragmentViewModel.setAuroraDisplayOption()
         }
 
-        binding.settingsFragmentMapOnCloudSetToogleImgaeButton.setOnClickListener {
+        binding.settingsFragmentMapOnCloudSetToogleImageButton.setOnClickListener {
             settingFragmentViewModel.setCloudDisplayOption()
         }
 
-        binding.settingsFragmentDeleteAccountImgaeButton.setOnClickListener {
+        binding.settingsFragmentDeleteAccountImageButton.setOnClickListener {
             val okCancelDialog = OkCancelDialog(
                 getString(R.string.delete_account_dialog_title_textview_text),
                 getString(R.string.delete_account_dialog_inform_textview_text),

@@ -1,5 +1,6 @@
 package com.nassafy.aro.ui.view.aurora
 
+import android.content.Context
 import android.content.res.Resources
 import android.graphics.Color
 import android.os.Bundle
@@ -102,16 +103,16 @@ class AuroraFragment : BaseFragment<FragmentAuroraBinding>(FragmentAuroraBinding
         mMap!!.uiSettings.isMapToolbarEnabled = false
         setCustomMapStyle()
 
-        // TODO: setCloudTileOverlay SDR
-//        when {
-//            mainActivityViewModel.cloudDisplayOption -> {
-//                setCloudTileOverlay()
-//            }
-//            mainActivityViewModel.cloudDisplayOption == false && cloudTileOverlay != null -> {
-//                cloudTileOverlay!!.remove()
-//            }
-//            else -> {}
-//        }
+        // setCloudTileOverlay
+        when {
+            mainActivityViewModel.cloudDisplayOption -> {
+                setCloudTileOverlay()
+            }
+            mainActivityViewModel.cloudDisplayOption == false && cloudTileOverlay != null -> {
+                cloudTileOverlay!!.remove()
+            }
+            else -> {}
+        }
 
         // setPolyLine
         when {
@@ -131,7 +132,6 @@ class AuroraFragment : BaseFragment<FragmentAuroraBinding>(FragmentAuroraBinding
     private fun initObserve() {
         auroraViewModel.currentKpIndexLiveData.observe(viewLifecycleOwner) {
             kpIndex = if (it.data != null) {
-                Log.d(TAG, "initObserve: ${it.data}")
                 it.data!!.kp
             } else {
                 -1.0
@@ -140,7 +140,6 @@ class AuroraFragment : BaseFragment<FragmentAuroraBinding>(FragmentAuroraBinding
 
         auroraViewModel.kpAndProbsLiveData.observe(viewLifecycleOwner) {
             if (it.data != null) {
-                Log.d(TAG, "kpAndProbsLiveData: ${it.data}")
                 kpWithProbs = it.data!!
                 favoriteAdapter.probs = it.data!!.probs
                 favoriteAdapter.notifyDataSetChanged()
@@ -154,7 +153,6 @@ class AuroraFragment : BaseFragment<FragmentAuroraBinding>(FragmentAuroraBinding
             when (it) {
                 is NetworkResult.Success -> {
                     if (mMap != null && it.data != null) {
-                        Log.d(TAG, "placeItemListLiveData: ${it.data}")
                         mClusterManager.clearItems()
                         mClusterManager.addItems(it.data)
                         mClusterManager.cluster()
@@ -369,7 +367,7 @@ class AuroraFragment : BaseFragment<FragmentAuroraBinding>(FragmentAuroraBinding
                 } catch (e: MalformedURLException) {
                     throw AssertionError(e)
                 }
-                Log.d(TAG, "getTileUrl: $tileUrl")
+//                Log.d(TAG, "getTileUrl: $tileUrl")
                 return tileUrl
             }
         }
