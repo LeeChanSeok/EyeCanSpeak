@@ -57,7 +57,6 @@ class CountryPlaceViewPagerAdapter(
         val a = mContext as MainActivity
         a.runOnUiThread {
             CoroutineScope(Dispatchers.Main).launch {
-
                 withContext(Dispatchers.Main) {
                     holder.itemView.findViewById<TextView>(R.id.stamp_country_name_textview).text =
                         countryName
@@ -140,7 +139,6 @@ class CountryPlaceViewPagerAdapter(
             .setOnClickListener {
                 itemClickListener.validateButtonclick(position)
             }
-
     } // End of onBindViewHolder
 
     override fun getItemCount(): Int = countryPlaceList.size

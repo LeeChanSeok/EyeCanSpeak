@@ -52,4 +52,14 @@ class StampNavViewModel : ViewModel() {
     fun setNowSelectedAttractionId(attractionId: Long) {
         _nowSelectedAttractionId = attractionId
     } // End of setNowSelectedAttractionId
+
+    // ======================================== 명소 뷰페이저에서 현재 선택된 명소의 명소 originalName ========================================
+    private var _nowSelectedAttractionOriginalName: String = ""
+    val nowSelectedAttractionOriginalName: String
+        get() = _nowSelectedAttractionOriginalName
+
+    fun setNowSelectedAttractionOriginalName(attractionOriginalName: String) {
+        _nowSelectedAttractionOriginalName = attractionOriginalName
+    } // End of setNowSelectedAttractionOriginalName
+
 } // End of StampNavViewModel

@@ -46,6 +46,14 @@ class StampCountryPlacesFragment :
 
         getUserPlaceDataGroupByCountryResponseLiveDataObserve()
 
+        var viewPagerHeight : Int = 0
+
+        viewPagerHeight = 40
+
+
+
+
+
         // View가져오기.
         CoroutineScope(Dispatchers.IO).launch {
             val def: Deferred<Int> = async {
@@ -70,7 +78,8 @@ class StampCountryPlacesFragment :
     private fun initViewPagerAdapter() {
         countryPlaceViewPager = CountryPlaceViewPagerAdapter(
             mContext,
-            stampHomeNavViewModel.nowSelectedCountry, stampHomeNavViewModel.userCountryPlaceDataList
+            stampHomeNavViewModel.nowSelectedCountry,
+            stampHomeNavViewModel.userCountryPlaceDataList
         )
         binding.stampCountryCustomViewpager2.apply {
             adapter = countryPlaceViewPager
@@ -96,13 +105,16 @@ class StampCountryPlacesFragment :
             // 인증하기 버튼 클릭 이벤트
             override fun validateButtonclick(position: Int) {
                 stampHomeNavViewModel.setNowSelectedAttractionId(stampHomeNavViewModel.userCountryPlaceDataList[position].attractionId!!)
+                stampHomeNavViewModel.setNowSelectedAttractionOriginalName(
+                    stampHomeNavViewModel.userCountryPlaceDataList[position].attractionOriginalName
+                        ?: ""
+                )
 
                 viewPagerPosition = position
                 val bundle = bundleOf("position" to viewPagerPosition)
                 Navigation.findNavController(binding.stampCountryCustomViewpager2.findViewById(R.id.stamp_country_place_validate_button))
                     .navigate(
-                        R.id.action_stampCountryPlacesFragment_to_stampValidateFragment,
-                        bundle
+                        R.id.action_stampCountryPlacesFragment_to_stampValidateFragment, bundle
                     )
             } // End of validateButtonclick
         })
@@ -122,15 +134,13 @@ class StampCountryPlacesFragment :
 
                 is NetworkResult.Error -> {
                     Log.d(
-                        TAG,
-                        "getUserPlaceDataGroupByCountryResponseLiveDataObserve: ${it.message}"
+                        TAG, "getUserPlaceDataGroupByCountryResponseLiveDataObserve: ${it.message}"
                     )
                 }
 
                 is NetworkResult.Loading -> {
                     Log.d(
-                        TAG,
-                        "getUserPlaceDataGroupByCountryResponseLiveDataObserve: 로딩 중"
+                        TAG, "getUserPlaceDataGroupByCountryResponseLiveDataObserve: 로딩 중"
                     )
                 }
             }

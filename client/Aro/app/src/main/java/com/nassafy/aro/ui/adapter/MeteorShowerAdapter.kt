@@ -1,6 +1,5 @@
 package com.nassafy.aro.ui.adapter
 
-import android.content.Context
 import android.transition.*
 import android.view.LayoutInflater
 import android.view.View
@@ -8,8 +7,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import com.nassafy.aro.R
 import com.nassafy.aro.data.dto.MeteorShower
@@ -17,7 +14,6 @@ import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.lang.Integer.max
 
 class MeteorShowerAdapter(var recyclerView: RecyclerView, var itemList: MutableList<MeteorShower>) :
     RecyclerView.Adapter<MeteorShowerAdapter.ViewHolder>() {
@@ -45,6 +41,7 @@ class MeteorShowerAdapter(var recyclerView: RecyclerView, var itemList: MutableL
         val iconImageView: ImageView = itemView.findViewById(R.id.meteor_shower_imageview)
         val subImageView: ImageView = itemView.findViewById(R.id.meteor_shower_sub_imageview)
         val subItemView: ConstraintLayout = itemView.findViewById(R.id.item_sub_layout)
+        val dateTextTextview: TextView = itemView.findViewById(R.id.meteor_shower_datetext_textview)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -57,11 +54,11 @@ class MeteorShowerAdapter(var recyclerView: RecyclerView, var itemList: MutableL
         val isExpanded = position == expandedPosition
         val item = itemList[position]
 
-        val iconPicasso = Picasso.get()
-            .load(item.image)
-            .fit()
-            .centerCrop()
-        iconPicasso.into(holder.iconImageView)
+//        val iconPicasso = Picasso.get()
+//            .load(item.image)
+//            .fit()
+//            .centerCrop()
+//        iconPicasso.into(holder.iconImageView)
 
         if (isExpanded) {
             CoroutineScope(Dispatchers.Main).launch {
@@ -76,6 +73,9 @@ class MeteorShowerAdapter(var recyclerView: RecyclerView, var itemList: MutableL
         holder.nameTextView.text = item.name
         holder.engNameTextView.text = item.engName
         holder.dateTextView.text = item.date
+        holder.dateTextTextview.text = item.name
+
+
 
         holder.subItemView.visibility = if (isExpanded) View.VISIBLE else View.GONE
         holder.itemView.isActivated = isExpanded
@@ -94,7 +94,6 @@ class MeteorShowerAdapter(var recyclerView: RecyclerView, var itemList: MutableL
 
                 notifyItemChanged(adapterPos)
                 notifyItemChanged(prevExpandedPosition)
-
             }
         }
     }

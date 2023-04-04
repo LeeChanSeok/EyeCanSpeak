@@ -30,7 +30,6 @@ import com.nassafy.aro.databinding.ActivityMainBinding
 import com.nassafy.aro.ui.view.login.LoginActivity
 import com.nassafy.aro.util.NetworkResult
 import com.nassafy.aro.util.showSnackBarMessage
-import com.nassafy.aro.util.showToastView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -74,7 +73,6 @@ class MainActivity : AppCompatActivity() {
         initDrawer()
 
         CoroutineScope(Dispatchers.IO).launch {
-            Log.d(TAG, "FCM 토큰 제대로 넘어가니???? : ${Application.sharedPreferencesUtil.getFcmToken()} ")
             mainActivityViewModel.getUserInfo(Application.sharedPreferencesUtil.getFcmToken())
         }
     } // End of onCreate
@@ -199,11 +197,9 @@ class MainActivity : AppCompatActivity() {
         }
     } // End of showDialogForLocationServiceSetting
 
-
 //    private fun callFcmToken(): String {
 //        return MyFirebaseMessagingService().getFirebaseToken()
 //    } // End of callFcmToken
-
 
     private fun initObserver() {
         mainActivityViewModel.userInfo.observe(this) {
@@ -221,6 +217,8 @@ class MainActivity : AppCompatActivity() {
                     mainActivityViewModel.nickname = it.data!!.nickname
                     mainActivityViewModel.auroraServiceEnabled = it.data!!.auroraService
                     mainActivityViewModel.meteorShowerServiceEnabled = it.data!!.meteorService
+
+                    // nickname 이모지 파싱
 
                     binding.mainNavigation.getHeaderView(0).apply {
                         findViewById<TextView>(R.id.nickname_textview).text =

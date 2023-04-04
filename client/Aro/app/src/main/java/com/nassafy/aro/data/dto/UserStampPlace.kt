@@ -15,5 +15,5 @@ data class UserStampPlace @JvmOverloads constructor(
     var stamp: String? = "",
     var auth: String? = "",
     var certificationDate: String? = "",
-) : Parcelable {
-} // End of UserStampPlace
+    var attractionOriginalName: String? = ""
+) : Parcelable {} // End of UserStampPlace
