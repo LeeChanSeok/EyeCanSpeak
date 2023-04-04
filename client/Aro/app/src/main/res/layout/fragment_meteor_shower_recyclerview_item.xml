@@ -1,110 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/item_main_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="16dp"
-        android:background="@color/dialog_background_color">
+            android:id="@+id/item_main_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="16dp"
+            android:background="@color/join_background_color">
 
-    <ImageView
-        android:id="@+id/meteor_shower_imageview"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        tools:src="@drawable/lyra"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <ImageView
+                android:id="@+id/meteor_shower_imageview"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/lyra"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/meteor_shower_name_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="거문고자리 유성우"
-        android:textSize="24sp"
-        android:textColor="@color/white"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:fontFamily="@font/nanum_square_eb"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/meteor_shower_imageview" />
+        <TextView
+                android:id="@+id/meteor_shower_name_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="거문고자리 유성우"
+                android:textSize="22sp"
+                app:layout_constraintStart_toEndOf="@id/meteor_shower_imageview"
+                app:layout_constraintBottom_toBottomOf="@id/meteor_shower_imageview"
+                app:layout_constraintTop_toTopOf="@id/meteor_shower_imageview"
+                android:textColor="@color/white"
+                android:layout_marginStart="20dp"
+                android:fontFamily="@font/nanum_barun_gothic" />
 
-    <TextView
-        android:id="@+id/meteor_shower_eng_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Lyra"
-        android:textSize="24sp"
-        android:textColor="@color/white"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/meteor_shower_imageview" />
+        <TextView
+                app:layout_constraintTop_toBottomOf="@id/meteor_shower_name_textview"
+                android:id="@+id/meteor_shower_eng_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Lyra"
+                android:fontFamily="@font/nanum_square_l"
+                android:textSize="12sp"
+                android:textColor="#B3B3B3"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@id/meteor_shower_name_textview" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/item_sub_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/dialog_background_color">
-
-        <View
+    <View
             android:id="@+id/item_sub_bar"
             android:layout_width="match_parent"
-            android:layout_height="5dp"
-            android:layout_marginTop="8dp"
+            android:layout_height="2dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:background="@drawable/tab_indicator" />
 
-        <TextView
-            android:id="@+id/meteor_shower_datetext_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="예상날짜"
-            android:textSize="20sp"
-            android:textColor="@color/white"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="16dp"
-            android:fontFamily="@font/nanum_square_eb"
-            app:layout_constraintTop_toBottomOf="@id/item_sub_bar"
-            app:layout_constraintStart_toStartOf="parent"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/item_sub_layout"
+            android:layout_width="match_parent"
+            android:layout_height="500dp"
+            android:background="@color/join_background_color">
 
-        <TextView
-            android:id="@+id/meteor_shower_date_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2023년 4월 20일"
-            android:textSize="20sp"
-            android:textColor="@color/white"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="16dp"
-            android:fontFamily="@font/nanum_square_eb"
-            app:layout_constraintTop_toBottomOf="@id/item_sub_bar"
-            app:layout_constraintStart_toEndOf="@+id/meteor_shower_datetext_textview"/>
 
         <ImageView
-            android:id="@+id/meteor_shower_sub_imageview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/loading_spinner"
-            android:layout_marginVertical="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/meteor_shower_date_textview" />
+                android:id="@+id/meteor_shower_sub_imageview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+            <TextView
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:id="@+id/meteor_shower_datetext_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nanum_square_eb"
+                    android:includeFontPadding="false"
+                    android:textColor="@color/stamp_location_name_color"
+                    android:textSize="36sp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:text="거문고 자리" />
+
+            <TextView
+                    android:id="@+id/meteor_shower_date_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2023년 4월 20일"
+                    android:textSize="20sp"
+                    android:textColor="@color/white"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/nanum_square_r"
+                    app:layout_constraintStart_toStartOf="@id/meteor_shower_datetext_textview"
+                    app:layout_constraintTop_toBottomOf="@id/meteor_shower_datetext_textview" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </LinearLayout>
