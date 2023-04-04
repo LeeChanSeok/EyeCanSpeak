@@ -26,6 +26,9 @@ interface MyPageApi {
     @POST("api/interest")
     suspend fun postFavoriteList(@Body requestBody: JsonObject): Response<Unit>
 
+    @POST("api/meteor")
+    suspend fun postFavoriteMeteorCountry(@Body requestBody: JsonObject): Response<Unit>
+
     @POST("api/members/service")
     suspend fun selectService(@Body requestBody: JsonObject): Response<JsonObject>
 

@@ -2,14 +2,23 @@ package com.nassafy.aro.ui.view.main.mypage
 
 import android.os.Bundle
 import android.view.View
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material.icons.outlined.Done
 import androidx.compose.material3.*
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -23,11 +32,10 @@ import androidx.navigation.fragment.findNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.nassafy.aro.R
+import com.nassafy.aro.data.dto.MeteorCountry
 import com.nassafy.aro.data.dto.PlaceItem
 import com.nassafy.aro.databinding.FragmentMyPageBinding
 import com.nassafy.aro.ui.view.BaseFragment
-import com.nassafy.aro.ui.view.custom.CountryPlaceChips
-import com.nassafy.aro.ui.view.custom.CountryPlaceLazyColumn
 import com.nassafy.aro.ui.view.custom.NanumSqaureFont
 import com.nassafy.aro.ui.view.dialog.OkDialog
 import com.nassafy.aro.ui.view.main.MainActivity
@@ -62,6 +70,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
     } // End of onViewCreated
 
     private fun initObserve() {
+
         myPageFragmentViewModel.nicknameLiveData.observe(this.viewLifecycleOwner) {
             when (it) {
                 is NetworkResult.Success -> {
@@ -147,6 +156,41 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
             } // End of when
         } // End of deleteFavoriteNetworkResultLiveData.observe
 
+        myPageFragmentViewModel.meteorCountryListNetworkResultLiveData.observe(this.viewLifecycleOwner) {
+            when (it) {
+                is NetworkResult.Success -> {
+                    binding.progressBar.isVisible = false
+                    it.data?.let { meteorCountryList ->
+                        meteorCountryList.firstOrNull { meteorCountry ->
+                            meteorCountry.interest
+                        }?.let { favoriteMeteorCountry ->
+                            myPageFragmentViewModel.setFavoriteMeteorCountry(favoriteMeteorCountry)
+                        }
+                    }
+                }
+                is NetworkResult.Error -> {
+                    binding.progressBar.isVisible = false
+                }
+                is NetworkResult.Loading -> {
+                    binding.progressBar.isVisible = true
+                }
+            }
+        } // End of meteorCountryListNetworkResultLiveData.observe
+
+        myPageFragmentViewModel.clearFavoriteMeteorCountryNetworkResultLiveData.observe(this.viewLifecycleOwner) {
+            when (it) {
+                is NetworkResult.Success -> {
+                    myPageFragmentViewModel.setFavoriteMeteorCountry(null)
+                }
+                is NetworkResult.Error -> {
+                    binding.progressBar.isVisible = false
+                }
+                is NetworkResult.Loading -> {
+                    binding.progressBar.isVisible = true
+                }
+            }
+        } // End of meteorCountryListNetworkResultLiveData.observe
+
     } // End of initObserve
 
     private fun initView() {
@@ -223,6 +267,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
     fun initComposeView() {
         CoroutineScope(Dispatchers.IO).launch {
             myPageFragmentViewModel.getFavoriteList()
+            myPageFragmentViewModel.getMeteorCountryList()
         } // End of CoroutineScope
         binding.myFavoriteComposeview.apply {
             // Dispose of the Composition when the view's LifecycleOwner
@@ -231,7 +276,9 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
             setContent {
                 val auroraFavoriteList =
                     remember { myPageFragmentViewModel.favoriteAuroraPlaceList }
-                val meteorFavoriteList = mutableListOf<PlaceItem>()
+                val favoriteMeteorCountry: MeteorCountry? by myPageFragmentViewModel.favoriteMeteorCountry.observeAsState(
+                    null
+                )
                 // In Compose world
 
                 LaunchedEffect(myPageFragmentViewModel.favoriteAuroraPlaceList) {
@@ -271,7 +318,97 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
                             1 -> {
                                 when (myPageFragmentViewModel.meteorService) {
                                     true -> {
-                                        // TODO 유성우
+                                        when (favoriteMeteorCountry) {
+                                            null -> {
+                                                Box(
+                                                    modifier = Modifier
+                                                        .fillMaxWidth(0.9f),
+                                                    contentAlignment = Alignment.Center
+                                                ) {
+                                                    Text(
+                                                        text = "관심위치로 지정한 나라가 존재하지 않습니다.",
+                                                        style = TextStyle(
+                                                            fontFamily = NanumSqaureFont,
+                                                            fontWeight = FontWeight.Bold,
+                                                            fontSize = 24.sp,
+                                                            textAlign = TextAlign.Center
+                                                        ),
+                                                        color = Color.White
+                                                    ) // End of Text
+                                                }
+                                            }
+                                            else -> {
+                                                Box(
+                                                    modifier = Modifier
+                                                        .fillMaxWidth(0.9f).fillMaxHeight()
+                                                ) {
+                                                    Card(
+                                                        shape = RoundedCornerShape(4.dp),
+                                                        modifier = Modifier
+                                                            .padding(8.dp)
+                                                            .height(100.dp),
+                                                        colors = CardDefaults.cardColors(
+                                                            containerColor = Color.Transparent,
+                                                        )
+                                                    ) {
+                                                        Column(
+                                                            Modifier
+                                                                .fillMaxWidth(1f),
+                                                        ) {
+                                                            Row(
+                                                                modifier = Modifier.fillMaxHeight(0.95f),
+                                                                verticalAlignment = Alignment.CenterVertically
+                                                            ) {
+                                                                Box(
+                                                                    modifier = Modifier.weight(2f),
+                                                                    contentAlignment = Alignment.Center
+                                                                ) {
+                                                                    Text(
+                                                                        text = favoriteMeteorCountry!!.countryEmoji,
+                                                                        style = TextStyle(
+                                                                            fontFamily = NanumSqaureFont,
+                                                                            fontWeight = FontWeight.Normal,
+                                                                            fontSize = 24.sp
+                                                                        )
+                                                                    )
+                                                                }
+                                                                Box(
+                                                                    modifier = Modifier
+                                                                        .weight(7f),
+                                                                    contentAlignment = Alignment.Center
+                                                                ) {
+                                                                    Text(
+                                                                        text = favoriteMeteorCountry!!.countryName,
+                                                                        style = TextStyle(
+                                                                            fontFamily = NanumSqaureFont,
+                                                                            fontWeight = FontWeight.Bold,
+                                                                            fontSize = 20.sp
+                                                                        ),
+                                                                        color = Color.White
+                                                                    ) // End of Text
+                                                                } // End of Box
+                                                                IconButton(onClick = {
+                                                                    myPageFragmentViewModel.clearFavoriteMeteorCountry()
+                                                                }) {
+                                                                    Icon(
+                                                                        imageVector = Icons.Outlined.Close,
+                                                                        contentDescription = "checked",
+                                                                        tint = colorResource(id = R.color.light_dark_gray),
+                                                                    ) // End of Icon
+                                                                } // End o f IconButton
+                                                            } // End of Row
+                                                            Spacer(modifier = Modifier.height(4.dp))
+                                                            Divider(
+                                                                modifier = Modifier
+                                                                    .fillMaxWidth(1f)
+                                                                    .height(2.dp),
+                                                                color = colorResource(id = R.color.main_app_color),
+                                                            )
+                                                        } // End of Column
+                                                    } // End of Card
+                                                }
+                                            }
+                                        }
                                     }
                                     false -> {
                                         Box(
@@ -291,7 +428,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
                                     }
                                 } // End of when
                             } // End of when(page) : page -> 1
-                        }
+                        } // End of when(page)
                     } // End of HorizontalPager
                 } // End of MaterialTheme
             } // End of setContent

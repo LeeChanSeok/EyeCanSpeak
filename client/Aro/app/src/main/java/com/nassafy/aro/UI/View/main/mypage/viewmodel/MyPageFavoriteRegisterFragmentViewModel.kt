@@ -38,6 +38,8 @@ class MyPageFavoriteRegisterFragmentViewModel @Inject constructor(
         get() = myPageRepository.placeListNetworkResultLiveData
     val postFavoriteListNetworkResultLiveData: LiveData<NetworkResult<Unit>>
         get() = myPageRepository.postFavoriteListNetworkResultLiveData
+    val postFavoriteMeteorCountryNetworkResultLiveData
+        get() = myPageRepository.postFavoriteMeteorCountryNetworkResultLiveData
     val setSelectServiceNetworkResultLiveData: LiveData<NetworkResult<JsonObject>>
         get() = myPageRepository.setSelectServiceNetworkResultLiveData
 
@@ -79,6 +81,12 @@ class MyPageFavoriteRegisterFragmentViewModel @Inject constructor(
             myPageRepository.postFavoriteList(requestBody)
         } // End of viewModelScope.launch
     } // End of postFavoriteList
+
+    suspend fun postFavoriteMeteorCounry() {
+        viewModelScope.launch {
+            myPageRepository.postFavoriteMeteorCountry(favoriteMeteorCountry.value?.countryId)
+        }
+    }
 
     override fun selectAuroraPlace(placeItem: PlaceItem) {
         when (favoriteAuroraPlaceList.contains(placeItem)) {
