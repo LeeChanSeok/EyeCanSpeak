@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonObject
 import com.nassafy.aro.data.dto.TokenResponse
-import com.nassafy.aro.data.dto.UserTest
 import com.nassafy.aro.domain.repository.UserAccessRepository
 import com.nassafy.aro.util.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel

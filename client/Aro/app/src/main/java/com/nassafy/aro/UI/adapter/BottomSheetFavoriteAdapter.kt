@@ -19,7 +19,8 @@ class BottomSheetFavoriteAdapter(var probs: List<Probability>) :
         parent: ViewGroup,
         viewType: Int
     ): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.bottom_sheet_recyclerview_item, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.bottom_sheet_recyclerview_item, parent, false)
         return ViewHolder(view)
     } // End of onCreateViewHolder
 
@@ -54,10 +55,14 @@ class BottomSheetFavoriteAdapter(var probs: List<Probability>) :
             "Clouds" -> R.drawable.weather_clouds_icon
             else -> R.drawable.weather_clear_icon
         }
-        var nameTextView = holder.itemView.findViewById<TextView>(R.id.bottom_sheet_item_name_textview)
-        var percentTextView = holder.itemView.findViewById<TextView>(R.id.bottom_sheet_item_percent_textview)
-        var updownImageView = holder.itemView.findViewById<ImageView>(R.id.bottom_sheet_item_updown_imageview)
-        var weatherImageView = holder.itemView.findViewById<ImageView>(R.id.bottom_sheet_item_weather_imageview)
+        var nameTextView =
+            holder.itemView.findViewById<TextView>(R.id.bottom_sheet_item_name_textview)
+        var percentTextView =
+            holder.itemView.findViewById<TextView>(R.id.bottom_sheet_item_percent_textview)
+        var updownImageView =
+            holder.itemView.findViewById<ImageView>(R.id.bottom_sheet_item_updown_imageview)
+        var weatherImageView =
+            holder.itemView.findViewById<ImageView>(R.id.bottom_sheet_item_weather_imageview)
 
         nameTextView.text = probability.attractionName
         percentTextView.apply {

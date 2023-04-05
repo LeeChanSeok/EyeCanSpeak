@@ -1,8 +1,6 @@
 package com.nassafy.aro.ui.view.custom
 
-import android.graphics.fonts.FontFamily
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -18,7 +16,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.nassafy.aro.R
 import com.nassafy.aro.data.dto.PlaceItem
 import com.nassafy.aro.ui.view.ServiceViewModel
 
@@ -33,7 +30,8 @@ fun ChipHasCancelButton(place: PlaceItem, viewModel: ServiceViewModel) {
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(
-            Modifier.height(28.dp), contentAlignment = Alignment.CenterEnd) {
+            Modifier.height(28.dp), contentAlignment = Alignment.CenterEnd
+        ) {
             Text(
                 text = place.placeName,
                 modifier = Modifier.padding(start = 16.dp),
@@ -44,7 +42,7 @@ fun ChipHasCancelButton(place: PlaceItem, viewModel: ServiceViewModel) {
                 )
             )
         }
-        Box (Modifier.height(28.dp), contentAlignment = Alignment.Center) {
+        Box(Modifier.height(28.dp), contentAlignment = Alignment.Center) {
             IconButton(onClick = {
                 viewModel.unSelectAuroraPlace(place)
             }) {
@@ -52,7 +50,10 @@ fun ChipHasCancelButton(place: PlaceItem, viewModel: ServiceViewModel) {
                     imageVector = Icons.Default.Close,
                     contentDescription = "Cancel",
                     tint = Color.Black,
-                    modifier = Modifier.padding(end = 0.dp).height(18.dp).width(18.dp)
+                    modifier = Modifier
+                        .padding(end = 0.dp)
+                        .height(18.dp)
+                        .width(18.dp)
                 )
             }
         }

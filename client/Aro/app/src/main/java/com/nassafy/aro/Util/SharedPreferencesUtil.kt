@@ -2,7 +2,6 @@ package com.nassafy.aro.util
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
 
 class SharedPreferencesUtil(context: Context) {
     private var preferences: SharedPreferences =
@@ -30,7 +29,7 @@ class SharedPreferencesUtil(context: Context) {
         return preferences.getString(ACCESS_TOKEN, "").toString()
     } // End of getUserAccessToken
 
-    fun addFcmToken(fcm_token : String) {
+    fun addFcmToken(fcm_token: String) {
         val editor = preferences.edit()
         editor.putString(FCM_TOKEN, fcm_token)
         editor.apply()
@@ -39,7 +38,6 @@ class SharedPreferencesUtil(context: Context) {
     fun getFcmToken(): String {
         return preferences.getString(FCM_TOKEN, "").toString()
     } // End of getUserRefreshToken
-
 
 
     companion object {

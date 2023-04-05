@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.ProgressBar
 import android.widget.TextView
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.Marker
@@ -16,15 +15,18 @@ import com.nassafy.aro.ui.view.aurora.AuroraViewModel
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.*
-import java.lang.Exception
 
 private const val TAG = "CustomMarkerInfoRenderer_SSAFY"
+
 class CustomMarkerInfoRenderer(
-    private val layoutInflater: LayoutInflater, val context: Context, val auroraViewModel: AuroraViewModel) :
+    private val layoutInflater: LayoutInflater,
+    val context: Context,
+    val auroraViewModel: AuroraViewModel
+) :
     GoogleMap.InfoWindowAdapter {
 
     private var infoWindow = layoutInflater.inflate(R.layout.map_info_window, null)
-    private var lastMarker : Marker? = null
+    private var lastMarker: Marker? = null
 
     override fun getInfoContents(marker: Marker): View? {
         return null
@@ -54,12 +56,13 @@ class CustomMarkerInfoRenderer(
                             override fun onSuccess() {
                                 when {
                                     marker.isInfoWindowShown -> {
-                                                    infoTextView.text = "${placeItem.prob}%"
-                                                     infoLinearLayout.visibility = View.VISIBLE
-                                                    marker.showInfoWindow()
+                                        infoTextView.text = "${placeItem.prob}%"
+                                        infoLinearLayout.visibility = View.VISIBLE
+                                        marker.showInfoWindow()
                                     }
                                 }
                             }
+
                             override fun onError(e: Exception?) {
                                 Log.e(TAG, "onError: $e")
                             }

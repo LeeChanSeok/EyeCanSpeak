@@ -15,7 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginFragmentViewModel @Inject constructor(
     private val userAccessRepository: UserAccessRepository
-): ViewModel() {
+) : ViewModel() {
 
     val loginToken: LiveData<NetworkResult<TokenResponse>>
         get() = userAccessRepository.loginToken
@@ -47,8 +47,8 @@ class LoginFragmentViewModel @Inject constructor(
             is NetworkResult.Success -> {
                 accessToken = networkResult.data!!.access_token
             }
-            is NetworkResult.Error -> { }
-            is NetworkResult.Loading -> { }
+            is NetworkResult.Error -> {}
+            is NetworkResult.Loading -> {}
         }
         return accessToken
     }

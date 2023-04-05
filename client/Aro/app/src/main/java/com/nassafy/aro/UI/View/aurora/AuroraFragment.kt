@@ -1,6 +1,5 @@
 package com.nassafy.aro.ui.view.aurora
 
-import android.content.Context
 import android.content.res.Resources
 import android.graphics.Color
 import android.os.Bundle
@@ -28,7 +27,6 @@ import com.google.maps.android.PolyUtil
 import com.google.maps.android.clustering.ClusterManager
 import com.nassafy.aro.BuildConfig
 import com.nassafy.aro.R
-import com.nassafy.aro.ui.view.ChartAxisFormatter
 import com.nassafy.aro.data.dto.PlaceItem
 import com.nassafy.aro.data.dto.kp.KpWithProbs
 import com.nassafy.aro.databinding.FragmentAuroraBinding
@@ -39,7 +37,6 @@ import com.nassafy.aro.ui.view.main.MainActivity
 import com.nassafy.aro.ui.view.main.MainActivityViewModel
 import com.nassafy.aro.util.*
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
 import java.net.MalformedURLException
 import java.net.URL
 import java.time.LocalDate
@@ -49,7 +46,6 @@ import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import kotlin.math.round
 import kotlin.math.roundToInt
-import kotlin.random.Random
 
 private const val TAG = "AuroraFragment_sdr"
 
@@ -73,7 +69,7 @@ class AuroraFragment : BaseFragment<FragmentAuroraBinding>(FragmentAuroraBinding
     private var chartHourLabel = getChartHourLabel(now, now)
     private var kpIndex = 0.0
     private var kpWithProbs = KpWithProbs()
-    private var mPolyline : Polyline? = null
+    private var mPolyline: Polyline? = null
 
     private lateinit var mClusterManager: ClusterManager<PlaceItem>
 
@@ -325,8 +321,8 @@ class AuroraFragment : BaseFragment<FragmentAuroraBinding>(FragmentAuroraBinding
         val formatter = DateTimeFormatter.ofPattern("yy.MM.dd HH:mm")
         var selectedDate = LocalDateTime.parse("$date $hour", formatter)
         utcNow = selectedDate.atZone(ZoneId.systemDefault())
-                                    .withZoneSameInstant(ZoneId.of("UTC"))
-                                    .toLocalDateTime()
+            .withZoneSameInstant(ZoneId.of("UTC"))
+            .toLocalDateTime()
 
         utcString = utcNow.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
 

@@ -1,6 +1,5 @@
 package com.nassafy.aro.domain.repository
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.nassafy.aro.domain.api.ValidateApi

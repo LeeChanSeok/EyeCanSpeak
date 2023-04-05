@@ -15,18 +15,24 @@ import com.nassafy.aro.util.setNetworkResult
 import javax.inject.Inject
 
 private const val TAG = "ssafy_pcs"
-class MyPageRepository @Inject constructor(private val myPageApi: MyPageApi, private val withoutHeaderMyPageApi: WithoutHeaderMyPageApi) {
+
+class MyPageRepository @Inject constructor(
+    private val myPageApi: MyPageApi,
+    private val withoutHeaderMyPageApi: WithoutHeaderMyPageApi
+) {
 
     private val _nicknameLiveData = MutableLiveData<NetworkResult<Unit>>()
     val nicknameLiveData get() = _nicknameLiveData
 
-    private val _getSelectedServiceNetworkResultLiveData = MutableLiveData<NetworkResult<UserTest>>()
+    private val _getSelectedServiceNetworkResultLiveData =
+        MutableLiveData<NetworkResult<UserTest>>()
     val getSelectedServiceNetworkResultLiveData get() = _getSelectedServiceNetworkResultLiveData
 
     private val _favoriteListNetworkResultLiveData = MutableLiveData<NetworkResult<FavoriteList>>()
     val favoriteListNetworkResultLiveData: LiveData<NetworkResult<FavoriteList>> get() = _favoriteListNetworkResultLiveData
 
-    private val _setSelectServiceNetworkResultLiveData = MutableLiveData<NetworkResult<JsonObject>>()
+    private val _setSelectServiceNetworkResultLiveData =
+        MutableLiveData<NetworkResult<JsonObject>>()
     val setSelectServiceNetworkResultLiveData get() = _setSelectServiceNetworkResultLiveData
 
     private val _countryListNetworkResultLiveData = MutableLiveData<NetworkResult<List<String>>>()
@@ -38,13 +44,15 @@ class MyPageRepository @Inject constructor(private val myPageApi: MyPageApi, pri
     private val _postFavoriteListNetworkResultLiveData = MutableLiveData<NetworkResult<Unit>>()
     val postFavoriteListNetworkResultLiveData: LiveData<NetworkResult<Unit>> get() = _postFavoriteListNetworkResultLiveData
 
-    private val _postFavoriteMeteorCountryNetworkResultLiveData = MutableLiveData<NetworkResult<Unit>>()
+    private val _postFavoriteMeteorCountryNetworkResultLiveData =
+        MutableLiveData<NetworkResult<Unit>>()
     val postFavoriteMeteorCountryNetworkResultLiveData: LiveData<NetworkResult<Unit>> get() = _postFavoriteMeteorCountryNetworkResultLiveData
 
     private val _deleteFavoriteNetworkResultLiveData = MutableLiveData<NetworkResult<Long>>()
     val deleteFavoriteNetworkResultLiveData: LiveData<NetworkResult<Long>> get() = _deleteFavoriteNetworkResultLiveData
 
-    private val _meteorCountryListNetworkResultLiveData = MutableLiveData<NetworkResult<List<MeteorCountry>>>()
+    private val _meteorCountryListNetworkResultLiveData =
+        MutableLiveData<NetworkResult<List<MeteorCountry>>>()
     val meteorCountryListNetworkResultLiveData: LiveData<NetworkResult<List<MeteorCountry>>> get() = _meteorCountryListNetworkResultLiveData
 
 
@@ -61,7 +69,11 @@ class MyPageRepository @Inject constructor(private val myPageApi: MyPageApi, pri
                     )
                 }
                 response.errorBody() != null -> {
-                    _nicknameLiveData.postValue(NetworkResult.Error(response.errorBody()!!.string()))
+                    _nicknameLiveData.postValue(
+                        NetworkResult.Error(
+                            response.errorBody()!!.string()
+                        )
+                    )
                 }
             } // End of when
         } catch (e: java.lang.Exception) {
@@ -75,13 +87,19 @@ class MyPageRepository @Inject constructor(private val myPageApi: MyPageApi, pri
         try {
             when {
                 response.isSuccessful -> {
-                    _favoriteListNetworkResultLiveData.postValue(NetworkResult.Success(
-                        response.body()!!
-                    ))
+                    _favoriteListNetworkResultLiveData.postValue(
+                        NetworkResult.Success(
+                            response.body()!!
+                        )
+                    )
 
                 }
                 response.errorBody() != null -> {
-                    _favoriteListNetworkResultLiveData.postValue(NetworkResult.Error(response.errorBody()!!.string()))
+                    _favoriteListNetworkResultLiveData.postValue(
+                        NetworkResult.Error(
+                            response.errorBody()!!.string()
+                        )
+                    )
                 }
             } // End of when
         } catch (e: java.lang.Exception) {
@@ -102,7 +120,11 @@ class MyPageRepository @Inject constructor(private val myPageApi: MyPageApi, pri
                     )
                 }
                 response.errorBody() != null -> {
-                    _getSelectedServiceNetworkResultLiveData.postValue(NetworkResult.Error(response.errorBody()!!.string()))
+                    _getSelectedServiceNetworkResultLiveData.postValue(
+                        NetworkResult.Error(
+                            response.errorBody()!!.string()
+                        )
+                    )
                 }
             } // End of when
         } catch (e: java.lang.Exception) {
@@ -126,7 +148,11 @@ class MyPageRepository @Inject constructor(private val myPageApi: MyPageApi, pri
                     )
                 }
                 response.errorBody() != null -> {
-                    _setSelectServiceNetworkResultLiveData.postValue(NetworkResult.Error(response.errorBody()!!.string()))
+                    _setSelectServiceNetworkResultLiveData.postValue(
+                        NetworkResult.Error(
+                            response.errorBody()!!.string()
+                        )
+                    )
                 }
             } // End of when
         } catch (e: java.lang.Exception) {
@@ -166,11 +192,19 @@ class MyPageRepository @Inject constructor(private val myPageApi: MyPageApi, pri
         try {
             when {
                 response.isSuccessful -> {
-                    _postFavoriteMeteorCountryNetworkResultLiveData.postValue(NetworkResult.Success(Unit))
+                    _postFavoriteMeteorCountryNetworkResultLiveData.postValue(
+                        NetworkResult.Success(
+                            Unit
+                        )
+                    )
 
                 }
                 response.errorBody() != null -> {
-                    _postFavoriteMeteorCountryNetworkResultLiveData.postValue(NetworkResult.Error(response.errorBody()!!.string()))
+                    _postFavoriteMeteorCountryNetworkResultLiveData.postValue(
+                        NetworkResult.Error(
+                            response.errorBody()!!.string()
+                        )
+                    )
                 }
             } // End of when
         } catch (e: java.lang.Exception) {
@@ -184,13 +218,19 @@ class MyPageRepository @Inject constructor(private val myPageApi: MyPageApi, pri
         try {
             when {
                 response.isSuccessful -> {
-                    _deleteFavoriteNetworkResultLiveData.postValue(NetworkResult.Success(
-                        interestId
-                    ))
+                    _deleteFavoriteNetworkResultLiveData.postValue(
+                        NetworkResult.Success(
+                            interestId
+                        )
+                    )
 
                 }
                 response.errorBody() != null -> {
-                    _deleteFavoriteNetworkResultLiveData.postValue(NetworkResult.Error(response.errorBody()!!.string()))
+                    _deleteFavoriteNetworkResultLiveData.postValue(
+                        NetworkResult.Error(
+                            response.errorBody()!!.string()
+                        )
+                    )
                 }
             } // End of when
         } catch (e: java.lang.Exception) {

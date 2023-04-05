@@ -9,10 +9,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
-import com.nassafy.aro.databinding.DialogOkBinding
 import com.nassafy.aro.databinding.DialogOkCancelBinding
 
-class OkCancelDialog(private val title: String, private val content: String, setOnOkButtonClickListener: SetOnOkButtonClickListener
+class OkCancelDialog(
+    private val title: String,
+    private val content: String,
+    setOnOkButtonClickListener: SetOnOkButtonClickListener
 ) :
     DialogFragment() {
 
@@ -65,6 +67,7 @@ class OkCancelDialog(private val title: String, private val content: String, set
         val height = WindowManager.LayoutParams.WRAP_CONTENT
         dialog?.window?.setLayout(width, height)
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

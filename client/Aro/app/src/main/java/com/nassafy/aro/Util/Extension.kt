@@ -3,31 +3,20 @@ package com.nassafy.aro.util
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.ColorMatrix
-import android.graphics.ColorMatrixColorFilter
-import android.renderscript.Allocation
-import android.renderscript.Element
-import android.renderscript.RenderScript
-import android.renderscript.ScriptIntrinsicBlur
 import android.util.Log
 import android.view.Gravity
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.Toast
-import androidx.compose.ui.graphics.Outline
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
 import com.google.android.material.snackbar.Snackbar
-import com.nassafy.aro.ui.view.Inflate
 import retrofit2.Response
 
 /**
  * ex) val layout = layoutInflater.inflate(R.layout.custom_toast, null)
-        context?.showToastView(layout)
+    context?.showToastView(layout)
  */
 fun Context.showToastView(toastView: View) {
     Toast(this).apply {

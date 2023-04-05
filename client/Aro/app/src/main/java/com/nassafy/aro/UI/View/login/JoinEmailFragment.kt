@@ -20,7 +20,9 @@ import com.nassafy.aro.ui.view.login.viewmodel.LoginActivityViewModel
 import com.nassafy.aro.util.NetworkResult
 import com.nassafy.aro.util.showSnackBarMessage
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class JoinEmailFragment :
@@ -59,7 +61,7 @@ class JoinEmailFragment :
                 is NetworkResult.Success -> {
                     isVerifyEmailTextviewClicked = false
                     binding.progressGroup.isGone = true
-                    when(it.data!!){
+                    when (it.data!!) {
                         true -> {
                             binding.joinEmailIdTextfield.error = null
                             binding.verificationEmailCodeTextfield.isVisible = true
@@ -79,7 +81,9 @@ class JoinEmailFragment :
                 is NetworkResult.Loading -> {
                     Log.d("ssafy_pcs", "progress.On")
                     when (isVerifyEmailTextviewClicked) {
-                        true -> {binding.progressGroup.isVisible = true}
+                        true -> {
+                            binding.progressGroup.isVisible = true
+                        }
                         false -> {}
                     }
                 }
@@ -125,7 +129,9 @@ class JoinEmailFragment :
                 joinEmailFragmentViewModel.validateEmail(binding.joinEmailIdTextfield.editText?.text.toString())
             }
             when (isVerifyEmailTextviewClicked) {
-                true -> {binding.progressGroup.isVisible = true}
+                true -> {
+                    binding.progressGroup.isVisible = true
+                }
                 false -> {}
             }
         } // End of verifyEmailTextview.setOnClickListener

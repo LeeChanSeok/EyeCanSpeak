@@ -10,7 +10,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.nassafy.aro.databinding.DialogOkBinding
 
-class OkDialog(private val title: String, private val content: String, private val okButtonContent: String): DialogFragment() {
+class OkDialog(
+    private val title: String,
+    private val content: String,
+    private val okButtonContent: String
+) : DialogFragment() {
 
     private var _binding: DialogOkBinding? = null
     private val binding get() = _binding!!

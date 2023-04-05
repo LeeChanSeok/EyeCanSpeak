@@ -12,7 +12,7 @@ import javax.inject.Inject
 @HiltViewModel
 class JoinEmailFragmentViewModel @Inject constructor(
     private val userAccessRepository: UserAccessRepository
-): ViewModel() {
+) : ViewModel() {
 
     val isEmailValidated: LiveData<NetworkResult<Boolean>>
         get() = userAccessRepository.isEmailValidated
@@ -24,6 +24,7 @@ class JoinEmailFragmentViewModel @Inject constructor(
             userAccessRepository.validateEmail(email)
         }
     }
+
     fun validateEmialAuthCode(email: String, code: String) {
         viewModelScope.launch {
             userAccessRepository.validateEmialAuthenticationCode(email, code)

@@ -1,7 +1,6 @@
 package com.nassafy.aro.ui.view.main.mypage.viewmodel
 
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -11,7 +10,6 @@ import com.nassafy.aro.data.dto.PlaceItem
 import com.nassafy.aro.domain.repository.MyPageRepository
 import com.nassafy.aro.ui.view.ServiceViewModel
 import com.nassafy.aro.util.NetworkResult
-import com.nassafy.aro.util.setNetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.util.function.Predicate

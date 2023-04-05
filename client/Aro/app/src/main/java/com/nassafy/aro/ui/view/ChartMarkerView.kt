@@ -2,7 +2,6 @@ package com.nassafy.aro.ui.view
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import android.widget.TextView
 import com.github.mikephil.charting.components.MarkerView
 import com.github.mikephil.charting.data.CandleEntry

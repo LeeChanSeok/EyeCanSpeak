@@ -7,18 +7,13 @@ import android.widget.AdapterView
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.core.view.isInvisible
@@ -85,7 +80,7 @@ class MyPageFavoriteRegisterFragment :
                     myPageFavoriteRegisterFragmentViewModel.getMeteorCountryList() // todo Activate
                 } // End of CoroutineScope
             }
-            false -> { }
+            false -> {}
         }
         initEssentialObserve()
         initView()
@@ -98,8 +93,10 @@ class MyPageFavoriteRegisterFragment :
                     it.data?.let {
                         myPageFavoriteRegisterFragmentViewModel.meteorCountryList.clear()
                         myPageFavoriteRegisterFragmentViewModel.meteorCountryList.addAll(it)
-                        it.firstOrNull { it.interest == true }?.let {selectedMeteorCountry ->
-                            myPageFavoriteRegisterFragmentViewModel.selectMeteorCountry(selectedMeteorCountry)
+                        it.firstOrNull { it.interest == true }?.let { selectedMeteorCountry ->
+                            myPageFavoriteRegisterFragmentViewModel.selectMeteorCountry(
+                                selectedMeteorCountry
+                            )
                         }
                     }
                 } // End of Success
@@ -120,8 +117,10 @@ class MyPageFavoriteRegisterFragment :
             when (it) {
                 is NetworkResult.Success -> {
 
-                    mainActivityViewModel.auroraServiceEnabled = myPageFavoriteRegisterFragmentViewModel.isAuroraServiceSelected
-                    mainActivityViewModel.meteorShowerServiceEnabled = myPageFavoriteRegisterFragmentViewModel.isMeteorServiceSelected
+                    mainActivityViewModel.auroraServiceEnabled =
+                        myPageFavoriteRegisterFragmentViewModel.isAuroraServiceSelected
+                    mainActivityViewModel.meteorShowerServiceEnabled =
+                        myPageFavoriteRegisterFragmentViewModel.isMeteorServiceSelected
 
                     val gson = GsonBuilder().create()
                     val requestBody = JsonObject()
@@ -163,7 +162,9 @@ class MyPageFavoriteRegisterFragment :
             } // End of when
         } // End of postFavoriteListNetworkResultLiveData.observe
 
-        myPageFavoriteRegisterFragmentViewModel.postFavoriteMeteorCountryNetworkResultLiveData.observe(this.viewLifecycleOwner) {
+        myPageFavoriteRegisterFragmentViewModel.postFavoriteMeteorCountryNetworkResultLiveData.observe(
+            this.viewLifecycleOwner
+        ) {
             when (it) {
                 is NetworkResult.Success -> {
                     requireView().showSnackBarMessage(getString(R.string.my_page_my_favorite_modify_success_text))
@@ -312,7 +313,8 @@ class MyPageFavoriteRegisterFragment :
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 val placeList = remember { myPageFavoriteRegisterFragmentViewModel.placeList }
-                val meteorCountryList = remember { myPageFavoriteRegisterFragmentViewModel.meteorCountryList }
+                val meteorCountryList =
+                    remember { myPageFavoriteRegisterFragmentViewModel.meteorCountryList }
                 val selectedAuroraPlaceList =
                     remember { myPageFavoriteRegisterFragmentViewModel.favoriteAuroraPlaceList }
                 val selectedCountry: MeteorCountry? by myPageFavoriteRegisterFragmentViewModel.favoriteMeteorCountry.observeAsState(
@@ -378,7 +380,11 @@ class MyPageFavoriteRegisterFragment :
                                         } // End of Column
                                     }
                                     false -> {
-                                        ServiceNotSelectedDisplayLayout(displayedString = getString(R.string.service_aurora_not_selected_textview_text))
+                                        ServiceNotSelectedDisplayLayout(
+                                            displayedString = getString(
+                                                R.string.service_aurora_not_selected_textview_text
+                                            )
+                                        )
                                     }
                                 }
                             } // End of page -> 0
@@ -394,7 +400,11 @@ class MyPageFavoriteRegisterFragment :
                                         )
                                     } // End of when (myPageFavoriteRegisterFragmentViewModel.isAuroraServiceSelected) -> true
                                     false -> {
-                                        ServiceNotSelectedDisplayLayout(displayedString = getString(R.string.service_meteor_not_selected_textview_text))
+                                        ServiceNotSelectedDisplayLayout(
+                                            displayedString = getString(
+                                                R.string.service_meteor_not_selected_textview_text
+                                            )
+                                        )
                                     } // End of myPageFavoriteRegisterFragmentViewModel.isAuroraServiceSelected -> false
                                 } // End of when (myPageFavoriteRegisterFragmentViewModel.isAuroraServiceSelected)
                             } // End of page -> 1

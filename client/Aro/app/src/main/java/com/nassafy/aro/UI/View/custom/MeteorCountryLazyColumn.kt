@@ -17,8 +17,8 @@ fun MeteorCountryLazyColumn(
 ) {
     LazyColumn(
         modifier = Modifier
-        .fillMaxHeight()
-        .fillMaxWidth(0.9f)
+            .fillMaxHeight()
+            .fillMaxWidth(0.9f)
     ) {
         items(meteorCountryList) { country ->
             MeteorCountryLazyColumItem(

@@ -293,7 +293,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
                 // In Compose world
 
                 val favoriteListNetworkResultLiveData by myPageFragmentViewModel.favoriteListNetworkResultLiveData.observeAsState()
-             
+
                 LaunchedEffect(myPageFragmentViewModel.favoriteAuroraPlaceList) {
                     auroraFavoriteList.clear()
                     auroraFavoriteList.addAll(myPageFragmentViewModel.favoriteAuroraPlaceList)

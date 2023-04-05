@@ -1,7 +1,7 @@
 package com.nassafy.aro.ui.view.main.stamp
 
 import android.app.Activity
-import android.app.Activity.*
+import android.app.Activity.RESULT_OK
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent

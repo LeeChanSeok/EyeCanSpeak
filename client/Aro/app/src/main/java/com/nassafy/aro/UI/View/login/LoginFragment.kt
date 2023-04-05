@@ -10,14 +10,14 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.nassafy.aro.Application
-import com.nassafy.aro.BuildConfig.*
+import com.nassafy.aro.BuildConfig.NAVER_CLIENT_ID
+import com.nassafy.aro.BuildConfig.NAVER_CLIENT_SECRET
 import com.nassafy.aro.R
 import com.nassafy.aro.databinding.FragmentLoginBinding
 import com.nassafy.aro.ui.view.BaseFragment
-import com.nassafy.aro.ui.view.dialog.OkCancelDialog
-import com.nassafy.aro.ui.view.main.MainActivity
 import com.nassafy.aro.ui.view.login.viewmodel.LoginActivityViewModel
 import com.nassafy.aro.ui.view.login.viewmodel.LoginFragmentViewModel
+import com.nassafy.aro.ui.view.main.MainActivity
 import com.nassafy.aro.util.NetworkResult
 import com.nassafy.aro.util.githubLoginUri
 import com.nassafy.aro.util.showSnackBarMessage
@@ -27,7 +27,10 @@ import com.navercorp.nid.oauth.OAuthLoginCallback
 import com.navercorp.nid.profile.NidProfileCallback
 import com.navercorp.nid.profile.data.NidProfileResponse
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::inflate) {

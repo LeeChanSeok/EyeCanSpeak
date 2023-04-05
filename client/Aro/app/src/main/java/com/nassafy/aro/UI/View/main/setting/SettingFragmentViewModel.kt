@@ -10,7 +10,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SettingFragmentViewModel @Inject constructor(private val settingRepository: SettingRepository ): ViewModel(){
+class SettingFragmentViewModel @Inject constructor(private val settingRepository: SettingRepository) :
+    ViewModel() {
     val getAlarmOptionNetworkResultLiveData get() = settingRepository.getAlarmOptionNetworkResultLiveData
     val setAlarmOptionNetworkResultLiveData get() = settingRepository.setAlarmOptionNetworkResultLiveData
     val getAuroraOptionNetworkResultLiveData get() = settingRepository.getAuroraDisplayOptionNetworkResultLiveData
@@ -39,7 +40,7 @@ class SettingFragmentViewModel @Inject constructor(private val settingRepository
 
     fun setAuroraDisplayOption() {
         viewModelScope.launch {
-            var result : Deferred<Int> = async {
+            var result: Deferred<Int> = async {
                 settingRepository.setAuroraDisplayOption()
                 1
             }
@@ -55,7 +56,7 @@ class SettingFragmentViewModel @Inject constructor(private val settingRepository
 
     fun setCloudDisplayOption() {
         viewModelScope.launch {
-            var result : Deferred<Int> = async {
+            var result: Deferred<Int> = async {
                 settingRepository.setCloudDisplayOption()
                 1
             }

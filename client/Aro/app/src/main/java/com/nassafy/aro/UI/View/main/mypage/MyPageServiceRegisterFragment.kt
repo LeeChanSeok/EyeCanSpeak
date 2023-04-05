@@ -49,8 +49,10 @@ class MyPageServiceRegisterFragment :
             when (it) {
                 is NetworkResult.Success -> {
                     Log.d("ssafy", "success")
-                    mainActivityViewModel.auroraServiceEnabled = myPageServiceRegisterFragementViewModel.auroraService
-                    mainActivityViewModel.meteorShowerServiceEnabled = myPageServiceRegisterFragementViewModel.meteorService
+                    mainActivityViewModel.auroraServiceEnabled =
+                        myPageServiceRegisterFragementViewModel.auroraService
+                    mainActivityViewModel.meteorShowerServiceEnabled =
+                        myPageServiceRegisterFragementViewModel.meteorService
 
                     requireView().showSnackBarMessage(getString(R.string.service_modify_success_text))
                     findNavController().navigate(R.id.action_myPageServiceRegisterFragment_to_myPageFragment)

@@ -17,13 +17,16 @@ class SettingRepository @Inject constructor(private val settingApi: SettingApi) 
     private val _setAlarmOptionNetworkResultLiveData = MutableLiveData<NetworkResult<Unit>>()
     val setAlarmOptionNetworkResultLiveData: LiveData<NetworkResult<Unit>> get() = _setAlarmOptionNetworkResultLiveData
 
-    private val _getAuroraDisplayOptionNetworkResultLiveData = MutableLiveData<NetworkResult<Boolean>>()
+    private val _getAuroraDisplayOptionNetworkResultLiveData =
+        MutableLiveData<NetworkResult<Boolean>>()
     val getAuroraDisplayOptionNetworkResultLiveData: LiveData<NetworkResult<Boolean>> get() = _getAuroraDisplayOptionNetworkResultLiveData
 
-    private val _setAuroraDisplayOptionNetworkResultLiveData = MutableLiveData<NetworkResult<Unit>>()
+    private val _setAuroraDisplayOptionNetworkResultLiveData =
+        MutableLiveData<NetworkResult<Unit>>()
     val setAuroraDisplayOptionNetworkResultLiveData: LiveData<NetworkResult<Unit>> get() = _setAuroraDisplayOptionNetworkResultLiveData
 
-    private val _getCloudDisplayOptionNetworkResultLiveData = MutableLiveData<NetworkResult<Boolean>>()
+    private val _getCloudDisplayOptionNetworkResultLiveData =
+        MutableLiveData<NetworkResult<Boolean>>()
     val getCloudDisplayOptionNetworkResultLiveData: LiveData<NetworkResult<Boolean>> get() = _getCloudDisplayOptionNetworkResultLiveData
 
     private val _setCloudDisplayOptionNetworkResultLiveData = MutableLiveData<NetworkResult<Unit>>()
@@ -49,7 +52,11 @@ class SettingRepository @Inject constructor(private val settingApi: SettingApi) 
                     ) // End of postValue
                 } // End of response.isSuccessful
                 response.errorBody() != null -> {
-                    _setAlarmOptionNetworkResultLiveData.postValue(NetworkResult.Error(response.errorBody()!!.string()))
+                    _setAlarmOptionNetworkResultLiveData.postValue(
+                        NetworkResult.Error(
+                            response.errorBody()!!.string()
+                        )
+                    )
                 } // End of response.errorBody
             } // End of when
         } catch (e: java.lang.Exception) {
@@ -74,7 +81,11 @@ class SettingRepository @Inject constructor(private val settingApi: SettingApi) 
                     ) // End of postValue
                 } // End of response.isSuccessful
                 response.errorBody() != null -> {
-                    _setAuroraDisplayOptionNetworkResultLiveData.postValue(NetworkResult.Error(response.errorBody()!!.string()))
+                    _setAuroraDisplayOptionNetworkResultLiveData.postValue(
+                        NetworkResult.Error(
+                            response.errorBody()!!.string()
+                        )
+                    )
                 } // End of response.errorBody
             } // End of when
         } catch (e: java.lang.Exception) {
@@ -99,7 +110,11 @@ class SettingRepository @Inject constructor(private val settingApi: SettingApi) 
                     ) // End of postValue
                 } // End of response.isSuccessful
                 response.errorBody() != null -> {
-                    _setCloudDisplayOptionNetworkResultLiveData.postValue(NetworkResult.Error(response.errorBody()!!.string()))
+                    _setCloudDisplayOptionNetworkResultLiveData.postValue(
+                        NetworkResult.Error(
+                            response.errorBody()!!.string()
+                        )
+                    )
                 } // End of response.errorBody
             } // End of when
         } catch (e: java.lang.Exception) {
@@ -120,7 +135,11 @@ class SettingRepository @Inject constructor(private val settingApi: SettingApi) 
                     ) // End of postValue
                 } // End of response.isSuccessful
                 response.errorBody() != null -> {
-                    _deleteAccountNetworkResultLiveData.postValue(NetworkResult.Error(response.errorBody()!!.string()))
+                    _deleteAccountNetworkResultLiveData.postValue(
+                        NetworkResult.Error(
+                            response.errorBody()!!.string()
+                        )
+                    )
                 } // End of response.errorBody
             } // End of when
         } catch (e: java.lang.Exception) {

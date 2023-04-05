@@ -10,7 +10,6 @@ import com.nassafy.aro.databinding.FragmentServerCallTestBinding
 import com.nassafy.aro.util.NetworkResult
 import com.nassafy.aro.util.showSnackBarMessage
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.scopes.FragmentScoped
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

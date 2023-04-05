@@ -11,7 +11,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MyPageServiceRegisterFragmentViewModel @Inject constructor(private val myPageRepository: MyPageRepository): ViewModel() {
+class MyPageServiceRegisterFragmentViewModel @Inject constructor(private val myPageRepository: MyPageRepository) :
+    ViewModel() {
 
     var auroraService: Boolean = false
     var meteorService: Boolean = false

@@ -3,7 +3,6 @@ package com.nassafy.aro.ui.view.main.stamp
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nassafy.aro.data.dto.MapStampItem
 import com.nassafy.aro.data.dto.StampHomeItem
 import com.nassafy.aro.domain.repository.StampRepository
 import com.nassafy.aro.util.NetworkResult

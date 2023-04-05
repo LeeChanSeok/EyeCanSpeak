@@ -70,7 +70,8 @@ class SplashFragment : BaseFragment<FragmentSplashBinding>(FragmentSplashBinding
                     }
 
                     splashViewModel.postAccessTokenGetUserData()
-                }}
+                }
+            }
         }
     } // End of onViewCreated
 

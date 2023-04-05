@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.gson.JsonObject
 import com.nassafy.aro.data.dto.MeteorCountry
 import com.nassafy.aro.data.dto.PlaceItem
 import com.nassafy.aro.domain.repository.MyPageRepository
@@ -14,7 +13,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MyPageFragmentViewModel @Inject constructor(private val myPageRepository: MyPageRepository) : ViewModel() {
+class MyPageFragmentViewModel @Inject constructor(private val myPageRepository: MyPageRepository) :
+    ViewModel() {
 
     var auroraService = false
     var meteorService = false

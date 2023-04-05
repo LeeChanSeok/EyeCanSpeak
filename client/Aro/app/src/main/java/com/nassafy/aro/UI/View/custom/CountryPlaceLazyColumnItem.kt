@@ -1,6 +1,5 @@
 package com.nassafy.aro.ui.view.custom
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -9,7 +8,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Done
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -23,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.ImageLoader
 import coil.annotation.ExperimentalCoilApi
-import coil.compose.ImagePainter
 import coil.compose.LocalImageLoader
 import coil.compose.rememberImagePainter
 import coil.decode.SvgDecoder
@@ -47,7 +44,7 @@ fun CountryPlaceLazyColumnItem(
         }
         .build()
 
-    DisposableEffect(key1 =  place, key2 = selectedPlaceList.size) {
+    DisposableEffect(key1 = place, key2 = selectedPlaceList.size) {
         isSelected = selectedPlaceList.any { it.placeName == place.placeName }
         onDispose {
             isSelected = selectedPlaceList.any { it.placeId == place.placeId }

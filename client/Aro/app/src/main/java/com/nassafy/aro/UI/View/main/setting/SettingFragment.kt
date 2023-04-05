@@ -3,10 +3,7 @@ package com.nassafy.aro.ui.view.main.setting
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -17,7 +14,6 @@ import com.nassafy.aro.ui.view.dialog.OkCancelDialog
 import com.nassafy.aro.ui.view.login.LoginActivity
 import com.nassafy.aro.ui.view.main.MainActivity
 import com.nassafy.aro.ui.view.main.MainActivityViewModel
-import com.nassafy.aro.ui.view.main.mypage.MyPageServiceRegisterFragmentDirections
 import com.nassafy.aro.util.NetworkResult
 import com.nassafy.aro.util.showSnackBarMessage
 import com.nassafy.aro.util.showToastView
@@ -174,7 +170,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(FragmentSettingBind
                 getString(R.string.delete_account_dialog_inform_textview_text),
                 object : OkCancelDialog.SetOnOkButtonClickListener {
                     override fun onOkButtonClick() {
-                            settingFragmentViewModel.deleteAccount(activityViewModel.email)
+                        settingFragmentViewModel.deleteAccount(activityViewModel.email)
                     }
                 }
             )

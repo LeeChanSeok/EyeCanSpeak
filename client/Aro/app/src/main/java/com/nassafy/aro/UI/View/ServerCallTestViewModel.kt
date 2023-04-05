@@ -8,12 +8,13 @@ import com.nassafy.aro.domain.repository.TestRepository
 import com.nassafy.aro.util.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import okhttp3.RequestBody.Companion.toRequestBody
 import javax.inject.Inject
 
 private const val TAG = "ServerCallTestViewModel_싸피"
+
 @HiltViewModel
-class ServerCallTestViewModel @Inject constructor(private val testRepository: TestRepository) : ViewModel()  {
+class ServerCallTestViewModel @Inject constructor(private val testRepository: TestRepository) :
+    ViewModel() {
 
     // ======================== 서버 호출 테스트 ========================
     val getServerCallTestResponseLiveData: LiveData<NetworkResult<String>>

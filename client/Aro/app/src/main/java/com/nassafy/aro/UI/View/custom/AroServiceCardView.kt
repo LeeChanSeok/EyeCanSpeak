@@ -1,7 +1,6 @@
 package com.nassafy.aro.ui.view.custom
 
 import android.content.Context
-import android.graphics.BitmapFactory
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.appcompat.widget.LinearLayoutCompat
@@ -10,8 +9,6 @@ import com.nassafy.aro.databinding.AroServiceCardviewLayoutBinding
 import com.squareup.picasso.Picasso
 import jp.wasabeef.picasso.transformations.BlurTransformation
 import jp.wasabeef.picasso.transformations.GrayscaleTransformation
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 
 
 class AroServiceCardView @JvmOverloads constructor(
@@ -24,9 +21,10 @@ class AroServiceCardView @JvmOverloads constructor(
         AroServiceCardviewLayoutBinding.inflate(LayoutInflater.from(context), this, true)
     }
 
-    interface OnSelectedChangeListener  {
-        fun onSelectedChanged (isSelected: Boolean)
+    interface OnSelectedChangeListener {
+        fun onSelectedChanged(isSelected: Boolean)
     }
+
     interface OnClickListener {
         fun onClick()
     }
@@ -46,7 +44,7 @@ class AroServiceCardView @JvmOverloads constructor(
             styledAttributes.getText(R.styleable.AroServiceCardView_service_name_text)
         styledAttributes.recycle()
 
-        onSelectedChangeListener = object: OnSelectedChangeListener {
+        onSelectedChangeListener = object : OnSelectedChangeListener {
             override fun onSelectedChanged(isSelected: Boolean) {
 
                 val grayScalePicasso = Picasso.get()

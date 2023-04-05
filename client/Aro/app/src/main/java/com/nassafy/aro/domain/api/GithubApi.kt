@@ -1,6 +1,5 @@
 package com.nassafy.aro.domain.api
 
-import com.google.gson.JsonObject
 import com.nassafy.aro.data.dto.GithubAccessTokenResponse
 import retrofit2.Response
 import retrofit2.http.*

@@ -8,7 +8,6 @@ import android.widget.AdapterView
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -19,11 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.core.view.isInvisible
@@ -53,6 +48,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 
 private const val TAG = "ssafy_pcs"
+
 @AndroidEntryPoint
 class JoinCountryPlaceSelectFragment : BaseFragment<FragmentAroCountryPlaceSelectBinding>(
     FragmentAroCountryPlaceSelectBinding::inflate
@@ -94,7 +90,7 @@ class JoinCountryPlaceSelectFragment : BaseFragment<FragmentAroCountryPlaceSelec
             true -> {
                 initMeteorCountryObserve()
                 CoroutineScope(Dispatchers.IO).launch {
-                        joinCountryPlaceServiceSelectFragmentViewModel.getMeteorCountryList()
+                    joinCountryPlaceServiceSelectFragmentViewModel.getMeteorCountryList()
                 }
             }
             false -> {}
@@ -104,12 +100,17 @@ class JoinCountryPlaceSelectFragment : BaseFragment<FragmentAroCountryPlaceSelec
     }
 
     private fun initMeteorCountryObserve() {
-        joinCountryPlaceServiceSelectFragmentViewModel.meteorCountryListNetworkResultLiveData.observe(this.viewLifecycleOwner) {
+        joinCountryPlaceServiceSelectFragmentViewModel.meteorCountryListNetworkResultLiveData.observe(
+            this.viewLifecycleOwner
+        ) {
             when (it) {
                 is NetworkResult.Success -> {
                     loginActivityViewModel.meteorCountryList.clear()
                     loginActivityViewModel.meteorCountryList.addAll(it.data!!)
-                    Log.d(TAG, "initAuroraCountryPlaceObserve: ${loginActivityViewModel.meteorCountryList.joinToString()}")
+                    Log.d(
+                        TAG,
+                        "initAuroraCountryPlaceObserve: ${loginActivityViewModel.meteorCountryList.joinToString()}"
+                    )
                 }
                 is NetworkResult.Error -> {
                     requireView().showSnackBarMessage("서버 통신 에러 발생")
@@ -284,7 +285,9 @@ class JoinCountryPlaceSelectFragment : BaseFragment<FragmentAroCountryPlaceSelec
                 val meteorCountryList = remember { loginActivityViewModel.meteorCountryList }
                 val selectedAuroraPlaceList =
                     remember { loginActivityViewModel.selectedAuroraPlaceList }
-                val selectedCountry:MeteorCountry? by loginActivityViewModel.selectedCountryId.observeAsState(null)
+                val selectedCountry: MeteorCountry? by loginActivityViewModel.selectedCountryId.observeAsState(
+                    null
+                )
                 val pagerState = rememberPagerState()
 
                 LaunchedEffect(pagerState) {
@@ -339,7 +342,11 @@ class JoinCountryPlaceSelectFragment : BaseFragment<FragmentAroCountryPlaceSelec
                                         } // End of Column
                                     }
                                     false -> {
-                                        ServiceNotSelectedDisplayLayout(displayedString = stringResource(R.string.service_aurora_not_selected_textview_text))
+                                        ServiceNotSelectedDisplayLayout(
+                                            displayedString = stringResource(
+                                                R.string.service_aurora_not_selected_textview_text
+                                            )
+                                        )
                                     }
                                 }
                             }
@@ -353,7 +360,11 @@ class JoinCountryPlaceSelectFragment : BaseFragment<FragmentAroCountryPlaceSelec
                                         )
                                     }
                                     false -> {
-                                        ServiceNotSelectedDisplayLayout(displayedString = stringResource(R.string.service_meteor_not_selected_textview_text))
+                                        ServiceNotSelectedDisplayLayout(
+                                            displayedString = stringResource(
+                                                R.string.service_meteor_not_selected_textview_text
+                                            )
+                                        )
                                     }
                                 }
                             }

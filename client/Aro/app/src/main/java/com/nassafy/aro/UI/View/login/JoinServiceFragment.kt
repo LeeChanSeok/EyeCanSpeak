@@ -15,7 +15,6 @@ import com.google.gson.JsonObject
 import com.nassafy.aro.Application
 import com.nassafy.aro.R
 import com.nassafy.aro.data.dto.PlaceItem
-import com.nassafy.aro.data.dto.UserTest
 import com.nassafy.aro.databinding.FragmentAroServiceSelectBinding
 import com.nassafy.aro.ui.view.BaseFragment
 import com.nassafy.aro.ui.view.login.viewmodel.JoinServiceFragmentViewModel
@@ -24,10 +23,10 @@ import com.nassafy.aro.ui.view.main.MainActivity
 import com.nassafy.aro.util.NetworkResult
 import com.nassafy.aro.util.showSnackBarMessage
 import dagger.hilt.android.AndroidEntryPoint
-import org.json.JSONArray
 
 @AndroidEntryPoint
-class JoinServiceFragment : BaseFragment<FragmentAroServiceSelectBinding>(FragmentAroServiceSelectBinding::inflate) {
+class JoinServiceFragment :
+    BaseFragment<FragmentAroServiceSelectBinding>(FragmentAroServiceSelectBinding::inflate) {
 
     private val loginActivityViewModel: LoginActivityViewModel by activityViewModels()
     private val joinSericeFragmentViewModel: JoinServiceFragmentViewModel by viewModels()
@@ -51,7 +50,9 @@ class JoinServiceFragment : BaseFragment<FragmentAroServiceSelectBinding>(Fragme
                     binding.progressbar.isGone = true
                     requireView().showSnackBarMessage("회원가입 성공!")
                     Application.sharedPreferencesUtil.addUserAccessToken(it.data?.accessToken ?: "")
-                    Application.sharedPreferencesUtil.addUserRefreshToken(it.data?.refreshToken ?: "")
+                    Application.sharedPreferencesUtil.addUserRefreshToken(
+                        it.data?.refreshToken ?: ""
+                    )
                     val intent = Intent(requireContext(), MainActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -79,7 +80,7 @@ class JoinServiceFragment : BaseFragment<FragmentAroServiceSelectBinding>(Fragme
             loginActivityViewModel.apply {
                 isAuroraServiceSelected = binding.auroraServiceCardview.getIsSelected()
                 isMeteorServiceSelected = binding.meteorServiceCardview.getIsSelected()
-                when(isAuroraServiceSelected || isMeteorServiceSelected) {
+                when (isAuroraServiceSelected || isMeteorServiceSelected) {
                     true -> {
                         findNavController().navigate(R.id.action_joinServiceFragment_to_joinCountryPlaceSelectFragment)
                     }

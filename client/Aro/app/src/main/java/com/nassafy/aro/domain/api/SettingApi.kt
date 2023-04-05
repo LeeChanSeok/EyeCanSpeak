@@ -32,5 +32,4 @@ interface SettingApi {
     suspend fun setCloudDisplayOption(): Response<Unit>
 
 
-
 }

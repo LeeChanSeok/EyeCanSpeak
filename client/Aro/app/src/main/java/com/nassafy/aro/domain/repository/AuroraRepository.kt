@@ -2,8 +2,8 @@ package com.nassafy.aro.domain.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.nassafy.aro.data.dto.kp.KpResponse
 import com.nassafy.aro.data.dto.PlaceItem
+import com.nassafy.aro.data.dto.kp.KpResponse
 import com.nassafy.aro.data.dto.kp.KpWithProbs
 import com.nassafy.aro.domain.api.AuroraApi
 import com.nassafy.aro.util.NetworkResult
@@ -13,13 +13,14 @@ import com.nassafy.aro.util.setNetworkResult
 import javax.inject.Inject
 
 private const val TAG = "AuroraRepository_sdr"
+
 class AuroraRepository @Inject constructor(
     @WithoutHeaderInterceptorApi private val auroraApi: AuroraApi,
     @HeaderInterceptorApi private val headerAuroraApi: AuroraApi
 ) {
     private val _placeItemListLiveData = MutableLiveData<NetworkResult<List<PlaceItem>>>()
-    val placeItemListLiveData : LiveData<NetworkResult<List<PlaceItem>>>
-        get () = _placeItemListLiveData
+    val placeItemListLiveData: LiveData<NetworkResult<List<PlaceItem>>>
+        get() = _placeItemListLiveData
 
     suspend fun getPlaceItemList(dateString: String, hour: Int) {
         val response = headerAuroraApi.getAllPlaces(dateString, hour)
@@ -29,7 +30,11 @@ class AuroraRepository @Inject constructor(
                 _placeItemListLiveData.postValue(NetworkResult.Success(response.body()!!))
             }
             response.errorBody() != null -> {
-                _placeItemListLiveData.postValue(NetworkResult.Error(response.errorBody().toString()))
+                _placeItemListLiveData.postValue(
+                    NetworkResult.Error(
+                        response.errorBody().toString()
+                    )
+                )
             }
             else -> {
                 _placeItemListLiveData.postValue(NetworkResult.Error(response.headers().toString()))
@@ -38,7 +43,7 @@ class AuroraRepository @Inject constructor(
     } // End of getPlaceItemList
 
     private val _kpCurrentLiveData = MutableLiveData<NetworkResult<KpResponse>>()
-    val kpCurrentLiveData : LiveData<NetworkResult<KpResponse>>
+    val kpCurrentLiveData: LiveData<NetworkResult<KpResponse>>
         get() = _kpCurrentLiveData
 
     suspend fun getCurrentKpIndex(dateString: String, hour: Int) {
@@ -47,7 +52,7 @@ class AuroraRepository @Inject constructor(
     } // End of getCurrentKpIndex
 
     private val _kpAndProbsLiveData = MutableLiveData<NetworkResult<KpWithProbs>>()
-    val kpAndProbsLiveData : LiveData<NetworkResult<KpWithProbs>>
+    val kpAndProbsLiveData: LiveData<NetworkResult<KpWithProbs>>
         get() = _kpAndProbsLiveData
 
     suspend fun getKpAndProbsLiveData(dateString: String, hour: Int) {

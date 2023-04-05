@@ -1,12 +1,11 @@
 package com.nassafy.aro.util
 
-import android.util.Log
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
-fun getDateList(now : LocalDateTime): (ArrayList<String>) {
+fun getDateList(now: LocalDateTime): (ArrayList<String>) {
     var dateList = arrayListOf<String>()
     val startTime = LocalDateTime.of(now.year, now.month, now.dayOfMonth, now.hour, 0)
     val endTime = startTime.plusHours(71L)
@@ -80,8 +79,9 @@ fun getHourList(dateList: ArrayList<String>, now: LocalDateTime): (ArrayList<Arr
     return hourList
 } // End of getHourList
 
-fun getChartHourLabel(selected: LocalDateTime, now: LocalDateTime) : ArrayList<String> {
-    val selectedTime = LocalDateTime.of(selected.year, selected.month, selected.dayOfMonth, selected.hour, 0)
+fun getChartHourLabel(selected: LocalDateTime, now: LocalDateTime): ArrayList<String> {
+    val selectedTime =
+        LocalDateTime.of(selected.year, selected.month, selected.dayOfMonth, selected.hour, 0)
     var startTime: LocalDateTime
     val endTime = now.plusHours(71L)
     val result = arrayListOf<String>()

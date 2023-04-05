@@ -1,24 +1,15 @@
 package com.nassafy.aro.ui.view.dialog
 
-import android.content.Context
 import android.graphics.Color
-import android.graphics.Point
 import android.graphics.drawable.ColorDrawable
-import android.os.Build
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
-import androidx.recyclerview.widget.RecyclerView
 import com.nassafy.aro.databinding.DialogMeteorCountrySelectBinding
 import com.nassafy.aro.ui.adapter.DateHourSelectAdapter
-import com.nassafy.aro.ui.view.aurora.AuroraFragment
-import com.nassafy.aro.ui.view.meteorshower.MeteorShowerFragment
-import java.util.zip.Inflater
 
 class MeteorCountrySelectDialog(
     var countryList: ArrayList<String>

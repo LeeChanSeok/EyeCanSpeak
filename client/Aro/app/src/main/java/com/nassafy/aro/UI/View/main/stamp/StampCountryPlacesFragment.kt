@@ -46,12 +46,9 @@ class StampCountryPlacesFragment :
 
         getUserPlaceDataGroupByCountryResponseLiveDataObserve()
 
-        var viewPagerHeight : Int = 0
+        var viewPagerHeight: Int = 0
 
         viewPagerHeight = 40
-
-
-
 
 
         // View가져오기.

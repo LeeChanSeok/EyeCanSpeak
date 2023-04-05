@@ -32,7 +32,8 @@ class UserAccessRepository @Inject constructor(
     private val _placeListLiveData = MutableLiveData<NetworkResult<List<PlaceItem>>>()
     val placeListLiveData get() = _placeListLiveData
 
-    private val _meteorCountryListNetworkResultLiveData = MutableLiveData<NetworkResult<List<MeteorCountry>>>()
+    private val _meteorCountryListNetworkResultLiveData =
+        MutableLiveData<NetworkResult<List<MeteorCountry>>>()
     val meteorCountryListNetworkResultLiveData: LiveData<NetworkResult<List<MeteorCountry>>> get() = _meteorCountryListNetworkResultLiveData
 
     private val _selectedAuraraPlaceListLiveData = MutableLiveData<MutableList<PlaceItem>>()
