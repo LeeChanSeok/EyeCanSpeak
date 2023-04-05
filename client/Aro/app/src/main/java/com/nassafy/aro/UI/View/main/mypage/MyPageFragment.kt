@@ -121,7 +121,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
                     binding.progressBar.isVisible = false
                 } // End of NetworkResult.Success
                 is NetworkResult.Error -> {
-                    requireView().showSnackBarMessage("닉네임 재설정에 실패했습니다.")
+                    requireView().showSnackBarMessage("선택한 서비스를 불러오는데 실패했습니다.")
                 } // End of NetworkResult.Error
                 is NetworkResult.Loading -> {
                     binding.progressBar.isVisible = true

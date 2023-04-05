@@ -34,8 +34,6 @@ class StampDiaryImageViewPagerAdapter(
     } // End of onCreateViewHolder
 
     override fun onBindViewHolder(holder: StampDiaryPlaceHolder, position: Int) {
-        Log.d(TAG, "viewAdapter Image List : ${placeDiaryImageList}")
-
         Picasso.get().load(placeDiaryImageList[position].toString()).fit().centerCrop()
             .into(holder.itemView.findViewById<ImageView>(R.id.stamp_diary_image_list_imageview))
 
@@ -52,7 +50,6 @@ class StampDiaryImageViewPagerAdapter(
     } // End of refreshAdapter
 
     internal fun addImage(newImageUri: Uri) {
-        Log.d(TAG, "addImage: 이미지 들어가나?")
         placeDiaryImageList.add(newImageUri)
         refreshAdapter()
     } // End of addImage

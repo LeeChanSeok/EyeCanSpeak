@@ -28,11 +28,12 @@
                 android:id="@+id/meteor_shower_name_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="거문고자리 유성우"
+                tools:text="9월 페르세우스 엡실론 유성우"
                 android:textSize="22sp"
                 app:layout_constraintStart_toEndOf="@id/meteor_shower_imageview"
                 app:layout_constraintBottom_toBottomOf="@id/meteor_shower_imageview"
                 app:layout_constraintTop_toTopOf="@id/meteor_shower_imageview"
+                android:maxLines="1"
                 android:textColor="@color/white"
                 android:layout_marginStart="20dp"
                 android:fontFamily="@font/nanum_barun_gothic" />
@@ -91,10 +92,11 @@
                     android:fontFamily="@font/nanum_square_eb"
                     android:includeFontPadding="false"
                     android:textColor="@color/stamp_location_name_color"
-                    android:textSize="36sp"
+                    android:textSize="30sp"
+                    android:maxLines="1"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    tools:text="거문고 자리" />
+                    tools:text="9월 페르세우스 엡실론 유성우" />
 
             <TextView
                     android:id="@+id/meteor_shower_date_textview"

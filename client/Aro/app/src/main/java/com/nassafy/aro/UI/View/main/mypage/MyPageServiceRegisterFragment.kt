@@ -48,7 +48,6 @@ class MyPageServiceRegisterFragment :
         myPageServiceRegisterFragementViewModel.setSelectServiceNetworkResultLiveData.observe(this.viewLifecycleOwner) {
             when (it) {
                 is NetworkResult.Success -> {
-                    Log.d("ssafy", "success")
                     mainActivityViewModel.auroraServiceEnabled =
                         myPageServiceRegisterFragementViewModel.auroraService
                     mainActivityViewModel.meteorShowerServiceEnabled =

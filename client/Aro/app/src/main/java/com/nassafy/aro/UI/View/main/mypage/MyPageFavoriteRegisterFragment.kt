@@ -233,7 +233,6 @@ class MyPageFavoriteRegisterFragment :
                     requireView().showSnackBarMessage("서버 통신 에러 발생")
                 }
                 is NetworkResult.Loading -> {
-                    //TODO Loading
                     Log.d(
                         "ssafy_pcs", "로딩 중.."
                     )

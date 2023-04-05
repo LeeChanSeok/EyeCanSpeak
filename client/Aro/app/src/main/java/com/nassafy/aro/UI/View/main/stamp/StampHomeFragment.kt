@@ -142,7 +142,6 @@ class StampHomeFragment :
     } // End of spinnerEventListener
 
     private fun initSpinner() {
-        Log.d(TAG, "initSpinner: 여기는 언제 동작할까?")
         arrayAdapter = CountrySpinnerAdapter(
             mContext,
             R.layout.item_country_spinner,

@@ -19,9 +19,7 @@ import kotlinx.coroutines.launch
 class MeteorShowerAdapter(
     private val mContext: Context,
     private val meteorList: List<MeteorShower>
-) :
-    RecyclerView.Adapter<MeteorShowerAdapter.ViewHolder>(
-    ) {
+) : RecyclerView.Adapter<MeteorShowerAdapter.ViewHolder>() {
     private var expandedPosition = -1
     private var prevExpandedPosition = -1
 

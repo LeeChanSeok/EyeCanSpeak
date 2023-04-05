@@ -113,28 +113,6 @@ object ApiModule {
             .build()
     } // End of provideHeaderOkHttpClient
 
-    @WithoutHeaderInterceptorApi
-    @Provides
-    fun provideTestApi(@WithoutHeaderInterceptorOkHttpClient okHttpClient: OkHttpClient): TestApi {
-        return Retrofit.Builder()
-            .client(okHttpClient)
-            .baseUrl(provideBaseUrl())
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .build()
-            .create(TestApi::class.java)
-    }
-
-    @HeaderInterceptorApi
-    @Provides
-    fun provideHeaderTestApi(@HeaderInterceptorOkHttpClient okHeaderOkHttpClient: OkHttpClient): TestApi {
-        return Retrofit.Builder()
-            .client(okHeaderOkHttpClient)
-            .baseUrl(provideBaseUrl())
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .build()
-            .create(TestApi::class.java)
-    }
-
     // ============================================ Main ============================================
     @Provides
     fun provideMainApi(@HeaderInterceptorOkHttpClient okHttpClient: OkHttpClient): MainApi {

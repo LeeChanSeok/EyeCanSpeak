@@ -99,7 +99,6 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(FragmentSettingBind
         settingFragmentViewModel.getCloudOptionNetworkResultLiveData.observe(this.viewLifecycleOwner) {
             when (it) {
                 is NetworkResult.Success -> {
-                    Log.d("SDR", "cloud initObserve: ${it.data}")
                     activityViewModel.cloudDisplayOption = it.data!!
                     binding.settingsFragmentMapOnCloudSetToogleImageButton.isSelected =
                         activityViewModel.cloudDisplayOption

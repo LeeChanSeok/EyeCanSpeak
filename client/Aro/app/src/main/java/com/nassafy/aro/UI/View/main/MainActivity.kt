@@ -70,7 +70,6 @@ class MainActivity : AppCompatActivity() {
         binding.mainNavigation.setupWithNavController(navController)
 
         mainActivityViewModel.userWholeData.observe(this) {
-            Log.d(TAG, "onCreate: 이거 돌음?")
 //            CoroutineScope(Dispatchers.IO).launch {
 //                mainActivityViewModel.getUserInfo(Application.sharedPreferencesUtil.getFcmToken())
 //            }
@@ -99,15 +98,6 @@ class MainActivity : AppCompatActivity() {
             mainActivityViewModel.getUserInfo(Application.sharedPreferencesUtil.getFcmToken())
         }
     } // End of onCreate
-
-
-    override fun onResume() {
-        Log.d(TAG, "onResume: 이거 돌음?")
-        super.onResume()
-//        CoroutineScope(Dispatchers.IO).launch {
-//            mainActivityViewModel.getUserInfo(Application.sharedPreferencesUtil.getFcmToken())
-//        }
-    }
 
     private fun checkPermission() {
         // 1. GPS가 켜져 있는지를 확인

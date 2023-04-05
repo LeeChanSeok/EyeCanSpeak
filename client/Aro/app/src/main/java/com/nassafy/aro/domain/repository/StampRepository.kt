@@ -82,6 +82,7 @@ class StampRepository @Inject constructor(
     suspend fun getUserPlaceDataGroupByCountry(countryName: String) {
         val response = stampHeaderApi.getUserPlaceDataGroupByCountry(countryName)
         Log.d(TAG, "getUserPlaceDataGroupByCountry: ${response.body()}")
+        Log.d(TAG, "getUserPlaceDataGroupByCountry: ${countryName}")
 
         _getUserPlaceDataGroupByCountryResponseLiveData.postValue(NetworkResult.Loading())
 
