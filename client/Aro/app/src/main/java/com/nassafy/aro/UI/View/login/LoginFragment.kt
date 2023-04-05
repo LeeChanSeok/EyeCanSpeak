@@ -178,6 +178,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                         }
                         is NetworkResult.Loading -> {
                             // Todo loading progressBar
+                            binding.progressbar.isVisible = true
                         }
                         else -> {
                             requireView().showSnackBarMessage("$providerType 로그인에 실패했습니다.")

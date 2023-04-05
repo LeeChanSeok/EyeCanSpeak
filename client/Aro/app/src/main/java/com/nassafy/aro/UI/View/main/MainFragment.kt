@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
@@ -18,16 +19,41 @@ import com.nassafy.aro.databinding.FragmentMainBinding
 import com.nassafy.aro.ui.view.BaseFragment
 import com.nassafy.aro.ui.view.meteorshower.MeteorShowerFragment
 import com.nassafy.aro.ui.view.aurora.AuroraFragment
+import com.nassafy.aro.util.showSnackBarMessage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 private const val TAG = "MainFragment_싸피"
 
 class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::inflate) {
     private lateinit var mContext: Context
+    private var finishFlag = false
     private var tabIcons: ArrayList<View> = arrayListOf()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mContext = context
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            when (finishFlag) {
+                true -> {
+                    requireActivity().finish()
+                }
+                false -> {
+                    finishFlag = true
+                    CoroutineScope(Dispatchers.IO).launch {
+                        requireView().showSnackBarMessage("\'뒤로가기\' 버튼을 한번 더 누르시면 종료됩니다.")
+                        delay(1800)
+                        finishFlag = false
+                    }
+                }
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
