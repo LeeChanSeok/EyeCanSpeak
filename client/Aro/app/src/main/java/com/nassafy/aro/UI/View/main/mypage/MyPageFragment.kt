@@ -18,7 +18,6 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.isGone
@@ -293,6 +292,8 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
                 )
                 // In Compose world
 
+                val favoriteListNetworkResultLiveData by myPageFragmentViewModel.favoriteListNetworkResultLiveData.observeAsState()
+             
                 LaunchedEffect(myPageFragmentViewModel.favoriteAuroraPlaceList) {
                     auroraFavoriteList.clear()
                     auroraFavoriteList.addAll(myPageFragmentViewModel.favoriteAuroraPlaceList)
@@ -302,17 +303,23 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
                     HorizontalPager(count = 2, modifier = Modifier.height(this.height.dp)) { page ->
                         when (page) {
                             0 -> {
-                                when (myPageFragmentViewModel.auroraService) {
-                                    true -> {
-                                        MyAuroraFavorite(
-                                            auroraFavoriteList = auroraFavoriteList,
-                                            myPageFragmentViewModel = myPageFragmentViewModel
-                                        )
-                                    }
-                                    false -> {
-                                        ServiceNotSelectedDisplayLayout(getString(R.string.service_aurora_not_selected_textview_text))
-                                    }
-                                } // End of when
+                                when (favoriteListNetworkResultLiveData) {
+                                    null -> {}
+                                    is NetworkResult.Loading -> {}
+                                    else -> {
+                                        when (myPageFragmentViewModel.auroraService) {
+                                            true -> {
+                                                MyAuroraFavorite(
+                                                    auroraFavoriteList = auroraFavoriteList,
+                                                    myPageFragmentViewModel = myPageFragmentViewModel
+                                                )
+                                            } // End of true
+                                            false -> {
+                                                ServiceNotSelectedDisplayLayout(getString(R.string.service_aurora_not_selected_textview_text))
+                                            } // End of false
+                                        } // End of when
+                                    } // End of else
+                                } // End of when(temp)
                             } // End of when(page) : page -> 0
                             1 -> {
                                 when (myPageFragmentViewModel.meteorService) {
@@ -341,7 +348,9 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
                                                                 .fillMaxWidth(1f),
                                                         ) {
                                                             Row(
-                                                                modifier = Modifier.fillMaxHeight(0.95f),
+                                                                modifier = Modifier.fillMaxHeight(
+                                                                    0.95f
+                                                                ),
                                                                 verticalAlignment = Alignment.CenterVertically
                                                             ) {
                                                                 Box(
