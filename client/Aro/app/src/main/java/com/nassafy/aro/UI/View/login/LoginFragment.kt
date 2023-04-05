@@ -106,6 +106,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                                 }
 
                             })
+
                         requireView().showSnackBarMessage("네이버 로그인에 실패했습니다.")
                         binding.progressbar.isVisible = false
                     }
@@ -146,9 +147,14 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                         snsLogin(providerType, accessToken)
                     }
                     "GITHUB" -> {
-                        snsLogin(providerType, loginFragmentViewModel.getAccessToken(loginActivityViewModel.githubCode))
+                        snsLogin(
+                            providerType,
+                            loginFragmentViewModel.getAccessToken(loginActivityViewModel.githubCode)
+                        )
                     }
-                    else -> { return@launch}
+                    else -> {
+                        return@launch
+                    }
                 }
                 val networkResult = userSnsLoginNetworkResultLiveData.value
                 Log.d("ssafy/snslogin/networkResult", networkResult?.data.toString())
@@ -177,7 +183,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                             binding.progressbar.isVisible = false
                         }
                         is NetworkResult.Loading -> {
-                            // Todo loading progressBar
                             binding.progressbar.isVisible = true
                         }
                         else -> {
@@ -201,10 +206,18 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                     startMainActivity()
                 }
                 is NetworkResult.Error -> {
+                    binding.progressbar.isVisible = false
                     when (isTriedLoginState) {
                         true -> {
                             requireView().showSnackBarMessage("로그인에 실패했습니다.")
-                            binding.progressbar.isVisible = false
+                            binding.loginEmailIdEdittext.error = " "
+                            binding.loginPasswordEdittext.error = " "
+
+                            CoroutineScope(Dispatchers.Main).launch {
+                                delay(1000)
+                                binding.loginEmailIdEdittext.error = null
+                                binding.loginPasswordEdittext.error = null
+                            }
                         }
                         false -> {}
                     }
@@ -246,14 +259,29 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
         binding.loginButton.setOnClickListener {
             when (binding.loginEmailIdEdittext.editText?.text.toString().trim().length) {
                 0 -> {
-                    requireView().showSnackBarMessage(getString(R.string.email_empty_text))
-                    return@setOnClickListener
+                    binding.loginEmailIdEdittext.error = getString(R.string.email_empty_text)
+                    CoroutineScope(Dispatchers.Main).launch {
+                        delay(1000)
+                        binding.loginEmailIdEdittext.error = null
+                        binding.loginPasswordEdittext.error = null
+                    }
+                    when (binding.loginPasswordEdittext.editText?.text.toString().trim().length) {
+                        0 -> {}
+                        else -> {
+                            return@setOnClickListener
+                        }
+                    }
                 }
                 else -> {}
             }
             when (binding.loginPasswordEdittext.editText?.text.toString().trim().length) {
                 0 -> {
-                    requireView().showSnackBarMessage(getString(R.string.password_empty_text))
+                    binding.loginPasswordEdittext.error = getString(R.string.password_empty_text)
+                    CoroutineScope(Dispatchers.Main).launch {
+                        delay(1000)
+                        binding.loginEmailIdEdittext.error = null
+                        binding.loginPasswordEdittext.error = null
+                    }
                     return@setOnClickListener
                 }
                 else -> {}

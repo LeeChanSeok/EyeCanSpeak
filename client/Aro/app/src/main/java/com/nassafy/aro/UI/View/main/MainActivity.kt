@@ -21,11 +21,11 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.nassafy.aro.Application
 import com.nassafy.aro.R
+import com.nassafy.aro.data.dto.UserWholeData
 import com.nassafy.aro.databinding.ActivityMainBinding
 import com.nassafy.aro.ui.view.login.LoginActivity
 import com.nassafy.aro.util.NetworkResult
@@ -41,6 +41,7 @@ private const val TAG = "MainActivity_SSAFY"
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+
     // Activity ViewModel
     private val mainActivityViewModel by viewModels<MainActivityViewModel>()
 
@@ -62,11 +63,33 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         checkPermission()
 
-        val navHostFragment =
+        var navHostFragment =
             supportFragmentManager.findFragmentById(R.id.main_fragmentcontainerview) as NavHostFragment
-        val navController = navHostFragment.navController
+        var navController = navHostFragment.navController
 
         binding.mainNavigation.setupWithNavController(navController)
+
+        mainActivityViewModel.userWholeData.observe(this) {
+            Log.d(TAG, "onCreate: 이거 돌음?")
+//            CoroutineScope(Dispatchers.IO).launch {
+//                mainActivityViewModel.getUserInfo(Application.sharedPreferencesUtil.getFcmToken())
+//            }
+
+            //this.onResume()
+
+//            navHostFragment =
+//                supportFragmentManager.findFragmentById(R.id.main_fragmentcontainerview) as NavHostFragment
+//            navController = navHostFragment.navController
+//
+//            binding.mainNavigation.setupWithNavController(navController)
+
+            binding.mainNavigation.getHeaderView(0).apply {
+                findViewById<TextView>(R.id.nickname_textview).text =
+                    it.nickname.toString()
+                findViewById<TextView>(R.id.email_textview).text =
+                    it.email.toString()
+            }
+        }
 
         initObserver()
         initOption()
@@ -76,6 +99,15 @@ class MainActivity : AppCompatActivity() {
             mainActivityViewModel.getUserInfo(Application.sharedPreferencesUtil.getFcmToken())
         }
     } // End of onCreate
+
+
+    override fun onResume() {
+        Log.d(TAG, "onResume: 이거 돌음?")
+        super.onResume()
+//        CoroutineScope(Dispatchers.IO).launch {
+//            mainActivityViewModel.getUserInfo(Application.sharedPreferencesUtil.getFcmToken())
+//        }
+    }
 
     private fun checkPermission() {
         // 1. GPS가 켜져 있는지를 확인
@@ -91,37 +123,27 @@ class MainActivity : AppCompatActivity() {
     private fun isRunTimePermissionsGranted() {
         // 위치 권한이 있는지 확인
         val hasFineLocationPermission = ContextCompat.checkSelfPermission(
-            this@MainActivity,
-            android.Manifest.permission.ACCESS_FINE_LOCATION
+            this@MainActivity, android.Manifest.permission.ACCESS_FINE_LOCATION
         )
 
         val hasCoarseLocationPermission = ContextCompat.checkSelfPermission(
-            this@MainActivity,
-            android.Manifest.permission.ACCESS_COARSE_LOCATION
+            this@MainActivity, android.Manifest.permission.ACCESS_COARSE_LOCATION
         )
 
         // 알림은 받지 않아도 크게 상관없긴 한데 고민됨.
         val hasNotificationPermission = ContextCompat.checkSelfPermission(
-            this@MainActivity,
-            android.Manifest.permission.POST_NOTIFICATIONS
+            this@MainActivity, android.Manifest.permission.POST_NOTIFICATIONS
         )
 
-        if (hasFineLocationPermission != PackageManager.PERMISSION_GRANTED ||
-            hasCoarseLocationPermission != PackageManager.PERMISSION_GRANTED ||
-            hasNotificationPermission != PackageManager.PERMISSION_GRANTED
-        ) {
+        if (hasFineLocationPermission != PackageManager.PERMISSION_GRANTED || hasCoarseLocationPermission != PackageManager.PERMISSION_GRANTED || hasNotificationPermission != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(
-                this@MainActivity,
-                REQUIRED_PERMISSIONS,
-                PERMISSION_REQUEST_CODE
+                this@MainActivity, REQUIRED_PERMISSIONS, PERMISSION_REQUEST_CODE
             )
         }
     } // End of isRunTimePermissionsGranted
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
+        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
@@ -146,13 +168,11 @@ class MainActivity : AppCompatActivity() {
     private fun isRunTimePermissoinsGranted() {
         // 위치 권한이 있는지 확인
         val hasFineLocationPermission = ContextCompat.checkSelfPermission(
-            this@MainActivity,
-            android.Manifest.permission.ACCESS_FINE_LOCATION
+            this@MainActivity, android.Manifest.permission.ACCESS_FINE_LOCATION
         )
 
         val hasCoarseLocationPermission = ContextCompat.checkSelfPermission(
-            this@MainActivity,
-            android.Manifest.permission.ACCESS_COARSE_LOCATION
+            this@MainActivity, android.Manifest.permission.ACCESS_COARSE_LOCATION
         )
 
     } // End of isRunTimePermissionsGranted
@@ -213,6 +233,20 @@ class MainActivity : AppCompatActivity() {
                         }
                         setContentView(binding.root)
                     }
+
+                    mainActivityViewModel.setUserWholeData(
+
+                        UserWholeData(
+                            it.data!!.nickname,
+                            it.data!!.email,
+                            it.data!!.alarm,
+                            true,
+                            true,
+                            it.data!!.auroraService,
+                            it.data!!.meteorService
+                        )
+                    )
+
                     mainActivityViewModel.email = it.data!!.email
                     mainActivityViewModel.nickname = it.data!!.nickname
                     mainActivityViewModel.auroraServiceEnabled = it.data!!.auroraService

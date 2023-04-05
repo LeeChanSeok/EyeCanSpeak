@@ -58,10 +58,10 @@ class MeteorShowerFragment :
         } else {
             binding.meteorShowerCountryTextview.visibility = View.GONE
             binding.meteorShowerRecyclerview.visibility = View.GONE
-            binding.drawerImagebutton.setOnClickListener {
-                val mainActivity = activity as MainActivity
-                mainActivity.openDrawer()
-            }
+        }
+        binding.drawerImagebutton.setOnClickListener {
+            val mainActivity = activity as MainActivity
+            mainActivity.openDrawer()
         }
 
     } // End of onViewCreated
@@ -138,6 +138,9 @@ class MeteorShowerFragment :
                 }
 
                 is NetworkResult.Error -> {
+                    binding.meteorShowerCountryTextview.visibility = View.GONE
+                    binding.meteorShowerRecyclerview.visibility = View.GONE
+                    binding.altView.root.visibility = View.VISIBLE
                     Log.d(
                         TAG, "getUserPlaceDataGroupByCountryResponseLiveDataObserve: ${it.message}"
                     )

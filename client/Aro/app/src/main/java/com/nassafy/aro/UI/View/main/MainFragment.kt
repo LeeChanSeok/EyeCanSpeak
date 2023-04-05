@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
@@ -31,6 +32,9 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
     private lateinit var mContext: Context
     private var finishFlag = false
     private var tabIcons: ArrayList<View> = arrayListOf()
+
+    private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
+
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -59,6 +63,8 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        observtest()
+
         binding.viewpager.apply {
             adapter = ViewPagerAdapter(childFragmentManager, lifecycle)
             isUserInputEnabled = false
@@ -66,7 +72,15 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
         // initialize tab layout
         initTabLayout()
 
+
+
     } // End of onViewCreated
+
+    private fun observtest() {
+        mainActivityViewModel.userWholeData.observe(this.viewLifecycleOwner) {
+            initTabLayout()
+        }
+    } // End of observtest
 
     private fun initTabLayout() {
         // add tablayout Icon with using custom view

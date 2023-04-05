@@ -2,12 +2,10 @@ package com.nassafy.aro.ui.view.main.mypage
 
 import android.os.Bundle
 import android.view.View
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
-import androidx.compose.material.icons.outlined.Done
 import androidx.compose.material3.*
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -15,7 +13,6 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.colorResource
@@ -33,10 +30,11 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.nassafy.aro.R
 import com.nassafy.aro.data.dto.MeteorCountry
-import com.nassafy.aro.data.dto.PlaceItem
+import com.nassafy.aro.data.dto.UserWholeData
 import com.nassafy.aro.databinding.FragmentMyPageBinding
 import com.nassafy.aro.ui.view.BaseFragment
 import com.nassafy.aro.ui.view.custom.NanumSqaureFont
+import com.nassafy.aro.ui.view.custom.ServiceNotSelectedDisplayLayout
 import com.nassafy.aro.ui.view.dialog.OkDialog
 import com.nassafy.aro.ui.view.main.MainActivity
 import com.nassafy.aro.ui.view.main.MainActivityViewModel
@@ -69,12 +67,26 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
         initView()
     } // End of onViewCreated
 
+
     private fun initObserve() {
 
         myPageFragmentViewModel.nicknameLiveData.observe(this.viewLifecycleOwner) {
             when (it) {
                 is NetworkResult.Success -> {
                     mainActivityViewModel.nickname = binding.userNicknameEdittext.text.toString()
+
+                    mainActivityViewModel.setUserWholeData(
+                        UserWholeData(
+                            binding.userNicknameEdittext.text.toString(),
+                            mainActivityViewModel.email,
+                            mainActivityViewModel.alarmOption,
+                            mainActivityViewModel.auroraDisplayOption,
+                            mainActivityViewModel.cloudDisplayOption,
+                            mainActivityViewModel.auroraServiceEnabled,
+                            mainActivityViewModel.meteorShowerServiceEnabled,
+                        )
+                    )
+
                     binding.nicknameChangeSaveAlertImagebutton.isVisible = true
                     CoroutineScope(Dispatchers.Main).launch {
                         delay(500)
@@ -298,20 +310,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
                                         )
                                     }
                                     false -> {
-                                        Box(
-                                            contentAlignment = Alignment.Center
-                                        ) {
-                                            Text(
-                                                text = getString(R.string.service_aurora_not_selected_textview_text),
-                                                style = TextStyle(
-                                                    fontFamily = NanumSqaureFont,
-                                                    fontWeight = FontWeight.Bold,
-                                                    fontSize = 24.sp,
-                                                    textAlign = TextAlign.Center
-                                                ),
-                                                color = Color.White
-                                            ) // End of Text
-                                        }
+                                        ServiceNotSelectedDisplayLayout(getString(R.string.service_aurora_not_selected_textview_text))
                                     }
                                 } // End of when
                             } // End of when(page) : page -> 0
@@ -320,27 +319,13 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
                                     true -> {
                                         when (favoriteMeteorCountry) {
                                             null -> {
-                                                Box(
-                                                    modifier = Modifier
-                                                        .fillMaxWidth(0.9f),
-                                                    contentAlignment = Alignment.Center
-                                                ) {
-                                                    Text(
-                                                        text = "관심위치로 지정한 나라가\n존재하지 않습니다.",
-                                                        style = TextStyle(
-                                                            fontFamily = NanumSqaureFont,
-                                                            fontWeight = FontWeight.Bold,
-                                                            fontSize = 24.sp,
-                                                            textAlign = TextAlign.Center
-                                                        ),
-                                                        color = Color.White
-                                                    ) // End of Text
-                                                }
+                                                ServiceNotSelectedDisplayLayout(getString(R.string.service_meteor_not_selected_textview_text))
                                             }
                                             else -> {
                                                 Box(
                                                     modifier = Modifier
-                                                        .fillMaxWidth(0.9f).fillMaxHeight()
+                                                        .fillMaxWidth(0.9f)
+                                                        .fillMaxHeight()
                                                 ) {
                                                     Card(
                                                         shape = RoundedCornerShape(4.dp),
@@ -411,20 +396,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
                                         }
                                     } // End of true
                                     false -> {
-                                        Box(
-                                            contentAlignment = Alignment.Center
-                                        ) {
-                                            Text(
-                                                text = getString(R.string.service_meteor_not_selected_textview_text),
-                                                style = TextStyle(
-                                                    fontFamily = NanumSqaureFont,
-                                                    fontWeight = FontWeight.Bold,
-                                                    fontSize = 24.sp,
-                                                    textAlign = TextAlign.Center
-                                                ),
-                                                color = Color.White
-                                            ) // End of Text
-                                        }
+                                        ServiceNotSelectedDisplayLayout(getString(R.string.service_meteor_not_selected_textview_text))
                                     } // End of false
                                 } // End of when
                             } // End of when(page) : page -> 1

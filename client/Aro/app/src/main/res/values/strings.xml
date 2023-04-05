@@ -9,7 +9,7 @@
     <string name="start_github_textview_text">깃허브로 시작하기</string>
     <string name="login_edittext_email_hint_text">EMAIL</string>
     <string name="login_edittext_pw_hint_text">PW</string>
-    <string name="made_by_textview_text">MADE BY NASSAFY</string>
+    <string name="made_by_textview_text">© MADE BY NASSAFY</string>
 
     <string name="email_empty_text">이메일을 입력해주세요</string>
     <string name="password_empty_text">비밀번호를 입력주세요</string>
@@ -34,11 +34,11 @@
 
     <!-- 서비스 선택 -->
     <string name="service_select_inform_textview_text">지금 선택하지 않아도 나중에 선택할 수 있어요!</string>
-    <string name="service_aurora_not_selected_textview_text">오로라 서비스를\n선택 하지 않았습니다!</string>
-    <string name="service_meteor_not_selected_textview_text">유성우 서비스를\n선택 하지 않았습니다!</string>
+    <string name="service_aurora_not_selected_textview_text">오로라 서비스를 선택 하지 않았습니다!</string>
+    <string name="service_meteor_not_selected_textview_text">유성우 서비스를 선택 하지 않았습니다!</string>
     <!-- 명소 선택 -->
     <string name="location_select_title_textview_text">관심 위치를 선택해주세요</string>
-    <string name="location_not_select_textview_text">선택한 관심위치가 없습니다!\n관심위치를 선택해주세요.</string>
+    <string name="location_not_select_textview_text">선택한 관심위치가 없습니다! 관심위치를 선택해주세요.</string>
 
     <!-- 서비스 선택 -->
     <string name="service_aurora">aurora</string>

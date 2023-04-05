@@ -31,6 +31,7 @@ import coil.decode.SvgDecoder
 import com.nassafy.aro.R
 import com.nassafy.aro.data.dto.PlaceItem
 import com.nassafy.aro.ui.view.custom.NanumSqaureFont
+import com.nassafy.aro.ui.view.custom.ServiceNotSelectedDisplayLayout
 import com.nassafy.aro.ui.view.main.mypage.viewmodel.MyPageFragmentViewModel
 
 @Composable
@@ -137,20 +138,7 @@ fun MyAuroraFavorite(
             } // End of LazyColum
         } // End of when (auroraFavoriteList.size > 0) -> true
         false -> {
-            Box(
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = stringResource(R.string.location_not_select_textview_text),
-                    style = TextStyle(
-                        fontFamily = NanumSqaureFont,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 24.sp,
-                        textAlign = TextAlign.Center
-                    ),
-                    color = Color.White
-                ) // End of Text
-            } // End of Box
+            ServiceNotSelectedDisplayLayout(stringResource(R.string.service_aurora_not_selected_textview_text))
         } // End of when (auroraFavoriteList.size > 0) -> false
     } // End of when (auroraFavoriteList.size > 0)
 

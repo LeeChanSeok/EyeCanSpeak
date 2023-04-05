@@ -378,20 +378,7 @@ class MyPageFavoriteRegisterFragment :
                                         } // End of Column
                                     }
                                     false -> {
-                                        Box(
-                                            contentAlignment = Alignment.Center
-                                        ) {
-                                            Text(
-                                                text = getString(R.string.service_aurora_not_selected_textview_text),
-                                                style = TextStyle(
-                                                    fontFamily = NanumSqaureFont,
-                                                    fontWeight = FontWeight.Bold,
-                                                    fontSize = 24.sp,
-                                                    textAlign = TextAlign.Center
-                                                ),
-                                                color = Color.White
-                                            ) // End of Text
-                                        }
+                                        ServiceNotSelectedDisplayLayout(displayedString = getString(R.string.service_aurora_not_selected_textview_text))
                                     }
                                 }
                             } // End of page -> 0
@@ -407,20 +394,7 @@ class MyPageFavoriteRegisterFragment :
                                         )
                                     } // End of when (myPageFavoriteRegisterFragmentViewModel.isAuroraServiceSelected) -> true
                                     false -> {
-                                        Box(
-                                            contentAlignment = Alignment.Center
-                                        ) {
-                                            Text(
-                                                text = getString(R.string.service_meteor_not_selected_textview_text),
-                                                style = TextStyle(
-                                                    fontFamily = NanumSqaureFont,
-                                                    fontWeight = FontWeight.Bold,
-                                                    fontSize = 24.sp,
-                                                    textAlign = TextAlign.Center
-                                                ),
-                                                color = Color.White
-                                            ) // End of Text
-                                        } // End of Box
+                                        ServiceNotSelectedDisplayLayout(displayedString = getString(R.string.service_meteor_not_selected_textview_text))
                                     } // End of myPageFavoriteRegisterFragmentViewModel.isAuroraServiceSelected -> false
                                 } // End of when (myPageFavoriteRegisterFragmentViewModel.isAuroraServiceSelected)
                             } // End of page -> 1

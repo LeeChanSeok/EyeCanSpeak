@@ -43,10 +43,7 @@ import com.nassafy.aro.data.dto.PlaceItem
 import com.nassafy.aro.databinding.FragmentAroCountryPlaceSelectBinding
 import com.nassafy.aro.ui.adapter.CountrySpinnerAdapter
 import com.nassafy.aro.ui.view.BaseFragment
-import com.nassafy.aro.ui.view.custom.CountryPlaceChips
-import com.nassafy.aro.ui.view.custom.CountryPlaceLazyColumn
-import com.nassafy.aro.ui.view.custom.MeteorCountryLazyColumn
-import com.nassafy.aro.ui.view.custom.NanumSqaureFont
+import com.nassafy.aro.ui.view.custom.*
 import com.nassafy.aro.ui.view.login.viewmodel.JoinCountryPlaceSelectFragmentViewModel
 import com.nassafy.aro.ui.view.login.viewmodel.LoginActivityViewModel
 import com.nassafy.aro.ui.view.main.MainActivity
@@ -342,20 +339,7 @@ class JoinCountryPlaceSelectFragment : BaseFragment<FragmentAroCountryPlaceSelec
                                         } // End of Column
                                     }
                                     false -> {
-                                        Box(
-                                            contentAlignment = Alignment.Center
-                                        ) {
-                                            Text(
-                                                text = stringResource(R.string.service_aurora_not_selected_textview_text),
-                                                style = TextStyle(
-                                                    fontFamily = NanumSqaureFont,
-                                                    fontWeight = FontWeight.Bold,
-                                                    fontSize = 24.sp,
-                                                    textAlign = TextAlign.Center
-                                                ),
-                                                color = Color.White
-                                            ) // End of Text
-                                        }
+                                        ServiceNotSelectedDisplayLayout(displayedString = stringResource(R.string.service_aurora_not_selected_textview_text))
                                     }
                                 }
                             }
@@ -363,35 +347,13 @@ class JoinCountryPlaceSelectFragment : BaseFragment<FragmentAroCountryPlaceSelec
                                 when (loginActivityViewModel.isMeteorServiceSelected) {
                                     true -> {
                                         MeteorCountryLazyColumn(
-                                            meteorCountryList = meteorCountryList, // todo activate
-//                                            meteorCountryList = mutableListOf( // todo delete
-//                                                MeteorCountry(1, "\uD83C\uDDF0\uD83C\uDDF7", "대한민국"),
-//                                                MeteorCountry(2, "\uD83C\uDDF0\uD83C\uDDF7", "대한민국1"),
-//                                                MeteorCountry(3, "\uD83C\uDDF0\uD83C\uDDF7", "대한민국2"),
-//                                                MeteorCountry(4, "\uD83C\uDDF0\uD83C\uDDF7", "대한민국3"),
-//                                                MeteorCountry(5, "\uD83C\uDDF0\uD83C\uDDF7", "대한민국4"),
-//                                                MeteorCountry(6, "\uD83C\uDDF0\uD83C\uDDF7", "대한민국5"),
-//                                                MeteorCountry(7, "\uD83C\uDDF0\uD83C\uDDF7", "대한민국6"),
-//                                            ),
+                                            meteorCountryList = meteorCountryList,
                                             selectedCountry = selectedCountry,
                                             viewModel = loginActivityViewModel
                                         )
                                     }
                                     false -> {
-                                        Box(
-                                            contentAlignment = Alignment.Center
-                                        ) {
-                                            Text(
-                                                text = stringResource(R.string.service_meteor_not_selected_textview_text),
-                                                style = TextStyle(
-                                                    fontFamily = NanumSqaureFont,
-                                                    fontWeight = FontWeight.Bold,
-                                                    fontSize = 24.sp,
-                                                    textAlign = TextAlign.Center
-                                                ),
-                                                color = Color.White
-                                            ) // End of Text
-                                        }
+                                        ServiceNotSelectedDisplayLayout(displayedString = stringResource(R.string.service_meteor_not_selected_textview_text))
                                     }
                                 }
                             }
