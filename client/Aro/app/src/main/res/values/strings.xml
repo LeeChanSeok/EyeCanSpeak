@@ -26,6 +26,7 @@
     <string name="password_validate_fail_textview_text">비밀번호와 비밀번호 확인 내용이 다릅니다</string>
 
     <string name="nickname_edittext_text">닉네임</string>
+    <string name="nickname_validate_fail_blank_edittext_text">닉네임에는 공백문자를 사용할 수 없습니다</string>
 
     <!-- 회원가입 서비스 선택 -->
     <string name="join_service_select_skip_button_text">나중에 선택하기</string>

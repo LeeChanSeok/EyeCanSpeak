@@ -54,8 +54,16 @@ class JoinNicknameFragment :
                     var result: Boolean =
                         when (text.toString().length in 3..10 || text.toString().isEmpty()) {
                             true -> {
-                                error = null
-                                true
+                                when (text.toString().contains(" ") || text.toString().contains("\n")) {
+                                    true -> {
+                                        error = getString(R.string.nickname_validate_fail_blank_edittext_text)
+                                        false
+                                    }
+                                    false -> {
+                                        error = null
+                                        true
+                                    }
+                                }
                             } // End of case true
                             false -> {
                                 error =

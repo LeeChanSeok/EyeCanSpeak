@@ -26,11 +26,6 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val a = intent.getStringExtra("deleteAccount")
-        if (a == "deleteAccount") {
-            Navigation.findNavController(binding.root).navigate(R.id.loginFragment)
-        }
-
         val uri = intent?.data
         // Oauth 로그인 인지 아닌지 확인
         when (uri?.scheme.toString()) {

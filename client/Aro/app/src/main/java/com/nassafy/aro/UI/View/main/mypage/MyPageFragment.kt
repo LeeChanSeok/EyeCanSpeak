@@ -216,8 +216,25 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
                             true -> {
                                 when (afterChangedNickname.length in 3..10) {
                                     true -> {
-                                        CoroutineScope(Dispatchers.IO).launch {
-                                            myPageFragmentViewModel.changeNickname(binding.userNicknameEdittext.text.toString())
+                                        when (afterChangedNickname.contains(" ") || afterChangedNickname.contains(
+                                            "\n"
+                                        )) {
+                                            true -> {
+                                                val okDialog = OkDialog(
+                                                    getString(R.string.my_page_nickname_modify_error_dialog_title_textview_text),
+                                                    getString(R.string.nickname_validate_fail_blank_edittext_text),
+                                                    getString(R.string.dialog_confirm_button_text)
+                                                )
+                                                okDialog.show(childFragmentManager, "OkDialog")
+                                                binding.userNicknameEdittext.setText(
+                                                    mainActivityViewModel.nickname
+                                                )
+                                            }
+                                            false -> {
+                                                CoroutineScope(Dispatchers.IO).launch {
+                                                    myPageFragmentViewModel.changeNickname(binding.userNicknameEdittext.text.toString())
+                                                }
+                                            }
                                         }
                                     }
                                     false -> {
