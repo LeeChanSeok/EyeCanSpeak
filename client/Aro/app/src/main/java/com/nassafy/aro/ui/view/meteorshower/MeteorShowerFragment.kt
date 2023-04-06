@@ -44,7 +44,6 @@ class MeteorShowerFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d(TAG, "onViewCreated: 여기 돌음?")
 
         if (mainActivityViewModel.meteorShowerServiceEnabled) {
             mLayoutManager =
@@ -115,15 +114,6 @@ class MeteorShowerFragment :
 
                     binding.meteorShowerCountryTextview.apply {
                         text = it.data!!.nation.toString()
-
-//                setOnClickListener {
-//                    val meteorCountrySelectDialog = MeteorCountrySelectDialog(
-//                        countryList
-//                    )
-//                    meteorCountrySelectDialog.show(
-//                        childFragmentManager, "MeteorCountrySelectDialog"
-//                    )
-//                }
                     }
                     binding.drawerImagebutton.setOnClickListener {
                         val mainActivity = activity as MainActivity

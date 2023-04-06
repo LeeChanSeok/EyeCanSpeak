@@ -3,6 +3,7 @@ package com.nassafy.aro.ui.view.dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,7 @@ import com.nassafy.aro.databinding.DialogDateHourSelectBinding
 import com.nassafy.aro.ui.adapter.DateHourSelectAdapter
 import com.nassafy.aro.ui.view.aurora.AuroraFragment
 
+private const val TAG = "DateHourSelectDialog_SDR"
 class DateHourSelectDialog(
     var dateList: ArrayList<String>,
     var hourList: ArrayList<ArrayList<String>>
@@ -64,9 +66,10 @@ class DateHourSelectDialog(
         binding.dateRecyclerview.apply {
             adapter = dateAdapter
             setAlpha(true)
-            setIntervalRatio(0.8f)
+            setIntervalRatio(1.0f)
             setItemSelectListener(object : CarouselLayoutManager.OnSelected {
                 override fun onItemSelected(position: Int) {
+                    Log.d(TAG, "onItemSelected: ${dateList[position]}")
                     hourAdapter.itemList = hourList[position]
                     hourAdapter.notifyDataSetChanged()
                 }

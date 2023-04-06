@@ -99,15 +99,12 @@ class AuroraFragment : BaseFragment<FragmentAuroraBinding>(FragmentAuroraBinding
         mMap!!.uiSettings.isMapToolbarEnabled = false
         setCustomMapStyle()
 
-        Log.d(TAG, "onMapReady: ${mainActivityViewModel.auroraDisplayOption}, ${mainActivityViewModel.cloudDisplayOption}")
         // setCloudTileOverlay
         when {
             mainActivityViewModel.cloudDisplayOption -> {
-                Log.d(TAG, "onMapReady2: ${mainActivityViewModel.auroraDisplayOption}, ${mainActivityViewModel.cloudDisplayOption}")
                 setCloudTileOverlay()
             }
             mainActivityViewModel.cloudDisplayOption == false && cloudTileOverlay != null -> {
-                Log.d(TAG, "onMapReady3: ${mainActivityViewModel.auroraDisplayOption}, ${mainActivityViewModel.cloudDisplayOption}")
                 cloudTileOverlay!!.remove()
             }
             else -> {}
@@ -116,11 +113,9 @@ class AuroraFragment : BaseFragment<FragmentAuroraBinding>(FragmentAuroraBinding
         // setPolyLine
         when {
             mainActivityViewModel.auroraDisplayOption -> {
-                Log.d(TAG, "onMapReady4: ${mainActivityViewModel.auroraDisplayOption}, ${mainActivityViewModel.cloudDisplayOption}")
                 setPolyLine()
             }
             mainActivityViewModel.auroraDisplayOption == false && mPolyline != null -> {
-                Log.d(TAG, "onMapReady5: ${mainActivityViewModel.auroraDisplayOption}, ${mainActivityViewModel.cloudDisplayOption}")
                 mPolyline!!.remove()
             }
             else -> {}
@@ -142,6 +137,7 @@ class AuroraFragment : BaseFragment<FragmentAuroraBinding>(FragmentAuroraBinding
         auroraViewModel.kpAndProbsLiveData.observe(viewLifecycleOwner) {
             if (it.data != null) {
                 kpWithProbs = it.data!!
+                Log.d(TAG, "initObserve: ${it.data!!.probs}")
                 favoriteAdapter.probs = it.data!!.probs
                 favoriteAdapter.notifyDataSetChanged()
                 initBottomSheetChart(chartHourLabel, it.data!!.kps)
