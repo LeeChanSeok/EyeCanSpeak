@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:cardBackgroundColor="@color/dialog_background_color"
+    app:cardCornerRadius="24dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/dialog_title_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="24dp"
+            android:textColor="@color/main_app_color"
+            android:textSize="20sp"
+            android:fontFamily="@font/nanum_square_eb"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="해당 닉네임을 사용할 수 없습니다." />
+
+        <TextView
+            android:id="@+id/dialog_content_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="@dimen/dialog_content_textview_margin_bottom_size"
+            android:textSize="12sp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/nanum_square_r"
+            app:layout_constraintBottom_toTopOf="@id/dialog_ok_textview"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dialog_title_textview"
+            tools:text="닉네임은 3자리 이상 10자리 이하로 설정해야 합니다." />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:id="@+id/dialog_cancel_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:textSize="16sp"
+                android:fontFamily="@font/nanum_square_b"
+                android:text="@string/dialog_cancel_button_text" />
+
+            <TextView
+                android:id="@+id/dialog_ok_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:fontFamily="@font/nanum_square_b"
+                android:layout_gravity="center_horizontal"
+                android:textSize="16sp"
+                android:text="@string/dialog_confirm_button_text" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

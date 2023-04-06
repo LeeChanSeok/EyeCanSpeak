@@ -1,0 +1,270 @@
+buildscript {
+	ext {
+//        springBootVersion = '2.4.9'
+//		springBootVersion = '2.3.2.RELEASE'
+		springBootVersion ='2.7.9'
+	}
+	repositories {
+		maven { url 'https://repo.spring.io/release' }
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+
+//
+//plugins {
+//	id 'java'
+//	id 'org.springframework.boot' version '2.7.9'
+//	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+//}
+//
+//group = 'com.nassafy'
+//version = '0.0.1-SNAPSHOT'
+//sourceCompatibility = '11'
+//
+//configurations {
+//	compileOnly {
+//		extendsFrom annotationProcessor
+//	}
+//}
+//
+//repositories {
+//	mavenCentral()
+//}
+//
+//dependencies {
+//	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+//	implementation 'org.springframework.boot:spring-boot-starter-security'
+//	implementation 'org.springframework.boot:spring-boot-starter-validation'
+//	implementation 'org.springframework.boot:spring-boot-starter-web'
+//	compileOnly 'org.projectlombok:lombok'
+//	runtimeOnly 'com.h2database:h2'
+//	annotationProcessor 'org.projectlombok:lombok'
+//	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+//	testImplementation 'org.springframework.security:spring-security-test'
+//}
+
+// 하위 모든 프로젝트 공통 세팅
+subprojects {
+	apply plugin: 'java'
+	apply plugin: 'idea'
+	apply plugin: 'org.springframework.boot'
+	apply plugin: 'io.spring.dependency-management'
+
+	group = 'com.nassafy'
+	version = '0.0.1-SNAPSHOT'
+
+	sourceCompatibility = '11'
+	targetCompatibility = '11'
+	compileJava.options.encoding = 'UTF-8'
+
+	configurations {
+		developmentOnly
+		runtimeClasspath {
+			extendsFrom developmentOnly
+		}
+		compileOnly {
+			extendsFrom annotationProcessor
+		}
+	}
+
+	repositories {
+		mavenCentral()
+		flatDir {
+			dirs 'libs'
+		}
+	}
+
+	// 하위 모듈에서 공통으로 사용하는 세팅 추가
+//	dependencies {
+//
+//		implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+//		implementation 'org.springframework.boot:spring-boot-starter-security'
+//		implementation 'org.springframework.boot:spring-boot-starter-validation'
+//		implementation 'org.springframework.boot:spring-boot-starter-web'
+//
+//		compileOnly 'org.projectlombok:lombok'
+//		runtimeOnly 'com.h2database:h2'
+//
+//		annotationProcessor 'org.projectlombok:lombok'
+//		annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+//
+//		testImplementation 'org.springframework.boot:spring-boot-starter-test'
+//		testImplementation 'org.springframework.security:spring-security-test'
+//
+//		testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+//		testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+//	}
+//
+//	test {
+//		useJUnitPlatform()
+//	}
+}
+
+//
+//tasks.named('test') {
+//	useJUnitPlatform()
+//}
+
+project(':core-module') {
+	apply plugin: 'org.springframework.boot'
+	apply plugin: 'io.spring.dependency-management'
+
+	bootJar { enabled = false } // core 은 bootJar 로 패키징 할 필요 없음
+	jar { enabled = true }
+
+	dependencies {
+
+		implementation 'org.springframework.boot:spring-boot-starter-web'
+		implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+		implementation 'org.springframework.boot:spring-boot-starter-security'
+		implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+		compileOnly 'org.projectlombok:lombok'
+		implementation 'io.jsonwebtoken:jjwt:0.9.1'
+		developmentOnly 'org.springframework.boot:spring-boot-devtools'
+		implementation 'org.springframework.boot:spring-boot-starter-mail'
+		implementation('org.springframework.boot:spring-boot-starter-logging')
+		implementation "org.springframework.boot:spring-boot-configuration-processor"
+		implementation 'org.springframework.boot:spring-boot-starter-freemarker'
+		implementation 'org.springframework.boot:spring-boot-starter-actuator'
+		implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5'
+		implementation group: 'org.apache.httpcomponents', name: 'httpmime', version: '4.3.1'
+
+		runtimeOnly 'com.h2database:h2'
+		runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+
+		annotationProcessor 'org.projectlombok:lombok'
+		annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
+		implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+		//querydsl 추가
+		implementation 'com.querydsl:querydsl-jpa'
+		//querydsl 추가
+		implementation 'com.querydsl:querydsl-apt'
+
+		testImplementation 'org.springframework.boot:spring-boot-starter-test'
+		testImplementation 'org.springframework.security:spring-security-test'
+
+		testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+		testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+	}
+}
+
+project(':api-module') {
+	apply plugin: 'org.springframework.boot'
+	apply plugin: 'io.spring.dependency-management'
+	apply plugin: 'java-library'
+
+	bootJar{
+		archivesBaseName = 'nassafy'
+		archiveFileName = 'nassafy-api-module-0.0.1.jar'
+		archiveVersion = "0.0.1"
+	}
+	jar { enabled = false }
+
+	dependencies {
+		implementation project(':core-module') // 컴파일 시 velog-core project 로딩
+
+		implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+		implementation 'org.springframework.boot:spring-boot-starter-security'
+		implementation 'org.springframework.boot:spring-boot-starter-validation'
+		implementation 'org.springframework.boot:spring-boot-starter-web'
+		implementation 'io.jsonwebtoken:jjwt:0.9.1'
+		implementation 'com.google.code.gson:gson:2.8.5'
+		compileOnly 'org.projectlombok:lombok'
+		annotationProcessor 'org.projectlombok:lombok'
+
+
+		runtimeOnly 'com.h2database:h2'
+
+		implementation 'net.rakugakibox.util:yaml-resource-bundle:1.1'
+//		implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-aws', version: '2.2.1.RELEASE'
+
+		implementation 'com.google.firebase:firebase-admin:6.8.1'
+		implementation 'com.google.gms:google-services:3.0.0'
+
+		implementation group: 'com.github.scribejava', name: 'scribejava-core', version: '8.3.1'
+		implementation group: 'com.github.scribejava', name: 'scribejava-apis', version: '8.3.1'
+
+		implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+		implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
+
+
+		//JUnit4 추가
+		testImplementation("org.junit.vintage:junit-vintage-engine") {
+			exclude group: "org.hamcrest", module: "hamcrest-core"
+		}
+
+		implementation('org.springframework.boot:spring-boot-starter-cache')
+		implementation group: 'org.apache.poi', name: 'poi', version: '3.11'
+		implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '3.11'
+		implementation group: 'commons-io', name: 'commons-io', version: '2.4'
+		implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+		annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
+		testImplementation 'org.springframework.boot:spring-boot-starter-test'
+		testImplementation 'org.springframework.security:spring-security-test'
+
+		testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+		testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+	}
+}
+
+project(':batch-module') {
+	apply plugin: 'org.springframework.boot'
+	apply plugin: 'io.spring.dependency-management'
+	apply plugin: 'java-library'
+
+	bootJar{
+		archivesBaseName = 'nassafy'
+		archiveFileName = 'nassafy-batch-module-0.0.1.jar'
+		archiveVersion = "0.0.1"
+	}
+	jar { enabled = false }
+
+	dependencies {
+		implementation project(':core-module') // 컴파일 시 velog-core project 로딩
+
+		implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+		implementation 'org.springframework.boot:spring-boot-starter-security'
+		implementation 'org.springframework.boot:spring-boot-starter-validation'
+		implementation 'org.springframework.boot:spring-boot-starter-web'
+		implementation 'com.google.code.gson:gson:2.8.5'
+		compileOnly 'org.projectlombok:lombok'
+		annotationProcessor 'org.projectlombok:lombok'
+		testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+		runtimeOnly 'com.h2database:h2'
+
+		implementation 'net.rakugakibox.util:yaml-resource-bundle:1.1'
+
+		implementation 'com.google.firebase:firebase-admin:6.8.1'
+		implementation 'com.google.gms:google-services:3.0.0'
+
+		implementation group: 'com.github.scribejava', name: 'scribejava-core', version: '8.3.1'
+		implementation group: 'com.github.scribejava', name: 'scribejava-apis', version: '8.3.1'
+
+		//JUnit4 추가
+		testImplementation("org.junit.vintage:junit-vintage-engine") {
+			exclude group: "org.hamcrest", module: "hamcrest-core"
+		}
+
+		implementation('org.springframework.boot:spring-boot-starter-cache')
+		implementation group: 'commons-io', name: 'commons-io', version: '2.4'
+		implementation fileTree(dir: 'libs', include: ['*.jar'])
+		annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
+		testImplementation 'org.springframework.boot:spring-boot-starter-test'
+		testImplementation 'org.springframework.security:spring-security-test'
+
+		testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+		testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+
+
+	}
+}

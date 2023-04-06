@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="small_button_size">24dp</dimen>
+    <dimen name="dialog_content_textview_margin_bottom_size">60dp</dimen>
+    <dimen name="fragment_title_textview_size">28sp</dimen>
+    <dimen name="setting_interval_margin_size">76dp</dimen>
+    <dimen name="setting_title_textview_text_size">24sp</dimen>
+</resources>

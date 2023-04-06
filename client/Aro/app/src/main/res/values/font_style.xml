@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="nanum_barun_gothic" parent="@android:style/Widget.DeviceDefault.TextView">
+        <item name="android:fontFamily">@font/nanum_barun_gothic</item>
+    </style>
+
+    <style name="nanum_barun_gothic_bold" parent="@android:style/Widget.DeviceDefault.TextView">
+        <item name="android:fontFamily">@font/nanum_barun_gothic_bold</item>
+    </style>
+
+
+    <style name="nanum_barun_gothic_light" parent="@android:style/Widget.DeviceDefault.TextView">
+        <item name="android:fontFamily">@font/nanum_barun_gothic_light</item>
+    </style>
+
+    <style name="nanum_barun_gothic_ultra_light" parent="@android:style/Widget.DeviceDefault.TextView">
+        <item name="android:fontFamily">@font/nanum_barun_gothic_ultra_light</item>
+    </style>
+
+    <style name="nanum_myeongjo" parent="@android:style/Widget.DeviceDefault.TextView">
+        <item name="android:fontFamily">@font/nanum_myeongjo</item>
+    </style>
+
+    <style name="nanum_myeongjo_bold" parent="@android:style/Widget.DeviceDefault.TextView">
+        <item name="android:fontFamily">@font/nanum_myeongjo_bold</item>
+    </style>
+
+    <style name="nanum_myeongjo_extra_bold" parent="@android:style/Widget.DeviceDefault.TextView">
+        <item name="android:fontFamily">@font/nanum_myeongjo_extra_bold</item>
+    </style>
+
+
+</resources>
