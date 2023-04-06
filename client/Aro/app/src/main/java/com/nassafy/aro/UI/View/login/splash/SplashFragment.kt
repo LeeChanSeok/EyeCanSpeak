@@ -48,6 +48,22 @@ class SplashFragment : BaseFragment<FragmentSplashBinding>(FragmentSplashBinding
         // 토큰이 있을 경우 서버에 보냄.
         postAccessTokenGetUserDataResponseLiveDataObserve()
 
+        when (requireActivity().intent.getStringExtra("deleteAccount")) {
+            "deleteAccount" -> {
+                findNavController().navigate(R.id.action_splashFragment_to_LoginFragment)
+                return
+            }
+            else -> {}
+        }
+
+        when (requireActivity().intent.getStringExtra("logout")) {
+            "logout" -> {
+                findNavController().navigate(R.id.action_splashFragment_to_LoginFragment)
+                return
+            }
+            else -> {}
+        }
+
         Log.d("ssafy/login/github", loginActivityViewModel.isTriedGithubLogin.toString())
         when (loginActivityViewModel.isTriedGithubLogin) {
             true -> {

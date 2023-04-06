@@ -5,6 +5,9 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentTransaction
+import androidx.navigation.findNavController
+import com.nassafy.aro.R
 import com.nassafy.aro.databinding.ActivityLoginBinding
 import com.nassafy.aro.ui.view.login.viewmodel.LoginActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,6 +38,13 @@ class LoginActivity : AppCompatActivity() {
             else -> {}
         } // End of when
     }
+
+    override fun startActivityForResult(intent: Intent, requestCode: Int) {
+        super.startActivityForResult(intent, requestCode)
+
+
+    }
+
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
