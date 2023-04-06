@@ -1,7 +1,7 @@
 package com.nassafy.aro.ui.view.main.stamp
 
 import android.app.Activity
-import android.app.Activity.RESULT_OK
+import android.app.Activity.*
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
@@ -9,6 +9,7 @@ import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
@@ -57,10 +58,16 @@ class StampValidateFragment :
 
     // 갤러리 권한 목록
     // SDK 버전 올라가서 갤러리 권한 가져오는 부분이 변경됨. (더 세분화 되었음)
-    var REQUIRED_PERMISSIONS = arrayOf(
+    var REQUIRED_PERMISSIONS_HIGH_VER = arrayOf(
         android.Manifest.permission.READ_MEDIA_IMAGES,
         android.Manifest.permission.ACCESS_MEDIA_LOCATION,
     )
+
+    var REQUIRED_PERMISSIONS_ROW_VER = arrayOf(
+        android.Manifest.permission.READ_EXTERNAL_STORAGE,
+        android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+    )
+
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -111,21 +118,46 @@ class StampValidateFragment :
             mContext as Activity, android.Manifest.permission.READ_MEDIA_IMAGES
         )
 
-        val hasExteralReadPermission = ContextCompat.checkSelfPermission(
+        val hasAccessMediaLocationPermission = ContextCompat.checkSelfPermission(
             mContext as Activity, android.Manifest.permission.ACCESS_MEDIA_LOCATION
         )
 
-        if (hasMediaPermission != PackageManager.PERMISSION_GRANTED || hasExteralReadPermission != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                mContext as Activity, REQUIRED_PERMISSIONS, REQ_GALLERY
-            )
+
+        val hasExternalWriteStorage = ContextCompat.checkSelfPermission(
+            mContext as Activity, android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
+
+        val hasExternalReadStorage = ContextCompat.checkSelfPermission(
+            mContext as Activity, android.Manifest.permission.READ_EXTERNAL_STORAGE
+        )
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (hasMediaPermission != PackageManager.PERMISSION_GRANTED || hasAccessMediaLocationPermission != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(
+                    mContext as Activity, REQUIRED_PERMISSIONS_HIGH_VER, REQ_GALLERY
+                )
+            } else {
+                val intent = Intent(Intent.ACTION_PICK)
+                intent.setDataAndType(
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*"
+                )
+                imageResult.launch(intent)
+            }
         } else {
-            val intent = Intent(Intent.ACTION_PICK)
-            intent.setDataAndType(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*"
-            )
-            imageResult.launch(intent)
+            if (hasExternalWriteStorage != PackageManager.PERMISSION_GRANTED || hasExternalReadStorage != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(
+                    mContext as Activity, REQUIRED_PERMISSIONS_ROW_VER, REQ_GALLERY
+                )
+            } else {
+                val intent = Intent(Intent.ACTION_PICK)
+                intent.setDataAndType(
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*"
+                )
+                imageResult.launch(intent)
+            }
         }
+
+
     } // End of isGalleryServiceAvaliable
 
 
@@ -215,20 +247,39 @@ class StampValidateFragment :
         requestCode: Int, permissions: Array<out String>, grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQ_GALLERY && grantResults.size == REQUIRED_PERMISSIONS.size) {
-            var checkResult = true
 
-            for (result in grantResults) {
-                if (result != PackageManager.PERMISSION_GRANTED) {
-                    checkResult = false
-                    break
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (requestCode == REQ_GALLERY && grantResults.size == REQUIRED_PERMISSIONS_HIGH_VER.size) {
+                var checkResult = true
+
+                for (result in grantResults) {
+                    if (result != PackageManager.PERMISSION_GRANTED) {
+                        checkResult = false
+                        break
+                    }
+                }
+
+                if (!checkResult) {
+                    requireView().showSnackBarMessage("갤러리 권한을 설정하지 않으면 이미지를 가져올 수 없어요 ㅠㅠ")
                 }
             }
+        } else {
+            if (requestCode == REQ_GALLERY && grantResults.size == REQUIRED_PERMISSIONS_ROW_VER.size) {
+                var checkResult = true
+                for (result in grantResults) {
+                    if (result != PackageManager.PERMISSION_GRANTED) {
+                        checkResult = false
+                        break
+                    }
+                }
 
-            if (!checkResult) {
-                requireView().showSnackBarMessage("갤러리 권한을 설정하지 않으면 이미지를 가져올 수 없어요 ㅠㅠ")
+                if (!checkResult) {
+                    requireView().showSnackBarMessage("갤러리 권한을 설정하지 않으면 이미지를 가져올 수 없어요 ㅠㅠ")
+                }
             }
         }
+
+
     } // End of onRequestPermissionsResult
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
