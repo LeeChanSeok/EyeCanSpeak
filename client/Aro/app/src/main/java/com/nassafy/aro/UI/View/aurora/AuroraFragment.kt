@@ -156,7 +156,7 @@ class AuroraFragment : BaseFragment<FragmentAuroraBinding>(FragmentAuroraBinding
                         // set Start Location
                         mMap!!.animateCamera(
                             CameraUpdateFactory.newLatLngZoom(
-                                LatLng(64.8, -18.5),
+                                LatLng(65.73507, 24.57180),
                                 5F
                             )
                         )
