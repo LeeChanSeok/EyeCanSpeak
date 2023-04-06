@@ -20,7 +20,6 @@ fun CountryPlaceChips(selectedPlaceList: MutableList<PlaceItem>, viewModel: Serv
             .height(80.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        //TODO change items
         items(selectedPlaceList) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,

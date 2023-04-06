@@ -11,7 +11,7 @@ import com.nassafy.aro.ui.view.ServiceViewModel
 
 @Composable
 fun MeteorCountryLazyColumn(
-    meteorCountryList: MutableList<MeteorCountry>, // Todo convert to Country
+    meteorCountryList: MutableList<MeteorCountry>,
     selectedCountry: MeteorCountry?,
     viewModel: ServiceViewModel
 ) {

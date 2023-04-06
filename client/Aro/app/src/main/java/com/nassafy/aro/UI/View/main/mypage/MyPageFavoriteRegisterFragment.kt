@@ -77,7 +77,7 @@ class MyPageFavoriteRegisterFragment :
             true -> {
                 initMeteorFavoriteObserve()
                 CoroutineScope(Dispatchers.IO).launch {
-                    myPageFavoriteRegisterFragmentViewModel.getMeteorCountryList() // todo Activate
+                    myPageFavoriteRegisterFragmentViewModel.getMeteorCountryList()
                 } // End of CoroutineScope
             }
             false -> {}
@@ -388,10 +388,8 @@ class MyPageFavoriteRegisterFragment :
                                 }
                             } // End of page -> 0
                             1 -> {
-                                // Todo MeteorShower Country Select
                                 when (myPageFavoriteRegisterFragmentViewModel.isMeteorServiceSelected) {
                                     true -> {
-//                                        TODO 유성우
                                         MeteorCountryLazyColumn(
                                             meteorCountryList = meteorCountryList,
                                             selectedCountry = selectedCountry,

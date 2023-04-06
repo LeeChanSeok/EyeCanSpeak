@@ -36,7 +36,6 @@ fun CountryPlaceLazyColumnItem(
     selectedPlaceList: MutableList<PlaceItem>,
     viewModel: ServiceViewModel
 ) {
-    //TODO change isSelected to DTO's boolean type var
     var isSelected by remember { mutableStateOf(false) }
     val imageLoader = ImageLoader.Builder(LocalContext.current)
         .componentRegistry {

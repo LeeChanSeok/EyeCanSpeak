@@ -31,7 +31,6 @@ class JoinPasswordFragment :
     }
 
     private fun setNextButtonAvailable(isAvailable: Boolean) {
-        //TODO ACTIVATE
         binding.nextButton.isSelected = isAvailable
         binding.nextButton.isEnabled = isAvailable
         binding.nextButton.isClickable = isAvailable
@@ -78,7 +77,6 @@ class JoinPasswordFragment :
         val verificationPasswordTextField = binding.verificationPasswordTextfield
         val verificationPassword = verificationPasswordTextField.editText?.text.toString()
 
-        // Todo when 정리...
         val result: Boolean = when (originPassword == verificationPassword) {
             true -> { // 같을 경우
                 verificationPasswordTextField.error = null

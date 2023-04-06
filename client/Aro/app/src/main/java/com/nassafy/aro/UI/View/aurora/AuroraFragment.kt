@@ -29,6 +29,7 @@ import com.nassafy.aro.BuildConfig
 import com.nassafy.aro.R
 import com.nassafy.aro.data.dto.PlaceItem
 import com.nassafy.aro.data.dto.kp.KpWithProbs
+import com.nassafy.aro.data.dto.kp.Probability
 import com.nassafy.aro.databinding.FragmentAuroraBinding
 import com.nassafy.aro.ui.adapter.BottomSheetFavoriteAdapter
 import com.nassafy.aro.ui.view.*
@@ -137,7 +138,6 @@ class AuroraFragment : BaseFragment<FragmentAuroraBinding>(FragmentAuroraBinding
         auroraViewModel.kpAndProbsLiveData.observe(viewLifecycleOwner) {
             if (it.data != null) {
                 kpWithProbs = it.data!!
-                Log.d(TAG, "initObserve: ${it.data!!.probs}")
                 favoriteAdapter.probs = it.data!!.probs
                 favoriteAdapter.notifyDataSetChanged()
                 initBottomSheetChart(chartHourLabel, it.data!!.kps)

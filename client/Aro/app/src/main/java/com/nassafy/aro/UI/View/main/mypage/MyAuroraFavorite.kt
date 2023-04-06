@@ -43,7 +43,6 @@ fun MyAuroraFavorite(
                     .fillMaxWidth(0.9f)
                     .fillMaxHeight()
             ) {
-                // TODO Change items DTO List
                 items(auroraFavoriteList) {
                     val imageLoader = ImageLoader.Builder(LocalContext.current)
                         .componentRegistry {

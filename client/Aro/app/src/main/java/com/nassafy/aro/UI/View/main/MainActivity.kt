@@ -340,7 +340,7 @@ class MainActivity : AppCompatActivity() {
                     closeDrawer()
                 }
                 logoutTextView.setOnClickListener {
-                    mainActivityViewModel.logout( // todo
+                    mainActivityViewModel.logout(
                         "Bearer",
                         Application.sharedPreferencesUtil.getUserAccessToken().substring(7),
                         Application.sharedPreferencesUtil.getUserRefreshToken()

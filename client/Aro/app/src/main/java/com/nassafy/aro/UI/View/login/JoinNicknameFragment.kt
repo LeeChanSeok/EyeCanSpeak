@@ -26,7 +26,6 @@ class JoinNicknameFragment :
     }
 
     private fun setNextButtonAvailable(isAvailable: Boolean) {
-        //TODO ACTIVATE
         binding.nextButton.isSelected = isAvailable
         binding.nextButton.isEnabled = isAvailable
         binding.nextButton.isClickable = isAvailable

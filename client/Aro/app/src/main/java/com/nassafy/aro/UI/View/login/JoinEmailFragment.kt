@@ -98,13 +98,12 @@ class JoinEmailFragment :
                             setNextButtonAvailable(true)
                         }
                         else -> {
-                            setNextButtonAvailable(false) // TODO ACTIVE
+                            setNextButtonAvailable(false)
                         }
                     } // End of when
                 } // End of true
                 false -> {
-//                    setNextButtonAvailable(true)//TODO DELETE
-                    setNextButtonAvailable(false) // TODO ACTIVE
+                    setNextButtonAvailable(false)
                     binding.verificationEmailCodeTextfield.error =
                         getString(R.string.email_validate_number_fail_textview_text)
                 } // End of false

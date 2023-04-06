@@ -115,7 +115,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                     }
 
                     override fun onFailure(httpStatus: Int, message: String) {
-                        // Todo loading progressBar
                     }
                 })
             }
