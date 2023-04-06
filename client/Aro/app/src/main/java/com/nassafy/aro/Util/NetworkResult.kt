@@ -1,4 +1,4 @@
-package com.nassafy.aro.Util
+package com.nassafy.aro.util
 
 sealed class NetworkResult<T>(var data: T? = null, val message: String? = null) {
     class Success<T>(data: T) : NetworkResult<T>(data)

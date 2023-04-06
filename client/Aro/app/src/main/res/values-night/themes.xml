@@ -11,6 +11,25 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:navigationBarColor">@color/view_pager_background_color</item>
         <!-- Customize your theme here. -->
+    </style>
+    <style name="EditTextStyle" parent="Widget.Design.TextInputLayout"> // important : parent 를 이것으로.
+
+        <item name="backgroundColor" >@android:color/transparent</item>
+
+        <item name="colorPrimary">@color/main_app_color</item>
+        <item name="colorControlNormal">@color/main_app_color</item>  // unFocus 상태일때 밑줄 색.
+        <item name="colorControlActivated">@color/main_app_color</item> // Focus 상태일때 밑줄 색.
+        <item name="android:textCursorDrawable">@color/white</item>  // cursor 색.
+
+        <item name="endIconTint">@color/main_app_color</item>
+
+        <item name="android:textColorHint">@color/white</item>  // hint 색
+        <item name="hintTextColor">@color/white</item>   // floating hint 색
+
+        <item name="errorTextColor">@color/join_edit_text_error_color</item>
+
     </style>
 </resources>
