@@ -23,8 +23,8 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:elevation="0dp"
-        android:backgroundTint="@android:color/transparent">
+        app:cardElevation="0dp"
+        app:cardBackgroundColor="@android:color/transparent">
 
         <LinearLayout
             android:orientation="vertical"
