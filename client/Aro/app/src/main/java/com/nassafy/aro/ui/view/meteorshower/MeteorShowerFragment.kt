@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
+import com.nassafy.aro.R
 import com.nassafy.aro.databinding.FragmentMeteorShowerBinding
 import com.nassafy.aro.ui.adapter.MeteorShowerAdapter
 import com.nassafy.aro.ui.view.BaseFragment
@@ -46,6 +47,9 @@ class MeteorShowerFragment :
         super.onViewCreated(view, savedInstanceState)
 
         if (mainActivityViewModel.meteorShowerServiceEnabled) {
+
+            binding.altView.root.visibility = View.GONE
+
             mLayoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
@@ -55,6 +59,10 @@ class MeteorShowerFragment :
                 meteorShowerViewModel.getMyMeteorShower()
             }
         } else {
+            binding.altView.meteorInformTextview.text =
+                getString(R.string.my_page_not_select_service_title_textview_text)
+            binding.altView.meteorInformSubTextview.text =
+                getString(R.string.my_page_not_select_service_inform_textview_text)
             binding.meteorShowerCountryTextview.visibility = View.GONE
             binding.meteorShowerRecyclerview.visibility = View.GONE
         }
@@ -120,11 +128,24 @@ class MeteorShowerFragment :
                         mainActivity.openDrawer()
                     }
 
-                    binding.meteorShowerCountryTextview.visibility = View.VISIBLE
-                    binding.meteorShowerRecyclerview.visibility = View.VISIBLE
-                    binding.altView.root.visibility = View.GONE
+                    if (it.data!!.meteorList!!.isEmpty()) {
+                        val newText =
+                            getString(R.string.my_page_not_select_service_title_textview_text)
+                        val newText2 =
+                            getString(R.string.my_page_not_select_service_inform_textview_text)
 
-                    setAdapter()
+                        binding.altView.meteorInformTextview.text = newText.replace("서비스", "국가")
+                        binding.altView.meteorInformSubTextview.text = newText2.replace("서비스", "국가")
+                        binding.altView.root.visibility = View.VISIBLE
+                        binding.meteorShowerCountryTextview.visibility = View.GONE
+                        binding.meteorShowerRecyclerview.visibility = View.GONE
+                    } else {
+                        binding.meteorShowerCountryTextview.visibility = View.VISIBLE
+                        binding.meteorShowerRecyclerview.visibility = View.VISIBLE
+                        binding.altView.root.visibility = View.GONE
+
+                        setAdapter()
+                    }
                 }
 
                 is NetworkResult.Error -> {

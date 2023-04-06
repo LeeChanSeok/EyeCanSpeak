@@ -67,8 +67,7 @@ class StampValidateFragment :
         android.Manifest.permission.READ_EXTERNAL_STORAGE,
         android.Manifest.permission.WRITE_EXTERNAL_STORAGE
     )
-
-
+    
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mContext = context

@@ -5,8 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentTransaction
-import androidx.navigation.findNavController
+import androidx.navigation.Navigation
 import com.nassafy.aro.R
 import com.nassafy.aro.databinding.ActivityLoginBinding
 import com.nassafy.aro.ui.view.login.viewmodel.LoginActivityViewModel
@@ -26,6 +25,11 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val a = intent.getStringExtra("deleteAccount")
+        if (a == "deleteAccount") {
+            Navigation.findNavController(binding.root).navigate(R.id.loginFragment)
+        }
 
         val uri = intent?.data
         // Oauth 로그인 인지 아닌지 확인
@@ -64,5 +68,4 @@ class LoginActivity : AppCompatActivity() {
 //            else -> {}
 //        } // End of when
     } // End of onResume
-
 }

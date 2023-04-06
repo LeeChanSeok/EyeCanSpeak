@@ -24,6 +24,7 @@
             app:exitAnim="@anim/aro_exit_anim"
             app:popEnterAnim="@anim/aro_pop_enter_anim"
             app:popExitAnim="@anim/aro_pop_exit_anim" />
+
     </fragment>
     <fragment
         android:id="@+id/joinEmailFragment"

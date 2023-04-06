@@ -2,7 +2,6 @@ package com.nassafy.aro.ui.view.main.setting
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
