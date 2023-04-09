@@ -50,8 +50,8 @@ spring:
     # Google smtp server 사용
     host: smtp.gmail.com
     port: 587
-    username: ckstjr93@gmail.com #앱 비밀번호 발급받은 google 계정
-    password: isemeuihjvftkkwx #발급받은 앱 비밀번호
+    username: curestream.cs@gmail.com #앱 비밀번호 발급받은 google 계정
+    password: sxhisfqyasrwvbgr #발급받은 앱 비밀번호
     properties:
       mail:
         smtp:

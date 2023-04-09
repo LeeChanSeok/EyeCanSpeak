@@ -53,7 +53,7 @@ public class EmailService {
         MimeMessage  message = emailSender.createMimeMessage();
 
         message.addRecipients(RecipientType.TO, to);//보내는 대상
-        message.setSubject("이메일 인증 테스트");//제목
+        message.setSubject("NASSAFY 이메일 인증코드입니다.");//제목
 
         String msgg="";
         msgg+= "<div style='margin:20px;'>";
