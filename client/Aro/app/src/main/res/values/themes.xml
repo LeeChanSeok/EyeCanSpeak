@@ -2,15 +2,34 @@
     <!-- Base application theme. -->
     <style name="Theme.Aro" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimary">@color/main_logo_color</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnPrimary">@color/join_background_color</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
         <item name="colorSecondaryVariant">@color/teal_700</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:navigationBarColor">@color/view_pager_background_color</item>
         <!-- Customize your theme here. -->
+        <item name="bottomSheetDialogTheme">@drawable/bottom_sheet_background</item>
+    </style>
+    <style name="EditTextStyle" parent="Widget.Design.TextInputLayout"> // important : parent 를 이것으로.
+
+        <item name="backgroundColor" >@android:color/transparent</item>
+
+        <item name="colorPrimary">@color/main_app_color</item>
+        <item name="colorControlNormal">@color/main_app_color</item>  // unFocus 상태일때 밑줄 색.
+        <item name="colorControlActivated">@color/main_app_color</item> // Focus 상태일때 밑줄 색.
+        <item name="android:textCursorDrawable">@color/white</item>  // cursor 색.
+
+        <item name="endIconTint">@color/white</item>
+        
+        <item name="android:textColorHint">@color/white</item>  // hint 색
+        <item name="hintTextColor">@color/white</item>   // floating hint 색
+
+        <item name="errorTextColor">@color/join_edit_text_error_color</item>
     </style>
 </resources>

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/join_background_color"
+    tools:context=".ui.view.login.JoinEmailFragment">
+
+    <ImageButton
+        android:id="@+id/cancel_button"
+        android:layout_width="@dimen/small_button_size"
+        android:layout_height="@dimen/small_button_size"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:scaleType="fitXY"
+        android:background="@android:color/transparent"
+        android:src="@drawable/back_step_arrow_button_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/service_select_page_title_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/nanum_square_eb"
+        android:paddingTop="2dp"
+        android:text="@string/settings_fragment_title_textview_text"
+        android:textColor="@color/main_app_color"
+        android:textSize="@dimen/fragment_title_textview_size"
+        app:layout_constraintBottom_toBottomOf="@id/cancel_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/cancel_button" />
+
+    <TextView
+        android:id="@+id/settings_fragment_notification_set_title_textview"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="@dimen/setting_interval_margin_size"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/nanum_square_b"
+        android:text="@string/settings_fragment_notification_set_title_textview_text"
+        android:textColor="@color/white"
+        android:textSize="@dimen/setting_title_textview_text_size"
+        app:layout_constraintEnd_toStartOf="@id/settings_fragment_notification_set_toogle_imageButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cancel_button" />
+
+    <TextView
+        android:id="@+id/settings_fragment_notification_set_inform_textview"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/nanum_square_l"
+        android:text="@string/settings_fragment_notification_set_inform_textview_text"
+        android:textColor="@color/white"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toStartOf="@id/settings_fragment_notification_set_toogle_imageButton"
+        app:layout_constraintStart_toStartOf="@id/settings_fragment_notification_set_title_textview"
+        app:layout_constraintTop_toBottomOf="@id/settings_fragment_notification_set_title_textview" />
+
+    <ImageButton
+        android:id="@+id/settings_fragment_notification_set_toogle_imageButton"
+        android:layout_width="40dp"
+        android:layout_height="17dp"
+        android:layout_marginEnd="32dp"
+        android:background="@android:color/transparent"
+        android:scaleType="fitCenter"
+        android:src="@drawable/setting_toggle_selector"
+        app:layout_constraintBottom_toBottomOf="@id/settings_fragment_notification_set_inform_textview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/settings_fragment_notification_set_title_textview" />
+
+
+    <TextView
+        android:id="@+id/settings_fragment_map_on_aurora_set_title_textview"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/setting_interval_margin_size"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/nanum_square_b"
+        android:text="@string/settings_fragment_map_on_aurora_set_title_textview_text"
+        android:textColor="@color/white"
+        android:textSize="@dimen/setting_title_textview_text_size"
+        app:layout_constraintEnd_toStartOf="@id/settings_fragment_notification_set_toogle_imageButton"
+        app:layout_constraintStart_toStartOf="@id/settings_fragment_notification_set_title_textview"
+        app:layout_constraintTop_toBottomOf="@id/settings_fragment_notification_set_inform_textview" />
+
+    <TextView
+        android:id="@+id/settings_fragment_map_on_aurora_set_inform_textview"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/nanum_square_l"
+        android:text="@string/settings_fragment_map_on_aurora_set_inform_textview_text"
+        android:textColor="@color/white"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toStartOf="@id/settings_fragment_map_on_aurora_set_toogle_imageButton"
+        app:layout_constraintStart_toStartOf="@id/settings_fragment_notification_set_title_textview"
+        app:layout_constraintTop_toBottomOf="@id/settings_fragment_map_on_aurora_set_title_textview" />
+
+    <ImageButton
+        android:id="@+id/settings_fragment_map_on_aurora_set_toogle_imageButton"
+        android:layout_width="40dp"
+        android:layout_height="17dp"
+        android:layout_marginEnd="32dp"
+        android:background="@android:color/transparent"
+        android:scaleType="fitCenter"
+        android:src="@drawable/setting_toggle_selector"
+        app:layout_constraintBottom_toBottomOf="@id/settings_fragment_map_on_aurora_set_inform_textview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/settings_fragment_map_on_aurora_set_title_textview" />
+
+    <TextView
+        android:id="@+id/settings_fragment_map_on_cloud_set_title_textview"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/setting_interval_margin_size"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/nanum_square_b"
+        android:text="@string/settings_fragment_map_on_cloud_set_title_textview_text"
+        android:textColor="@color/white"
+        android:textSize="@dimen/setting_title_textview_text_size"
+        app:layout_constraintEnd_toStartOf="@id/settings_fragment_notification_set_toogle_imageButton"
+        app:layout_constraintStart_toStartOf="@id/settings_fragment_notification_set_title_textview"
+        app:layout_constraintTop_toBottomOf="@id/settings_fragment_map_on_aurora_set_inform_textview" />
+
+    <TextView
+        android:id="@+id/settings_fragment_map_on_cloud_set_inform_textview"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/nanum_square_l"
+        android:text="@string/settings_fragment_map_on_cloud_set_inform_textview_text"
+        android:textColor="@color/white"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toStartOf="@id/settings_fragment_map_on_aurora_set_toogle_imageButton"
+        app:layout_constraintStart_toStartOf="@id/settings_fragment_notification_set_title_textview"
+        app:layout_constraintTop_toBottomOf="@id/settings_fragment_map_on_cloud_set_title_textview" />
+
+    <ImageButton
+        android:id="@+id/settings_fragment_map_on_cloud_set_toogle_imageButton"
+        android:layout_width="40dp"
+        android:layout_height="17dp"
+        android:layout_marginEnd="32dp"
+        android:background="@android:color/transparent"
+        android:scaleType="fitCenter"
+        android:src="@drawable/setting_toggle_selector"
+        app:layout_constraintBottom_toBottomOf="@id/settings_fragment_map_on_cloud_set_inform_textview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/settings_fragment_map_on_cloud_set_title_textview" />
+
+    <TextView
+        android:id="@+id/settings_fragment_delete_account_title_textview"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/setting_interval_margin_size"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/nanum_square_b"
+        android:text="@string/settings_fragment_delete_account_title_textview_text"
+        android:textColor="@color/white"
+        android:textSize="@dimen/setting_title_textview_text_size"
+        app:layout_constraintEnd_toStartOf="@id/settings_fragment_delete_account_imageButton"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/settings_fragment_notification_set_title_textview"
+        app:layout_constraintTop_toBottomOf="@+id/settings_fragment_map_on_cloud_set_inform_textview" />
+
+    <TextView
+        android:id="@+id/settings_fragment_delete_account_inform_textview"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/nanum_square_l"
+        android:text="@string/settings_fragment_delete_account_inform_textview_text"
+        android:textColor="@color/white"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toStartOf="@id/settings_fragment_delete_account_imageButton"
+        app:layout_constraintStart_toStartOf="@id/settings_fragment_notification_set_title_textview"
+        app:layout_constraintTop_toBottomOf="@id/settings_fragment_delete_account_title_textview" />
+
+    <ImageButton
+        android:id="@+id/settings_fragment_delete_account_imageButton"
+        android:layout_width="77dp"
+        android:layout_height="29dp"
+        android:layout_marginEnd="32dp"
+        android:background="@android:color/transparent"
+        android:scaleType="fitCenter"
+        android:src="@drawable/delete_account_button"
+        app:layout_constraintBottom_toBottomOf="@id/settings_fragment_delete_account_inform_textview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/settings_fragment_delete_account_title_textview" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

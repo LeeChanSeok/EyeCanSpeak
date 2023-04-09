@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:background="@color/view_pager_background_color"
+        android:paddingHorizontal="8dp">
+
+    <TextView
+            android:id="@+id/meteor_inform_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="@string/my_page_not_select_service_title_textview_text"
+            android:textColor="@color/main_app_color"
+            android:textSize="20sp"
+            android:fontFamily="@font/nanum_square_b" />
+
+    <TextView
+            android:id="@+id/meteor_inform_sub_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            tools:text="@string/my_page_not_select_service_inform_textview_text"
+            android:fontFamily="@font/nanum_square_l"
+            android:textColor="@color/main_app_color"
+            android:textSize="16sp" />
+
+</LinearLayout>
