@@ -189,7 +189,7 @@ public class MemberController {
         if(!emailCode.containsKey(email)){
             return ResponseEntity.badRequest().body("Error: email is not checked!!");
         }
-        if(!code.equals(emailCode.get(email)) && !code.equals(mailCode)){
+        if(!code.equals(emailCode.get(email))){
             return ResponseEntity.badRequest().body("Error: code is different!!");
         }
         emailCode.remove(email);
