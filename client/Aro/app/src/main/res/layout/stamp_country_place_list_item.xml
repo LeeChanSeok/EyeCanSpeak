@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/stamp_country_place_imageview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/country_place_test_image" />
+
+
+        <TextView
+            android:id="@+id/stamp_country_name_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="58dp"
+            android:fontFamily="@font/nanum_square_eb"
+            android:includeFontPadding="false"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="미국" />
+
+        <TextView
+            android:id="@+id/stamp_country_place_name_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nanum_square_eb"
+            android:includeFontPadding="false"
+            android:textColor="@color/stamp_location_name_color"
+            android:textSize="36sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/stamp_country_name_textview"
+            app:layout_constraintTop_toBottomOf="@+id/stamp_country_name_textview"
+            tools:text="쿡 카운티" />
+
+        <TextView
+            android:id="@+id/stamp_country_place_inform_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:fontFamily="@font/nanum_myeongjo"
+            android:textColor="@color/white"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/stamp_country_place_name_textview"
+            app:layout_constraintTop_toBottomOf="@+id/stamp_country_place_name_textview"
+            tools:text="시카고근교에서 즐기는 북극광 명소" />
+
+        <!--        <com.ssomai.android.scalablelayout.ScalableLayout-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:layout_height="0dp"-->
+        <!--                app:scale_base_height="100"-->
+        <!--                app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--                app:layout_constraintEnd_toEndOf="parent"-->
+        <!--                app:layout_constraintHorizontal_bias="1.3"-->
+        <!--                app:layout_constraintTop_toTopOf="parent"-->
+        <!--                app:scale_base_width="200">-->
+
+        <!--            <ImageView-->
+        <!--                    android:id="@+id/stamp_country_place_stamp_imageview"-->
+        <!--                    android:layout_width="wrap_content"-->
+        <!--                    android:layout_height="wrap_content"-->
+        <!--                    app:scale_height="50"-->
+        <!--                    app:scale_left="100"-->
+        <!--                    app:scale_top="5"-->
+        <!--                    app:scale_width="100"-->
+        <!--                    tools:ignore="MissingPrefix" />-->
+        <!--        </com.ssomai.android.scalablelayout.ScalableLayout>-->
+
+
+        <ImageView
+            android:id="@+id/stamp_country_place_stamp_imageview"
+            android:layout_width="240dp"
+            android:layout_height="240dp"
+            android:layout_marginTop="160dp"
+            android:layout_marginEnd="4dp"
+            android:rotation="-30"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:background="@drawable/idaho_test_image2" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/stamp_country_place_write_diary_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="60dp"
+            android:background="@drawable/diary_histroy_make_button"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/stamp_country_place_validate_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="60dp"
+            android:background="@drawable/stamp_country_place_visit_certification_button"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

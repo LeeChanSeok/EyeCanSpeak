@@ -18,7 +18,7 @@ spring:
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
     url: jdbc:mariadb://localhost:3306/nassafy
-    username: ming
+    username: root
     password: ssafy1234!  # local에서는 각자 비밀번호로 변경하고, 올릴 때는 ssafy1234!로 변경하기
     hikari:
       maximum-pool-size: 20

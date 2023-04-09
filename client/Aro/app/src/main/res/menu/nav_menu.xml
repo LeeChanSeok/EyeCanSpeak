@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+            android:id="@+id/action_mainFragment_to_myPageFragment"
+            android:icon="@drawable/menu_mypage_icon"
+            android:title="@string/my_page_main_title_textview_text" />
+    <item
+            android:id="@+id/action_mainFragment_to_stampHomeFragment"
+            android:icon="@drawable/menu_stamp_icon"
+            android:title="@string/stamp_main_title_textview_text" />
+    <item
+            android:id="@+id/action_mainFragment_to_settingFragment"
+            android:icon="@drawable/menu_setting_icon"
+            android:title="@string/settings_fragment_title_textview_text" />
+
+</menu>
